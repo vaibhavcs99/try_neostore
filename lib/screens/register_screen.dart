@@ -21,7 +21,6 @@ class _RegisterState extends State<Register> {
   var confirmPasswordController = TextEditingController();
   var phoneNumberController = TextEditingController();
   var gender = 'ok';
-  List<String> data = [];
 
   String _firstName;
   String _lastName;
@@ -61,23 +60,11 @@ class _RegisterState extends State<Register> {
               phoneNumberField(),
               RaisedButton(
                   onPressed: () => _validateInputs(), child: Text('Register')),
-              Text(data.toString())
             ],
           ),
         ),
       ),
     );
-  }
-
-  showAll() {
-    data.add(firstNameController.text);
-    data.add(lastNameController.text);
-    data.add(emailController.text);
-    data.add(passwordController.text);
-    data.add(confirmPasswordController.text);
-    data.add(phoneNumberController.text);
-    data.add(gender);
-    setState(() {});
   }
 
   Row buildGender() {
