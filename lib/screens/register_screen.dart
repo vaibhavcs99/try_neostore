@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:try_neostore/Utils/utils.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -6,7 +7,12 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  var maleCheckBox = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  bool _autoValidate = false;
+
+  var maleCheckBox = true;
   var femaleCheckBox = false;
   var firstNameController = TextEditingController();
   var lastNameController = TextEditingController();
@@ -14,7 +20,16 @@ class _RegisterState extends State<Register> {
   var passwordController = TextEditingController();
   var confirmPasswordController = TextEditingController();
   var phoneNumberController = TextEditingController();
-  var gender;
+  var gender = 'ok';
+  List<String> data = [];
+
+  String _firstName;
+  String _lastName;
+  String _email;
+  String _password;
+  String _confirmPassword;
+  String _phoneNumber;
+
   @override
   void dispose() {
     firstNameController.dispose();
@@ -29,22 +44,40 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: Center(
+      key: _scaffoldKey,
+      appBar: AppBar(),
+      body: Center(
+        child: Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             children: [
-              buildTextField('First Name',firstNameController),
-              buildTextField('Last Name',lastNameController),
-              buildTextField('Email',emailController),
-              buildTextField('Password',passwordController),
-              buildTextField('Confirm Password',confirmPasswordController),
+              firstNameField(),
+              lastNameField(),
+              emailField(),
+              passwordField(),
+              confirmPasswordField(),
               buildGender(),
-              buildTextField('Phone Number',phoneNumberController),
+              phoneNumberField(),
               RaisedButton(
-                  onPressed: () => print('Pressed'), child: Text('Login'))
+                  onPressed: () => _validateInputs(), child: Text('Register')),
+              Text(data.toString())
             ],
           ),
-        ));
+        ),
+      ),
+    );
+  }
+
+  showAll() {
+    data.add(firstNameController.text);
+    data.add(lastNameController.text);
+    data.add(emailController.text);
+    data.add(passwordController.text);
+    data.add(confirmPasswordController.text);
+    data.add(phoneNumberController.text);
+    data.add(gender);
+    setState(() {});
   }
 
   Row buildGender() {
@@ -58,7 +91,9 @@ class _RegisterState extends State<Register> {
             onChanged: (value) {
               gender = 'Male';
               setState(() {
+                gender = 'Male';
                 maleCheckBox = value;
+                femaleCheckBox = !value;
               });
             },
           ),
@@ -67,11 +102,12 @@ class _RegisterState extends State<Register> {
         Expanded(
           flex: 1,
           child: Checkbox(
-            value: maleCheckBox,
+            value: femaleCheckBox,
             onChanged: (value) {
-              gender = 'Male';
               setState(() {
-                maleCheckBox = value;
+                gender = 'Female';
+                femaleCheckBox = value;
+                maleCheckBox = !value;
               });
             },
           ),
@@ -81,9 +117,71 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  TextField buildTextField(String title, TextEditingController _controller) {
-    return TextField(
-        controller: _controller,
-        decoration: InputDecoration(labelText: '$title'));
+  void _validateInputs() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+    } else {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Please Enter all Fields')));
+    }
+  }
+
+  firstNameField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'First Name'),
+      validator: validateName,
+      onSaved: (newValue) {
+        _firstName = newValue;
+      },
+    );
+  }
+
+  lastNameField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Last Name'),
+      validator: validateName,
+      onSaved: (newValue) {
+        _lastName = newValue;
+      },
+    );
+  }
+
+  emailField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Email'),
+      validator: validateEmail,
+      onSaved: (newValue) {
+        _email = newValue;
+      },
+    );
+  }
+
+  passwordField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Password'),
+      validator: validatePassword,
+      onSaved: (newValue) {
+        _password = newValue;
+      },
+    );
+  }
+
+  confirmPasswordField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Current Password'),
+      validator: validatePassword,
+      onSaved: (newValue) {
+        _firstName = newValue;
+      },
+    );
+  }
+
+  phoneNumberField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Phone Number'),
+      validator: validatePhoneNumber,
+      onSaved: (newValue) {
+        _phoneNumber = newValue;
+      },
+    );
   }
 }
