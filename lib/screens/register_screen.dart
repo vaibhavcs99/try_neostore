@@ -10,17 +10,15 @@ class _RegisterState extends State<Register> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  bool _autoValidate = false;
+  var _maleCheckBox = true;
+  var _femaleCheckBox = false;
 
-  var maleCheckBox = true;
-  var femaleCheckBox = false;
-  var firstNameController = TextEditingController();
-  var lastNameController = TextEditingController();
-  var emailController = TextEditingController();
-  var passwordController = TextEditingController();
-  var confirmPasswordController = TextEditingController();
-  var phoneNumberController = TextEditingController();
-  var gender = 'ok';
+  // var firstNameController = TextEditingController();
+  // var lastNameController = TextEditingController();
+  // var emailController = TextEditingController();
+  // var passwordController = TextEditingController();
+  // var confirmPasswordController = TextEditingController();
+  // var phoneNumberController = TextEditingController();
 
   String _firstName;
   String _lastName;
@@ -28,17 +26,17 @@ class _RegisterState extends State<Register> {
   String _password;
   String _confirmPassword;
   String _phoneNumber;
-
-  @override
-  void dispose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    phoneNumberController.dispose();
-    super.dispose();
-  }
+  String _gender ='Male';
+  // @override
+  // void dispose() {
+  //   firstNameController.dispose();
+  //   lastNameController.dispose();
+  //   emailController.dispose();
+  //   passwordController.dispose();
+  //   confirmPasswordController.dispose();
+  //   phoneNumberController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +72,13 @@ class _RegisterState extends State<Register> {
         Expanded(
           flex: 1,
           child: Checkbox(
-            value: maleCheckBox,
+            value: _maleCheckBox,
             onChanged: (value) {
-              gender = 'Male';
+              _gender = 'Male';
               setState(() {
-                gender = 'Male';
-                maleCheckBox = value;
-                femaleCheckBox = !value;
+                _gender = 'Male';
+                _maleCheckBox = value;
+                _femaleCheckBox = !value;
               });
             },
           ),
@@ -89,12 +87,12 @@ class _RegisterState extends State<Register> {
         Expanded(
           flex: 1,
           child: Checkbox(
-            value: femaleCheckBox,
+            value: _femaleCheckBox,
             onChanged: (value) {
               setState(() {
-                gender = 'Female';
-                femaleCheckBox = value;
-                maleCheckBox = !value;
+                _gender = 'Female';
+                _femaleCheckBox = value;
+                _maleCheckBox = !value;
               });
             },
           ),
@@ -108,7 +106,8 @@ class _RegisterState extends State<Register> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
     } else {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Please Enter all Fields')));
+      _scaffoldKey.currentState
+          .showSnackBar(SnackBar(content: Text('Please Enter all Fields')));
     }
   }
 

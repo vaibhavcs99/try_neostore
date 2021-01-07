@@ -16,7 +16,7 @@ class NeoStore extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Register(),
+      home: LoginScreen(),
     );
   }
 }
