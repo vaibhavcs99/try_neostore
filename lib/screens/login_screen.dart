@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
 import 'package:try_neostore/constants/constants.dart';
@@ -39,12 +40,36 @@ class _LoginScreenState extends State<LoginScreen> {
                 RaisedButton(
                   onPressed: () => _validateInputs(),
                   child: Text('Login'),
-                )
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                RichText(
+                    text: TextSpan(
+                        text: 'Forgot your Password?',
+                        style: TextStyle(color: Colors.blue, fontSize: 20.0),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.pushNamed(context, route_forgot_password);
+                          })),                SizedBox(
+                  height: 20,
+                ),
+                RichText(
+                    text: TextSpan(
+                  text: "Don't have an account? ",
+                  style: TextStyle(color: Colors.black, fontSize: 20.0),
+                  children: <TextSpan>[TextSpan(text: 'Sign Up',style: TextStyle(color: Colors.blue),recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.pushNamed(context, route_register);
+                    
+                          })],
+                )),
               ],
             ),
           ),
         ));
   }
+
   //----------------------------------------------------------------------------------------------------------
 //backend code
   void _validateInputs() {
@@ -70,14 +95,13 @@ class _LoginScreenState extends State<LoginScreen> {
         final apiResponse = apiResponseFromJson(value.data);
         Navigator.pushNamed(context, route_home_screen, arguments: apiResponse);
         // print(apiResponse.userMsg);
-        return null;//FIXME: why null??
+        return null; //FIXME: why null??
       });
     } catch (error) {
       // print(error);
       showSnackBar('Invalid Login Credentials, Try again!');
     }
   }
-
 
 //-------------------------------------------------------------------------------------------------------------
   //this part contains all the defined UI widget fields.
@@ -101,9 +125,9 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
   }
+
 //-------------------------------------------------------------------------------------------------------------
   showSnackBar(String title) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
   }
-
 }

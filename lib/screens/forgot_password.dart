@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:try_neostore/Utils/utils.dart';
+import 'package:try_neostore/constants/urls.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -6,28 +9,68 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  var usernameController = TextEditingController();
-  var passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _email;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                  controller: usernameController,
-                  decoration: InputDecoration(labelText: 'Username')),
-              TextField(
-                  controller: passwordController,
-                  decoration: InputDecoration(labelText: 'Password')),
-              RaisedButton(
-                  onPressed: () => print('Pressed'),
-                  child: Text('Change Password')),
-            ],
+          child: Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Enter your email address below to to reset password'),
+                emailField(),
+                RaisedButton(
+                    onPressed: () => _validateInputs(),
+                    child: Text('Change Password')),
+              ],
+            ),
           ),
         ));
+  }
+
+  emailField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Email'),
+      validator: validateEmail,
+      onSaved: (newValue) {
+        _email = newValue.trim();
+      },
+    );
+  }
+
+  void _validateInputs() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      sendPasswordResetMail(); //same method as authenticate user.
+    }
+  }
+
+  void sendPasswordResetMail() async {
+    var dio = Dio();
+    var _userEmail = {'email': '$_email'};
+
+    FormData formData = FormData.fromMap(_userEmail);
+
+    try {
+      await dio.post(urlForgotPassword, data: formData).then((value) async {
+        showSnackBar('Password reset email is sent!');
+        await Future.delayed(Duration(seconds: 2));
+        Navigator.pop(context);
+      });
+    } on DioError catch (dioError) {
+      print(dioError.response.statusMessage);
+    } catch (e) {}
+  }
+
+  showSnackBar(String title) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
   }
 }
