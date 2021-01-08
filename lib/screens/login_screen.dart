@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await dio.post(urlLogin, data: formData).then((value) {
         final apiResponse = apiResponseFromJson(value.data);
-        Navigator.pushNamed(context, route_home_screen, arguments: apiResponse);
+        Navigator.pushReplacementNamed(context, route_home_screen, arguments: apiResponse);
         // print(apiResponse.userMsg);
         return null; //FIXME: why null??
       });

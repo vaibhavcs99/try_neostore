@@ -11,7 +11,7 @@ void main() {
 }
 
 class NeoStore extends StatelessWidget {
-  AppRouter _appRouter = AppRouter();
+  final AppRouter _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
