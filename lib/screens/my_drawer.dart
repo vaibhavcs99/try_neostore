@@ -40,7 +40,7 @@ class _MyDrawerState extends State<MyDrawer> {
         ListTile(
           title: Text('My Account'),
           leading: Icon(Icons.person),
-          onTap: () {},
+          onTap: () => Navigator.pushReplacementNamed(context, route_my_account_details,arguments:  widget._apiResponse),
         ),
         ListTile(title: Text('Store Locator'), leading: Icon(Icons.map)),
         ListTile(title: Text('My Orders'), leading: Icon(Icons.view_list)),
