@@ -113,11 +113,11 @@ class UserData {
     final String lastName;
     final String email;
     final String username;
-    final dynamic profilePic;
+    final String profilePic;
     final dynamic countryId;
     final String gender;
     final String phoneNo;
-    final dynamic dob;
+    final String dob;
     final bool isActive;
     final String created;
     final String modified;

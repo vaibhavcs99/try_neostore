@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
+import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/fetchDataResponse.dart';
@@ -22,7 +23,6 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
 
   @override
   Widget build(BuildContext context) {
-    var user = widget._apiResponse;
     return Scaffold(
       appBar: AppBar(title: Text('My Account')),
       body: Center(
@@ -41,8 +41,8 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                   Text(userData.email ?? 'no data'),
                   Text(userData.phoneNo ?? 'no data'),
                   Text(userData.dob ?? 'no data'),
-                  FlatButton(onPressed: null, child: Text('Edit Profile')),
-                  FlatButton(onPressed: null,child: Text('Reset Password'),)
+                  FlatButton(onPressed: ()=>Navigator.pushNamed(context, route_edit_account_details), child: Text('Edit Profile')),
+                  FlatButton(onPressed: ()=>Navigator.pushNamed(context, route_change_password,arguments:widget._apiResponse ),child: Text('Reset Password'),)
                 ],
               );
             }),
@@ -52,14 +52,13 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
 
   Future<FetchDataResponse> getDetails() async {
     var dio = Dio();
-    dio.options.headers['access_token'] = '5ff679991c4b1';
+    dio.options.headers['access_token'] = widget._apiResponse.data.accessToken;
     try {
       return await dio.get(urlFetchAccountDetails).then((value) {
-        print('$value' + '**************');
         return fetchDataResponseFromJson(value.data);
       });
     } on DioError catch (dioError) {
-      print('${dioError.error.toString()}' + '&&&&&&&&&&&&&&');
+      print('${dioError.error.toString()}');
     } catch (e) {
       print(e.toString());
     }

@@ -1,27 +1,101 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
+import 'package:try_neostore/constants/constants.dart';
+import 'package:try_neostore/constants/urls.dart';
+import 'package:try_neostore/model/api_response.dart';
 
 class EditAccountDetails extends StatefulWidget {
+  final ApiResponse _apiResponse;
+  EditAccountDetails(this._apiResponse);
+
   @override
   _EditAccountDetailsState createState() => _EditAccountDetailsState();
 }
 
 class _EditAccountDetailsState extends State<EditAccountDetails> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _firstName;
   String _lastName;
   String _email;
-  String _password;
-  String _confirmPassword;
   int _phoneNumber;
-  String _gender = 'M';
+
+  String _dob;
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(title: Text('Edit Account Details')),
+      body: Center(
+        child: Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: ListView(
+            children: [
+              firstNameField(),
+              lastNameField(),
+              dateOfBirth(),
+              emailField(),
+              phoneNumberField(),
+              RaisedButton(
+                onPressed: () => _validateInputs(),
+                child: Text('EditAccountDetails'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
+  //----------------------------------------------------------------------------------------------------------------
+
+  void _validateInputs() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      registerUser(); //same method as authenticate user.
+    } else {
+      _scaffoldKey.currentState
+          .showSnackBar(SnackBar(content: Text('Please Enter all Fields')));
+    }
+  }
+
+  void registerUser() async {
+    var dio = Dio();
+
+    dio.options.headers['access_token'] = widget._apiResponse.data.accessToken;
+
+    Map<String, dynamic> userDetails = {
+      'first_name': '$_firstName',
+      'last_name': '$_lastName',
+      'email': '$_email',
+      'dob': '$_dob',
+      'profile_pic': 'null',
+      'phone_no': '$_phoneNumber',
+    };
+
+    FormData formData = FormData.fromMap(userDetails);
+    try {
+      await dio
+          .post(urlUpdateAccountDetails, data: formData)
+          .then((value) async {
+        showSnackBar('Account Details Updated');
+        await Future.delayed(Duration(seconds: 3));
+        Navigator.pop(context);
+      });
+    } on DioError catch (dioError) {
+      print(dioError);
+      showSnackBar(dioError.response.data);
+    } catch (e) {
+      print(e);
+      showSnackBar(e.toString());
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------
+  //this part contains all the defined UI widget fields.
 
   firstNameField() {
     return TextFormField(
@@ -53,26 +127,6 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
     );
   }
 
-  passwordField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Password'),
-      validator: validatePassword,
-      onSaved: (newValue) {
-        _password = newValue.trim();
-      },
-    );
-  }
-
-  confirmPasswordField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Confirm Password'),
-      validator: validatePassword,
-      onSaved: (newValue) {
-        _confirmPassword = newValue.trim();
-      },
-    );
-  }
-
   phoneNumberField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Phone Number'),
@@ -83,7 +137,18 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
     );
   }
 
-//-------------------------------------------------------------------------------------------------------------
+  dateOfBirth() {
+    return TextFormField(
+      decoration:
+          const InputDecoration(labelText: 'Date of Birth in dd-mm-yyyy'),
+      validator: validateDob,
+      onSaved: (newValue) {
+        _dob = newValue.trim();
+      },
+    );
+  }
+
+  //-------------------------------------------------------------------------------------------------------------
   showSnackBar(String title) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
   }

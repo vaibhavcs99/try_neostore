@@ -26,7 +26,7 @@ class _MyDrawerState extends State<MyDrawer> {
             style: TextStyle(fontSize: 23),
           ),
           accountEmail: Text('${user.email}'),
-          currentAccountPicture: CircleAvatar(backgroundImage: user.profilePic),
+          // currentAccountPicture: CircleAvatar(backgroundImage: NetworkImage(user.profilePic)),
         ),
         ListTile(
           title: Text('My Cart'),

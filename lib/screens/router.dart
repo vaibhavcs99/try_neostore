@@ -7,6 +7,8 @@ import 'package:try_neostore/screens/home_screen.dart';
 import 'package:try_neostore/screens/login_screen.dart';
 import 'package:try_neostore/screens/register_screen.dart';
 
+import 'change_password.dart';
+import 'edit_account_details.dart';
 import 'my_account.dart';
 
 class AppRouter {
@@ -31,6 +33,18 @@ class AppRouter {
         var data = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => MyAccountDetails(data),
+        );
+        break;
+      case route_edit_account_details:
+        var data = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => EditAccountDetails(data),
+        );
+        break;
+      case route_change_password:
+        var data = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => ChangePassword(data),
         );
         break;
       case route_home_screen:
