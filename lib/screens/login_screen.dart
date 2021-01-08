@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
+import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
 
@@ -36,13 +37,50 @@ class _LoginScreenState extends State<LoginScreen> {
                 emailField(),
                 passwordField(),
                 RaisedButton(
-                    onPressed: () => _validateInputs(), child: Text('Login'))
+                  onPressed: () => _validateInputs(),
+                  child: Text('Login'),
+                )
               ],
             ),
           ),
         ));
   }
+  //----------------------------------------------------------------------------------------------------------
+//backend code
+  void _validateInputs() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      authenticateUser();
+    } else {
+      _scaffoldKey.currentState
+          .showSnackBar(SnackBar(content: Text('Please Enter all Fields')));
+    }
+  }
 
+  authenticateUser() async {
+    Dio dio = Dio();
+
+    Map<String, dynamic> userDetails = {
+      'email': '$_email',
+      'password': '$_password'
+    };
+    FormData formData = FormData.fromMap(userDetails);
+    try {
+      await dio.post(urlLogin, data: formData).then((value) {
+        final apiResponse = apiResponseFromJson(value.data);
+        Navigator.pushNamed(context, route_home_screen, arguments: apiResponse);
+        // print(apiResponse.userMsg);
+        return null;//FIXME: why null??
+      });
+    } catch (error) {
+      // print(error);
+      showSnackBar('Invalid Login Credentials, Try again!');
+    }
+  }
+
+
+//-------------------------------------------------------------------------------------------------------------
+  //this part contains all the defined UI widget fields.
   emailField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Email'),
@@ -63,41 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
   }
-
-  void _validateInputs() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      authenticateUser();
-    } else {
-      _scaffoldKey.currentState
-          .showSnackBar(SnackBar(content: Text('Please Enter all Fields')));
-    }
-  }
-
-  authenticateUser() async {
-    Dio dio = Dio();
-    Response response;
-    Map<String, dynamic> userDetails = {
-      'email': '$_email',
-      'password': '$_password'
-    };
-    FormData formData = FormData.fromMap(userDetails);
-    try {
-      response = await dio.post(urlLogin, data: formData).then((value) {
-        final apiResponse = apiResponseFromJson(value.data);
-        Navigator.pushNamed(context, '/home_screen',
-            arguments: apiResponse.data.accessToken);
-        print(apiResponse.userMsg);
-        showSnackBar('Login Successful');
-        return null;
-      });
-    } catch (error) {
-      print(error);
-      showSnackBar('Invalid Login Credentials');
-    }
-  }
-
+//-------------------------------------------------------------------------------------------------------------
   showSnackBar(String title) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
   }
+
 }

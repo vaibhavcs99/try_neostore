@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/screens/forgot_password.dart';
 import 'package:try_neostore/screens/home_screen.dart';
 import 'package:try_neostore/screens/login_screen.dart';
@@ -20,7 +21,7 @@ class NeoStore extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/register',
+      initialRoute: route_register,
       onGenerateRoute: _appRouter.onGenerateRoute,
     );
   }

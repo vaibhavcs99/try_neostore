@@ -1,5 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
+import 'package:try_neostore/constants/constants.dart';
+import 'package:try_neostore/constants/urls.dart';
+import 'package:try_neostore/model/api_response.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -13,30 +17,13 @@ class _RegisterState extends State<Register> {
   var _maleCheckBox = true;
   var _femaleCheckBox = false;
 
-  // var firstNameController = TextEditingController();
-  // var lastNameController = TextEditingController();
-  // var emailController = TextEditingController();
-  // var passwordController = TextEditingController();
-  // var confirmPasswordController = TextEditingController();
-  // var phoneNumberController = TextEditingController();
-
   String _firstName;
   String _lastName;
   String _email;
   String _password;
   String _confirmPassword;
-  String _phoneNumber;
-  String _gender ='Male';
-  // @override
-  // void dispose() {
-  //   firstNameController.dispose();
-  //   lastNameController.dispose();
-  //   emailController.dispose();
-  //   passwordController.dispose();
-  //   confirmPasswordController.dispose();
-  //   phoneNumberController.dispose();
-  //   super.dispose();
-  // }
+  int _phoneNumber;
+  String _gender = 'M';
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +44,115 @@ class _RegisterState extends State<Register> {
               buildGender(),
               phoneNumberField(),
               RaisedButton(
-                  onPressed: () => _validateInputs(), child: Text('Register')),
+                onPressed: () => _validateInputs(),
+                child: Text('Register'),
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+//----------------------------------------------------------------------------------------------------------------
+
+  void _validateInputs() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      registerUser(); //same method as authenticate user.
+    } else {
+      _scaffoldKey.currentState
+          .showSnackBar(SnackBar(content: Text('Please Enter all Fields')));
+    }
+  }
+
+  void registerUser() async {
+    var dio = Dio();
+
+    Map<String, dynamic> userDetails = {
+      'first_name': '$_firstName',
+      'last_name': '$_lastName',
+      'email': '$_email',
+      'password': '$_password',
+      'confirm_password': '$_confirmPassword',
+      'gender': '$_gender',
+      'phone_no': '$_phoneNumber',
+    };
+
+    FormData formData = FormData.fromMap(userDetails);
+    try {
+      await dio.post(urlRegister, data: formData).then((value) {
+        final apiResponse = apiResponseFromJson(value.data);
+        Navigator.pushNamed(context, route_home_screen, arguments: apiResponse);
+      });
+    } on DioError catch (dioError) {
+      print(dioError);
+      showSnackBar(dioError.response.data);
+    } catch (e) {
+      print(e);
+      showSnackBar(e.toString());
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------
+  //this part contains all the defined UI widget fields.
+
+  firstNameField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'First Name'),
+      validator: validateName,
+      onSaved: (newValue) {
+        _firstName = newValue.trim();
+      },
+    );
+  }
+
+  lastNameField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Last Name'),
+      validator: validateName,
+      onSaved: (newValue) {
+        _lastName = newValue.trim();
+      },
+    );
+  }
+
+  emailField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Email'),
+      validator: validateEmail,
+      onSaved: (newValue) {
+        _email = newValue.trim();
+      },
+    );
+  }
+
+  passwordField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Password'),
+      validator: validatePassword,
+      onSaved: (newValue) {
+        _password = newValue.trim();
+      },
+    );
+  }
+
+  confirmPasswordField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Confirm Password'),
+      validator: validatePassword,
+      onSaved: (newValue) {
+        _confirmPassword = newValue.trim();
+      },
+    );
+  }
+
+  phoneNumberField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Phone Number'),
+      validator: validatePhoneNumber,
+      onSaved: (newValue) {
+        _phoneNumber = int.parse(newValue.trim());
+      },
     );
   }
 
@@ -74,9 +165,9 @@ class _RegisterState extends State<Register> {
           child: Checkbox(
             value: _maleCheckBox,
             onChanged: (value) {
-              _gender = 'Male';
+              _gender = 'M';
               setState(() {
-                _gender = 'Male';
+                _gender = 'M';
                 _maleCheckBox = value;
                 _femaleCheckBox = !value;
               });
@@ -90,7 +181,7 @@ class _RegisterState extends State<Register> {
             value: _femaleCheckBox,
             onChanged: (value) {
               setState(() {
-                _gender = 'Female';
+                _gender = 'F';
                 _femaleCheckBox = value;
                 _maleCheckBox = !value;
               });
@@ -102,72 +193,8 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  void _validateInputs() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-    } else {
-      _scaffoldKey.currentState
-          .showSnackBar(SnackBar(content: Text('Please Enter all Fields')));
-    }
-  }
-
-  firstNameField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'First Name'),
-      validator: validateName,
-      onSaved: (newValue) {
-        _firstName = newValue;
-      },
-    );
-  }
-
-  lastNameField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Last Name'),
-      validator: validateName,
-      onSaved: (newValue) {
-        _lastName = newValue;
-      },
-    );
-  }
-
-  emailField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Email'),
-      validator: validateEmail,
-      onSaved: (newValue) {
-        _email = newValue;
-      },
-    );
-  }
-
-  passwordField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Password'),
-      validator: validatePassword,
-      onSaved: (newValue) {
-        _password = newValue;
-      },
-    );
-  }
-
-  confirmPasswordField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Current Password'),
-      validator: validatePassword,
-      onSaved: (newValue) {
-        _firstName = newValue;
-      },
-    );
-  }
-
-  phoneNumberField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Phone Number'),
-      validator: validatePhoneNumber,
-      onSaved: (newValue) {
-        _phoneNumber = newValue;
-      },
-    );
+  //-------------------------------------------------------------------------------------------------------------
+  showSnackBar(String title) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
   }
 }
