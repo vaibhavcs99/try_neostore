@@ -84,14 +84,20 @@ class _LoginScreenState extends State<LoginScreen> {
     FormData formData = FormData.fromMap(userDetails);
     try {
       response = await dio.post(urlLogin, data: formData).then((value) {
-    final apiResponse = apiResponseFromJson(value.data);
-        print(apiResponse.data.accessToken);
+        final apiResponse = apiResponseFromJson(value.data);
+        Navigator.pushNamed(context, '/home_screen',
+            arguments: apiResponse.data.accessToken);
+        print(apiResponse.userMsg);
+        showSnackBar('Login Successful');
         return null;
       });
     } catch (error) {
-      //TODO:Check for error code number.
-      _scaffoldKey.currentState
-          .showSnackBar(SnackBar(content: Text('Invalid Login Credentials')));
+      print(error);
+      showSnackBar('Invalid Login Credentials');
     }
+  }
+
+  showSnackBar(String title) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
   }
 }
