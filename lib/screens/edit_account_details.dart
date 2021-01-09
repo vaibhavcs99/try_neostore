@@ -1,9 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
-import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
+import 'package:try_neostore/network/api_services.dart';
 
 class EditAccountDetails extends StatefulWidget {
   final ApiResponse _apiResponse;
@@ -63,11 +61,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   void registerUser() async {
-    var dio = Dio();
-
-    dio.options.headers['access_token'] = widget._apiResponse.data.accessToken;
-
-    Map<String, dynamic> userDetails = {
+    Map<String, dynamic> _userDetails = {
       'first_name': '$_firstName',
       'last_name': '$_lastName',
       'email': '$_email',
@@ -75,24 +69,39 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       'profile_pic': 'null',
       'phone_no': '$_phoneNumber',
     };
+    print(widget._apiResponse.data);
+    String receivedMessage = await editAccountDetailsService(
+        widget._apiResponse.data.accessToken, _userDetails);
 
-    FormData formData = FormData.fromMap(userDetails);
-    try {
-      await dio
-          .post(urlUpdateAccountDetails, data: formData)
-          .then((value) async {
-        showSnackBar('Account Details Updated');
-        await Future.delayed(Duration(seconds: 3));
-        Navigator.pop(context);
-      });
-    } on DioError catch (dioError) {
-      print(dioError);
-      showSnackBar(dioError.response.data);
-    } catch (e) {
-      print(e);
-      showSnackBar(e.toString());
-    }
+    showSnackBar(receivedMessage);
   }
+  // void registerUser() async {
+  //   var dio = Dio();
+
+  //   dio.options.headers['access_token'] = widget._apiResponse.data.accessToken;
+
+  //   Map<String, dynamic> userDetails = {
+  //     'first_name': '$_firstName',
+  //     'last_name': '$_lastName',
+  //     'email': '$_email',
+  //     'dob': '$_dob',
+  //     'profile_pic': 'null',
+  //     'phone_no': '$_phoneNumber',
+  //   };
+
+  //   FormData formData = FormData.fromMap(userDetails);
+  //   try {
+  //     await dio
+  //         .post(urlUpdateAccountDetails, data: formData)
+  //         .then((value) async {
+  //       showSnackBar('Account Details Updated');
+  //     });
+  //   } on DioError catch (dioError) {
+  //     showSnackBar(dioError.response.data);
+  //   } catch (e) {
+  //     showSnackBar(e.toString());
+  //   }
+  // }
 
   //--------------------------------------------------------------------------------------------------------------
   //this part contains all the defined UI widget fields.

@@ -4,7 +4,7 @@ import 'package:try_neostore/Utils/utils.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/fetchDataResponse.dart';
-import 'package:try_neostore/network/network.dart';
+import 'package:try_neostore/network/api_services.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
