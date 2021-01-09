@@ -7,7 +7,7 @@ import 'my_drawer.dart';
 class HomeScreen extends StatefulWidget {
   final ApiResponse apiResponse;
 
-  const HomeScreen({Key key, @required this.apiResponse}) : super(key: key);
+  const HomeScreen(this.apiResponse, {Key key}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -48,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<bool> _onBackPressed() {
     return showDialog(
-      
       context: context,
       builder: (context) {
         return AlertDialog(

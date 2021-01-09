@@ -29,10 +29,15 @@ class _MyDrawerState extends State<MyDrawer> {
           // currentAccountPicture: CircleAvatar(backgroundImage: NetworkImage(user.profilePic)),
         ),
         ListTile(
-          title: Text('My Cart'),
-          leading: Icon(Icons.shopping_cart),
-          onTap: () {},
-        ),
+            title: Text('Home'),
+            leading: Icon(Icons.home),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, route_home_screen);
+            }),
+        ListTile(
+            title: Text('My Cart'),
+            leading: Icon(Icons.shopping_cart),
+            onTap: () {}),
         ListTile(title: Text('Tables'), leading: Icon(Icons.shopping_cart)),
         ListTile(title: Text('Sofas'), leading: Icon(Icons.shopping_cart)),
         ListTile(title: Text('Chairs'), leading: Icon(Icons.shopping_cart)),
@@ -40,7 +45,8 @@ class _MyDrawerState extends State<MyDrawer> {
         ListTile(
           title: Text('My Account'),
           leading: Icon(Icons.person),
-          onTap: () => Navigator.pushReplacementNamed(context, route_my_account_details,arguments:  widget._apiResponse),
+          onTap: () => Navigator.pushNamed(context, route_my_account_details,
+              arguments: widget._apiResponse),
         ),
         ListTile(title: Text('Store Locator'), leading: Icon(Icons.map)),
         ListTile(title: Text('My Orders'), leading: Icon(Icons.view_list)),
@@ -54,7 +60,6 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   _onLogOut() {
-    
     return showDialog(
       context: context,
       builder: (context) {
@@ -63,7 +68,8 @@ class _MyDrawerState extends State<MyDrawer> {
           content: Text('Do you want to exit an App?'),
           actions: [
             TextButton(
-                onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(route_login,(Route<dynamic> route) => false),//TODO:
+                onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                    route_login, (Route<dynamic> route) => false), //TODO:
                 child: Text('Yes')),
             TextButton(
                 onPressed: () => Navigator.of(context).pop(false),

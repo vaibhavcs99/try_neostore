@@ -21,7 +21,7 @@ class NeoStore extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: route_login,
+      initialRoute: route_splash_screen,
       onGenerateRoute: _appRouter.onGenerateRoute,
     );
   }

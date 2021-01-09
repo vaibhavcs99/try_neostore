@@ -5,6 +5,7 @@ import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/fetchDataResponse.dart';
+import 'package:try_neostore/screens/my_drawer.dart';
 
 class MyAccountDetails extends StatefulWidget {
   final ApiResponse _apiResponse;
@@ -18,13 +19,13 @@ class MyAccountDetails extends StatefulWidget {
 }
 
 class _MyAccountDetailsState extends State<MyAccountDetails> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('My Account')),
+      drawer: Drawer(child:MyDrawer(widget._apiResponse),),
       body: Center(
         child: FutureBuilder<FetchDataResponse>(
             future: getDetails(),
