@@ -1,12 +1,10 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
+import 'package:try_neostore/model/fetchDataResponse.dart';
+import 'package:try_neostore/network/api_services.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -27,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(title:Text('Login')),
+        appBar: AppBar(title: Text('Login')),
         body: Center(
           child: Form(
             key: _formKey,
@@ -51,18 +49,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.pushNamed(context, route_forgot_password);
-                          })),                SizedBox(
+                          })),
+                SizedBox(
                   height: 20,
                 ),
                 RichText(
                     text: TextSpan(
                   text: "Don't have an account? ",
                   style: TextStyle(color: Colors.black, fontSize: 20.0),
-                  children: <TextSpan>[TextSpan(text: 'Sign Up',style: TextStyle(color: Colors.blue),recognizer: TapGestureRecognizer()
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: 'Sign Up',
+                        style: TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.pushNamed(context, route_register);
-                    
-                          })],
+                          })
+                  ],
                 )),
               ],
             ),
@@ -82,25 +85,22 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  authenticateUser() async {
-    Dio dio = Dio();
-
-    Map<String, dynamic> userDetails = {
+  void authenticateUser() async {
+    Map<String, dynamic> _userDetails = {
       'email': '$_email',
       'password': '$_password'
     };
-    FormData formData = FormData.fromMap(userDetails);
-    try {
-      await dio.post(urlLogin, data: formData).then((value) {
-        final apiResponse = apiResponseFromJson(value.data);
-        Navigator.pushReplacementNamed(context, route_home_screen, arguments: apiResponse);
-        // print(apiResponse.userMsg);
-        return null; //FIXME: why null??
-      });
-    } catch (error) {
-      // print(error);
-      showSnackBar('Invalid Login Credentials, Try again!');
+
+    var _apiResponseReceived = await authenticateUserService(_userDetails);
+    if (_apiResponseReceived is String) {
+      showSnackBar(_apiResponseReceived);
+    } else if (_apiResponseReceived is ApiResponse) {
+      Navigator.pushReplacementNamed(context, route_home_screen,
+          arguments: _apiResponseReceived);
+    } else {
+      showSnackBar('Something is wrong!');
     }
+    
   }
 
 //-------------------------------------------------------------------------------------------------------------

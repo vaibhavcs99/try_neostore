@@ -1,9 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
+import 'package:try_neostore/network/api_services.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -12,7 +11,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState>_scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   var _maleCheckBox = true;
   var _femaleCheckBox = false;
@@ -66,8 +65,6 @@ class _RegisterState extends State<Register> {
   }
 
   void registerUser() async {
-    var dio = Dio();
-
     Map<String, dynamic> userDetails = {
       'first_name': '$_firstName',
       'last_name': '$_lastName',
@@ -78,20 +75,45 @@ class _RegisterState extends State<Register> {
       'phone_no': '$_phoneNumber',
     };
 
-    FormData formData = FormData.fromMap(userDetails);
-    try {
-      await dio.post(urlRegister, data: formData).then((value) {
-        final apiResponse = apiResponseFromJson(value.data);
-        Navigator.pushNamed(context, route_home_screen, arguments: apiResponse);
-      });
-    } on DioError catch (dioError) {
-      print(dioError);
-      showSnackBar(dioError.response.data);
-    } catch (e) {
-      print(e);
-      showSnackBar(e.toString());
+    var _apiResponseReceivedFromService =
+        await registerUserService(userDetails);
+
+    if (_apiResponseReceivedFromService is String) {
+      showSnackBar(_apiResponseReceivedFromService);
+    } else if (_apiResponseReceivedFromService is ApiResponse) {
+      Navigator.pushNamed(context, route_home_screen,
+          arguments: _apiResponseReceivedFromService);
+    } else {
+      showSnackBar('$_apiResponseReceivedFromService');
     }
   }
+  // void registerUser() async {
+  //   var dio = Dio();
+
+  //   Map<String, dynamic> userDetails = {
+  //     'first_name': '$_firstName',
+  //     'last_name': '$_lastName',
+  //     'email': '$_email',
+  //     'password': '$_password',
+  //     'confirm_password': '$_confirmPassword',
+  //     'gender': '$_gender',
+  //     'phone_no': '$_phoneNumber',
+  //   };
+
+  //   FormData formData = FormData.fromMap(userDetails);
+  //   try {
+  //     await dio.post(urlRegister, data: formData).then((value) {
+  //       final apiResponse = apiResponseFromJson(value.data);
+  //       Navigator.pushNamed(context, route_home_screen, arguments: apiResponse);
+  //     });
+  //   } on DioError catch (dioError) {
+  //     print(dioError);
+  //     showSnackBar(dioError.response.data);
+  //   } catch (e) {
+  //     print(e);
+  //     showSnackBar(e.toString());
+  //   }
+  // }
 
   //--------------------------------------------------------------------------------------------------------------
   //this part contains all the defined UI widget fields.

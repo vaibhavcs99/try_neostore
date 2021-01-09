@@ -1,7 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
-import 'package:try_neostore/constants/urls.dart';
+import 'package:try_neostore/network/api_services.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -54,19 +53,25 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   void sendPasswordResetMail() async {
-    var dio = Dio();
     var _userEmail = {'email': '$_email'};
+    String resultReceived = await sendPasswordResetMailService(_userEmail);
 
-    FormData formData = FormData.fromMap(_userEmail);
-
-    try {
-      await dio.post(urlForgotPassword, data: formData).then((value) async {
-        showSnackBar('Password reset email is sent!');
-      });
-    } on DioError catch (dioError) {
-      if (dioError.response.statusCode == 404) showSnackBar('Email not found');
-    } catch (e) {}
+    showSnackBar(resultReceived);
   }
+  // void sendPasswordResetMail() async {
+  //   var dio = Dio();
+  //   var _userEmail = {'email': '$_email'};
+
+  //   FormData formData = FormData.fromMap(_userEmail);
+
+  //   try {
+  //     await dio.post(urlForgotPassword, data: formData).then((value) async {
+  //       showSnackBar('Password reset email is sent!');
+  //     });
+  //   } on DioError catch (dioError) {
+  //     if (dioError.response.statusCode == 404) showSnackBar('Email not found');
+  //   } catch (e) {}
+  // }
 
   showSnackBar(String title) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));

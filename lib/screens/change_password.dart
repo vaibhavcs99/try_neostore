@@ -1,8 +1,8 @@
-import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
-import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
+import 'package:try_neostore/network/api_services.dart';
 
 class ChangePassword extends StatefulWidget {
   final ApiResponse _apiResponse;
@@ -26,7 +26,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text('Change Password'),
         ),
@@ -89,28 +89,38 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   void changePassword() async {
-    var dio = Dio();
-
-    dio.options.headers['access_token'] = widget._apiResponse.data.accessToken;
-
-    Map<String, dynamic> passwordDetails = {
+    Map<String, dynamic> _passwordDetails = {
       'old_password': '$_currentPassword',
       'password': '$_newPassword',
       'confirm_password': '$_confirmNewPassword',
     };
 
-    FormData _formData = FormData.fromMap(passwordDetails);
+    String receivedMessage = await changePasswordService(
+        widget._apiResponse.data.accessToken, _passwordDetails);
 
-    try {
-      await dio.post(urlChangePassword, data: _formData).then((value) async {
-        showSnackBar('Password Changed');
-        await Future.delayed(Duration(seconds: 3));
-        Navigator.pop(context);
-      });
-    } on DioError catch (dioError) {
-      showSnackBar(dioError.message.toString());
-    } catch (e) {}
+    showSnackBar(receivedMessage);
   }
+  // void changePassword() async {
+  //   var dio = Dio();
+
+  //   dio.options.headers['access_token'] = widget._apiResponse.data.accessToken;
+
+  //   Map<String, dynamic> passwordDetails = {
+  //     'old_password': '$_currentPassword',
+  //     'password': '$_newPassword',
+  //     'confirm_password': '$_confirmNewPassword',
+  //   };
+
+  //   FormData _formData = FormData.fromMap(passwordDetails);
+
+  //   try {
+  //     await dio.post(urlChangePassword, data: _formData).then((value) async {
+  //       showSnackBar('Password Changed');
+  //     });
+  //   } on DioError catch (dioError) {
+  //     showSnackBar(dioError.message.toString());
+  //   } catch (e) {}
+  // }
 
   showSnackBar(String title) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
