@@ -10,11 +10,14 @@ Future<dynamic> authenticateUserService(
   FormData formData = FormData.fromMap(userDetails);
   try {
     var _receivedResponseFromServer = await dio.post(urlLogin, data: formData);
-    final sendResponseBack =
-        apiResponseFromJson(_receivedResponseFromServer.data);
-    return sendResponseBack;
-  } catch (error) {
+    if (_receivedResponseFromServer.statusCode == 200) {
+      return apiResponseFromJson(_receivedResponseFromServer.data);
+    }
+  } on DioError catch (dioError) {
+        // return dioError.response.statusCode.toString();
     return 'Invalid Credentials';
+  } catch (error) {
+    print(error);
   }
 }
 
