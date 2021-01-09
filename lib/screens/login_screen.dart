@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(),
+        appBar: AppBar(title:Text('Login')),
         body: Center(
           child: Form(
             key: _formKey,

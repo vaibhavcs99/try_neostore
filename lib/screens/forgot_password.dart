@@ -62,11 +62,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     try {
       await dio.post(urlForgotPassword, data: formData).then((value) async {
         showSnackBar('Password reset email is sent!');
-        await Future.delayed(Duration(seconds: 2));
-        Navigator.pop(context);
       });
     } on DioError catch (dioError) {
-      print(dioError.response.statusMessage);
+      if (dioError.response.statusCode == 404) showSnackBar('Email not found');
     } catch (e) {}
   }
 
