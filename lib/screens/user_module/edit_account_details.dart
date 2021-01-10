@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:try_neostore/Utils/utils.dart';
+import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/network/api_services.dart';
 

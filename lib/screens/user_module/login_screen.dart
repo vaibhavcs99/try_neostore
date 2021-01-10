@@ -1,9 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:try_neostore/Utils/utils.dart';
+import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
-import 'package:try_neostore/model/fetchDataResponse.dart';
 import 'package:try_neostore/network/api_services.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -95,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_apiResponseReceived is String) {
       showSnackBar(_apiResponseReceived);
     } else if (_apiResponseReceived is ApiResponse) {
-      Navigator.pushReplacementNamed(context, route_home_screen,
+      Navigator.popAndPushNamed(context, route_home_screen,
           arguments: _apiResponseReceived);
     } else {
       showSnackBar('Something is wrong!');
@@ -108,6 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
   emailField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Email'),
+      keyboardType: TextInputType.emailAddress,
       validator: validateEmail,
       controller: usernameController,
       onSaved: (newValue) {
@@ -119,6 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
   passwordField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Password'),
+      keyboardType: TextInputType.visiblePassword,
       validator: validatePassword,
       onSaved: (newValue) {
         _password = newValue;

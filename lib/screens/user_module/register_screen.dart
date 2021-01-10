@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:try_neostore/Utils/utils.dart';
+import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/network/api_services.dart';
@@ -141,6 +141,7 @@ class _RegisterState extends State<Register> {
   emailField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Email'),
+      keyboardType: TextInputType.emailAddress,
       validator: validateEmail,
       onSaved: (newValue) {
         _email = newValue.trim();
@@ -151,6 +152,7 @@ class _RegisterState extends State<Register> {
   passwordField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Password'),
+      keyboardType: TextInputType.visiblePassword,
       validator: validatePassword,
       onSaved: (newValue) {
         _password = newValue.trim();
@@ -161,6 +163,7 @@ class _RegisterState extends State<Register> {
   confirmPasswordField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Confirm Password'),
+      keyboardType: TextInputType.visiblePassword,
       validator: validatePassword,
       onSaved: (newValue) {
         _confirmPassword = newValue.trim();
@@ -171,6 +174,7 @@ class _RegisterState extends State<Register> {
   phoneNumberField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Phone Number'),
+      keyboardType: TextInputType.number,
       validator: validatePhoneNumber,
       onSaved: (newValue) {
         _phoneNumber = int.parse(newValue.trim());
