@@ -25,17 +25,33 @@ class _HomeScreenState extends State<HomeScreen> {
         drawer: Drawer(
           child: MyDrawer(widget.apiResponse),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              Text("${widget.apiResponse.userMsg}"),
-              Text("${widget.apiResponse.data.accessToken}"),
-              Text("${widget.apiResponse.data.email}"),
-              Text("${widget.apiResponse.data.username}"),
-              Text("${widget.apiResponse.data.dob}"),
-              Text("${widget.apiResponse.data.modified}"),
-            ],
-          ),
+        body: Column(
+          children: [
+            ListView(
+              shrinkWrap: true,
+              children: [
+                Text("${widget.apiResponse.userMsg}"),
+                Text("${widget.apiResponse.data.accessToken}"),
+                Text("${widget.apiResponse.data.email}"),
+                Text("${widget.apiResponse.data.username}"),
+                Text("${widget.apiResponse.data.dob}"),
+                Text("${widget.apiResponse.data.modified}"),
+              ],
+            ),
+            Expanded(
+              child: Container(
+                child: GridView.count(
+                    crossAxisCount: 2,
+                    children: List.generate(4, (index) {
+                      return Container(
+                        child: Card(
+                          child: Text(index.toString()),
+                        ),
+                      );
+                    })),
+              ),
+            )
+          ],
         ),
       ),
     );

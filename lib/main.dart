@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/screens/router.dart';
 
+import 'bloc/login_bloc.dart';
+
 void main() {
-  runApp(NeoStore());
+  runApp(BlocProvider(
+    create: (context) => LoginBloc(),
+    child: NeoStore(),
+  ));
 }
 
 class NeoStore extends StatelessWidget {
