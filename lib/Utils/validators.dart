@@ -40,6 +40,7 @@ String validateDob(String name) {
 }
 
 String validatePhoneNumber(String phone) {
+
   if (phone.length < 10) {
     return 'Phone number must be of 10 digit';
   }

@@ -2,15 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
-import 'package:try_neostore/screens/forgot_password.dart';
+import 'package:try_neostore/screens/user_module/forgot_password.dart';
 import 'package:try_neostore/screens/home_screen.dart';
-import 'package:try_neostore/screens/login_screen.dart';
-import 'package:try_neostore/screens/register_screen.dart';
+import 'package:try_neostore/screens/user_module/login_screen.dart';
+import 'package:try_neostore/screens/user_module/register_screen.dart';
 import 'package:try_neostore/screens/splash_screen.dart';
 
-import 'change_password.dart';
-import 'edit_account_details.dart';
-import 'my_account.dart';
+import 'user_module/change_password.dart';
+import 'user_module/edit_account_details.dart';
+import 'user_module/my_account.dart';
 
 class AppRouter {
   Route onGenerateRoute(RouteSettings settings) {
