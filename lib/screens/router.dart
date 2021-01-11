@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
+import 'package:try_neostore/model/product_list_model.dart';
+import 'package:try_neostore/screens/product_details.dart';
+import 'package:try_neostore/screens/products_list.dart';
 import 'package:try_neostore/screens/user_module/forgot_password.dart';
 import 'package:try_neostore/screens/home_screen.dart';
 import 'package:try_neostore/screens/user_module/login_screen.dart';
@@ -48,6 +51,8 @@ class AppRouter {
           builder: (_) => ChangePassword(data),
         );
         break;
+
+//*****************************************************************************************************
       case route_home_screen:
         var data = settings.arguments as ApiResponse;
         return MaterialPageRoute(
@@ -59,9 +64,20 @@ class AppRouter {
           builder: (_) => SplashScreen(),
         );
         break;
+      case route_product_list:
+        int index = settings.arguments as int;
+        return MaterialPageRoute(
+          builder: (_) => ProductList(index: index),
+        );
+        break;
+      case route_product_details:
+        var productInfo = settings.arguments as Datum;
+        return MaterialPageRoute(
+          builder: (_) => ProductDetails(productInfo: productInfo,),
+        );
+        break;
 
       default:
-      
     }
   }
 }

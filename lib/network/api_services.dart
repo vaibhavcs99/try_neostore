@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/fetchDataResponse.dart';
+import 'package:try_neostore/model/product_details.model.dart';
+import 'package:try_neostore/model/product_list_model.dart';
 
 Future<dynamic> authenticateUserService(
     Map<String, dynamic> userDetails) async {
@@ -102,4 +104,38 @@ Future<dynamic> myAccountDetailsService(String receivedAccessToken) async {
   } catch (e) {
     return 'Something is wrong!';
   }
+}
+
+Future<ProductsListModel> productListService(String _productCategory) async {
+  var dio = Dio();
+
+  Map<String, dynamic> json = {
+    'product_category_id': '$_productCategory',
+  };
+
+  try {
+    var response = await dio.get(urlGetProductList, queryParameters: json);
+    final productsListModel = productsListModelFromJson(response.data);
+    print(productsListModel);
+    return productsListModel;
+  } on DioError catch (dioError) {
+    print(dioError);
+  } catch (e) {}
+}
+
+Future<ProductDetailsModel> productDetailsService(String _productId) async {
+  var dio = Dio();
+
+  Map<String, dynamic> json = {
+    'product_id': '$_productId',
+  };
+
+  try {
+    var response = await dio.get(urlGetProductDetails, queryParameters: json);
+    final productsListModel = productDetailsModelFromJson(response.data);
+    print(productsListModel);
+    return productsListModel;
+  } on DioError catch (dioError) {
+    print(dioError);
+  } catch (e) {}
 }

@@ -1,5 +1,6 @@
 //TODO: Show snackbar on arrival.
 import 'package:flutter/material.dart';
+import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
 
 import 'my_drawer.dart';
@@ -14,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  List productNames = ['Tables', 'Chairs', 'Sofa', 'Bed','Dining set'];
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 child: GridView.count(
                     crossAxisCount: 2,
-                    children: List.generate(4, (index) {
+                    children: List.generate(5, (index) {
                       return Container(
-                        child: Card(
-                          child: Text(index.toString()),
+                        child: InkWell(
+                          onTap: () => Navigator.pushNamed(
+                              context, route_product_list,
+                              arguments: index + 1),
+                          child: Card(
+                            child: Text(productNames[index]),
+                          ),
                         ),
                       );
                     })),
