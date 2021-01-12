@@ -1,19 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/product_list_model.dart';
-import 'package:try_neostore/screens/product_details.dart';
-import 'package:try_neostore/screens/products_list.dart';
+import 'package:try_neostore/screens/cart_list.dart';
+import 'package:try_neostore/screens/product/product_details.dart';
+import 'package:try_neostore/screens/product/products_list.dart';
 import 'package:try_neostore/screens/user_module/forgot_password.dart';
 import 'package:try_neostore/screens/home_screen.dart';
 import 'package:try_neostore/screens/user_module/login_screen.dart';
 import 'package:try_neostore/screens/user_module/register_screen.dart';
-import 'package:try_neostore/screens/splash_screen.dart';
+import 'package:try_neostore/screens/common/splash_screen.dart';
 
-import 'user_module/change_password.dart';
-import 'user_module/edit_account_details.dart';
-import 'user_module/my_account.dart';
+import '../screens/user_module/change_password.dart';
+import '../screens/user_module/edit_account_details.dart';
+import '../screens/user_module/my_account.dart';
 
 class AppRouter {
   Route onGenerateRoute(RouteSettings settings) {
@@ -65,15 +67,32 @@ class AppRouter {
         );
         break;
       case route_product_list:
-        int index = settings.arguments as int;
+        ScreenParameters parameters = settings.arguments as ScreenParameters;
         return MaterialPageRoute(
-          builder: (_) => ProductList(index: index),
+          builder: (_) => ProductList(
+            index: parameters.parameter1,
+            apiResponse: parameters.parameter2,
+          ),
         );
         break;
       case route_product_details:
-        var productInfo = settings.arguments as Datum;
+        ScreenParameters parameters = settings.arguments as ScreenParameters;
+        Datum productInfo = parameters.parameter1 as Datum;
+        ApiResponse apiResponse = parameters.parameter2 as ApiResponse;
+
         return MaterialPageRoute(
-          builder: (_) => ProductDetails(productInfo: productInfo,),
+          builder: (_) => ProductDetails(
+            productInfo: productInfo,
+            apiResponse: apiResponse,
+          ),
+        );
+        break;
+      case route_cart_list:
+        ApiResponse apiResponse = settings.arguments as ApiResponse;
+        return MaterialPageRoute(
+          builder: (_) => CartList(
+            apiResponse: apiResponse,
+          ),
         );
         break;
 

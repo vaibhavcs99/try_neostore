@@ -1,9 +1,10 @@
 //TODO: Show snackbar on arrival.
 import 'package:flutter/material.dart';
+import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
 
-import 'my_drawer.dart';
+import 'common/my_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   final ApiResponse apiResponse;
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: InkWell(
                           onTap: () => Navigator.pushNamed(
                               context, route_product_list,
-                              arguments: index + 1),
+                              arguments: ScreenParameters(parameter1: index+1,parameter2: widget.apiResponse)),//imdex+1 is product category id number
                           child: Card(
                             child: Text(productNames[index]),
                           ),
@@ -65,7 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   showSnackBar(String title) {
-    print(_scaffoldKey);
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
   }
 

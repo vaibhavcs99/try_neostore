@@ -5,7 +5,7 @@ import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/fetchDataResponse.dart';
-import 'package:try_neostore/screens/my_drawer.dart';
+import 'package:try_neostore/screens/common/my_drawer.dart';
 
 class MyAccountDetails extends StatefulWidget {
   final ApiResponse _apiResponse;

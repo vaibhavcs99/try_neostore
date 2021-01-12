@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
+import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/product_list_model.dart';
 import 'package:try_neostore/network/api_services.dart';
 
 class ProductList extends StatefulWidget {
   final int index;
-  ProductList({@required this.index});
+  final ApiResponse apiResponse;
+
+  ProductList({@required this.index, @required this.apiResponse});
 
   @override
   _ProductListState createState() => _ProductListState();
@@ -28,8 +32,9 @@ class _ProductListState extends State<ProductList> {
                 Datum productData = snapshot.data.data[index];
                 return Container(
                   child: InkWell(
-                    onTap: () =>
-                        Navigator.pushNamed(context, route_product_details,arguments: productData),
+                    onTap: () => Navigator.pushNamed(
+                        context, route_product_details,
+                        arguments:  ScreenParameters(parameter1: productData,parameter2: widget.apiResponse)),
                     child: Card(
                         child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
