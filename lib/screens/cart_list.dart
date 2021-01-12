@@ -27,6 +27,9 @@ class _CartListState extends State<CartList> {
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());
               }
+              if (snapshot.data.count == null) {
+                return Center(child: Text('Cart is Empty'));
+              }
               return ListView.builder(
                   itemCount: snapshot.data.count,
                   itemBuilder: (context, index) {

@@ -5,6 +5,8 @@ import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/product_list_model.dart';
 import 'package:try_neostore/screens/cart_list.dart';
+import 'package:try_neostore/screens/order/order_details.dart';
+import 'package:try_neostore/screens/order/order_list.dart';
 import 'package:try_neostore/screens/product/product_details.dart';
 import 'package:try_neostore/screens/product/products_list.dart';
 import 'package:try_neostore/screens/user_module/forgot_password.dart';
@@ -87,10 +89,30 @@ class AppRouter {
           ),
         );
         break;
+//*****************************************************************************************************
+
       case route_cart_list:
         ApiResponse apiResponse = settings.arguments as ApiResponse;
         return MaterialPageRoute(
           builder: (_) => CartList(
+            apiResponse: apiResponse,
+          ),
+        );
+        break;
+      case route_order_list:
+        ApiResponse apiResponse = settings.arguments as ApiResponse;
+        return MaterialPageRoute(
+          builder: (_) => MyOrders(apiResponse: apiResponse),
+        );
+        break;
+      case route_order_details:
+        ScreenParameters parameters = settings.arguments as ScreenParameters;
+
+        int orderId = parameters.parameter1 as int;
+        ApiResponse apiResponse = parameters.parameter2 as ApiResponse;
+        return MaterialPageRoute(
+          builder: (_) => OrderDetails(
+            orderId: orderId,
             apiResponse: apiResponse,
           ),
         );

@@ -23,46 +23,47 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('My Account')),
-      drawer: Drawer(
-        child: MyDrawer(widget._apiResponse),
-      ),
-      body: Center(
-        child: FutureBuilder<FetchDataResponse>(
-            future: getDetails(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                print(snapshot.data);
-                return CircularProgressIndicator();
-              } else {
-                var userData = snapshot.data.data.userData;
-                return Column(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          '${snapshot.data.data.productCategories[0].iconImage}'),
-                    ),
-                    Text(userData.firstName ?? 'no data'),
-                    Text(userData.lastName ?? 'no data'),
-                    Text(userData.email ?? 'no data'),
-                    Text(userData.phoneNo ?? 'no data'),
-                    Text(userData.dob ?? 'no data'),
-                    FlatButton(
+    return WillPopScope(onWillPop: _onBackPressed,
+          child: Scaffold(
+        appBar: AppBar(title: Text('My Account')),
+        drawer: Drawer(
+          child: MyDrawer( apiResponse: widget._apiResponse,),
+        ),
+        body: Center(
+          child: FutureBuilder<FetchDataResponse>(
+              future: getDetails(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator();
+                } else {
+                  var userData = snapshot.data.data.userData;
+                  return Column(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            '${snapshot.data.data.productCategories[0].iconImage}'),
+                      ),
+                      Text(userData.firstName ?? 'no data'),
+                      Text(userData.lastName ?? 'no data'),
+                      Text(userData.email ?? 'no data'),
+                      Text(userData.phoneNo ?? 'no data'),
+                      Text(userData.dob ?? 'no data'),
+                      FlatButton(
+                          onPressed: () => Navigator.pushNamed(
+                              context, route_edit_account_details,
+                              arguments: widget._apiResponse),
+                          child: Text('Edit Profile')),
+                      FlatButton(
                         onPressed: () => Navigator.pushNamed(
-                            context, route_edit_account_details,
+                            context, route_change_password,
                             arguments: widget._apiResponse),
-                        child: Text('Edit Profile')),
-                    FlatButton(
-                      onPressed: () => Navigator.pushNamed(
-                          context, route_change_password,
-                          arguments: widget._apiResponse),
-                      child: Text('Reset Password'),
-                    )
-                  ],
-                );
-              }
-            }),
+                        child: Text('Reset Password'),
+                      )
+                    ],
+                  );
+                }
+              }),
+        ),
       ),
     );
   }
@@ -71,7 +72,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
     dynamic _receivedDynamicResponse =
         await myAccountDetailsService(widget._apiResponse.data.accessToken);
     if (_receivedDynamicResponse is String) {
-      print(_receivedDynamicResponse);
+      // print(_receivedDynamicResponse);
     } else if (_receivedDynamicResponse is FetchDataResponse) {
       // print(_receivedDynamicResponse.data.userData.email);
       return _receivedDynamicResponse;
@@ -91,4 +92,24 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
   //   }
   //   return null;
   // }
+
+    Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Are you Sure?'),
+          content: Text('Do you want to exit an App?'),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text('Yes')),
+            TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('No')),
+          ],
+        );
+      },
+    );
+  }
 }

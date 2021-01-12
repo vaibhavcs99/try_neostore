@@ -9,3 +9,5 @@ const String route_splash_screen = '/splash_screen';
 const String route_product_list = '/product_list';
 const String route_product_details = '/product_details';
 const String route_cart_list = '/cart_list';
+const String route_order_list = '/order_list';
+const String route_order_details = '/order_details';

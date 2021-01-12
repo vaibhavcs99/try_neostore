@@ -69,7 +69,6 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       'profile_pic': 'null',
       'phone_no': '$_phoneNumber',
     };
-    print(widget._apiResponse.data);
     String receivedMessage = await editAccountDetailsService(
         widget._apiResponse.data.accessToken, _userDetails);
 

@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         drawer: Drawer(
-          child: MyDrawer(widget.apiResponse),
+          child: MyDrawer(apiResponse: widget.apiResponse),
         ),
         body: Column(
           children: [

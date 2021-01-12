@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
 
 class MyDrawer extends StatefulWidget {
-  final ApiResponse _apiResponse;
+  final ApiResponse apiResponse;
 
-  const MyDrawer(
-    this._apiResponse, {
-    Key key,
-  }) : super(key: key);
+  const MyDrawer({Key key, this.apiResponse}) : super(key: key);
 
   @override
   _MyDrawerState createState() => _MyDrawerState();
@@ -17,7 +15,7 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
-    var user = widget._apiResponse.data;
+    var user = widget.apiResponse.data;
     return ListView(
       children: [
         UserAccountsDrawerHeader(
@@ -32,24 +30,54 @@ class _MyDrawerState extends State<MyDrawer> {
             title: Text('Home'),
             leading: Icon(Icons.home),
             onTap: () {
-              Navigator.pushReplacementNamed(context, route_home_screen);
+              Navigator.pushReplacementNamed(context, route_home_screen,
+                  arguments: widget.apiResponse);
             }),
         ListTile(
             title: Text('My Cart'),
             leading: Icon(Icons.shopping_cart),
             onTap: () {}),
-        ListTile(title: Text('Tables'), leading: Icon(Icons.shopping_cart)),
-        ListTile(title: Text('Sofas'), leading: Icon(Icons.shopping_cart)),
-        ListTile(title: Text('Chairs'), leading: Icon(Icons.shopping_cart)),
-        ListTile(title: Text('Cupboards'), leading: Icon(Icons.shopping_cart)),
+        ListTile(
+            title: Text('Tables'),
+            leading: Icon(Icons.shopping_cart),
+            onTap: () => Navigator.pushNamed(context, route_product_list,
+                //imdex+1 is product category id number
+                arguments: ScreenParameters(
+                    parameter1: 1, parameter2: widget.apiResponse))),
+        ListTile(
+            title: Text('Chair'),
+            leading: Icon(Icons.shopping_cart),
+            onTap: () => Navigator.pushNamed(context, route_product_list,
+                //imdex+1 is product category id number
+                arguments: ScreenParameters(
+                    parameter1: 2, parameter2: widget.apiResponse))),
+        ListTile(
+            title: Text('Sofas'),
+            leading: Icon(Icons.shopping_cart),
+            onTap: () => Navigator.pushNamed(context, route_product_list,
+                //imdex+1 is product category id number
+                arguments: ScreenParameters(
+                    parameter1: 3, parameter2: widget.apiResponse))),
+        ListTile(
+            title: Text('Bed'),
+            leading: Icon(Icons.shopping_cart),
+            onTap: () => Navigator.pushNamed(context, route_product_list,
+                //imdex+1 is product category id number
+                arguments: ScreenParameters(
+                    parameter1: 4, parameter2: widget.apiResponse))),
         ListTile(
           title: Text('My Account'),
           leading: Icon(Icons.person),
-          onTap: () => Navigator.pushNamed(context, route_my_account_details,
-              arguments: widget._apiResponse),
+          onTap: () => Navigator.pushReplacementNamed(context, route_my_account_details,
+              arguments: widget.apiResponse),
         ),
         ListTile(title: Text('Store Locator'), leading: Icon(Icons.map)),
-        ListTile(title: Text('My Orders'), leading: Icon(Icons.view_list)),
+        ListTile(
+            title: Text('My Orders'),
+            leading: Icon(Icons.view_list),
+            onTap: () => Navigator.pushReplacementNamed(
+                context, route_order_list,
+                arguments: widget.apiResponse)),
         ListTile(
           title: Text('LogOut'),
           leading: Icon(Icons.exit_to_app),

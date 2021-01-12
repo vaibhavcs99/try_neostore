@@ -4,6 +4,8 @@ import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/cart_list_model.dart';
 import 'package:try_neostore/model/fetchDataResponse.dart';
+import 'package:try_neostore/model/order_details_model.dart';
+import 'package:try_neostore/model/order_list_model.dart';
 import 'package:try_neostore/model/product_details.model.dart';
 import 'package:try_neostore/model/product_list_model.dart';
 
@@ -118,7 +120,6 @@ Future<ProductsListModel> productListService(String _productCategory) async {
   try {
     var response = await dio.get(urlGetProductList, queryParameters: json);
     final productsListModel = productsListModelFromJson(response.data);
-    print(productsListModel);
     return productsListModel;
   } on DioError catch (dioError) {
     print(dioError);
@@ -135,7 +136,6 @@ Future<ProductDetailsModel> productDetailsService(String _productId) async {
   try {
     var response = await dio.get(urlGetProductDetails, queryParameters: json);
     final productsListModel = productDetailsModelFromJson(response.data);
-    print(productsListModel);
     return productsListModel;
   } on DioError catch (dioError) {
     print(dioError);
@@ -196,5 +196,29 @@ editItemCartService(
 
   var data = await dio.post(urlEditCart, data: formData);
 
-  print('$data *************************');
+}
+Future<OrderListModel> orderListService(
+    {@required String myAccessToken}) async {
+  var dio = Dio();
+
+  dio.options.headers['access_token'] = myAccessToken;
+
+  var orderListJson = await dio.get(urlOrderList);
+  final orderListModel = orderListModelFromJson(orderListJson.data);
+  return orderListModel;
+
+}
+
+Future<OrderDetailsModel> orderDetailsService(
+    {@required String myAccessToken, @required int orderId}) async {
+  var dio = Dio();
+  dio.options.headers['access_token'] = myAccessToken;
+
+  Map<String, dynamic> parameters = {'order_id': orderId};
+  // FormData formData = FormData.fromMap(parameters);
+
+  var response = await dio.get(urlOrderDetail, queryParameters: parameters);
+  final orderDetailsModel = orderDetailsModelFromJson(response.data);
+
+  return orderDetailsModel;
 }

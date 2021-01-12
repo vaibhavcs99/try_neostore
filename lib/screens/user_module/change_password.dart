@@ -29,6 +29,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         key: _scaffoldKey,
         appBar: AppBar(
           title: Text('Change Password'),
+          
         ),
         body: Center(
           child: Form(
