@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  List productNames = ['Tables', 'Chairs', 'Sofa', 'Bed','Dining set'];
+  List productNames = ['Tables', 'Chairs', 'Sofa', 'Bed', 'Dining set'];
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,17 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: _onBackPressed,
       child: Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text('Home'),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: InkWell(
+                  onTap: () => Navigator.pushNamed(context, route_cart_list,arguments: widget.apiResponse),
+                  child: Icon(Icons.shopping_cart_outlined)),
+            )
+          ],
+        ),
         drawer: Drawer(
           child: MyDrawer(widget.apiResponse),
         ),
@@ -50,7 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: InkWell(
                           onTap: () => Navigator.pushNamed(
                               context, route_product_list,
-                              arguments: ScreenParameters(parameter1: index+1,parameter2: widget.apiResponse)),//imdex+1 is product category id number
+                              //imdex+1 is product category id number
+                              arguments: ScreenParameters(
+                                  parameter1: index + 1,
+                                  parameter2: widget.apiResponse)),
                           child: Card(
                             child: Text(productNames[index]),
                           ),

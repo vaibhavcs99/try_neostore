@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
+import 'package:try_neostore/model/cart_list_model.dart';
 import 'package:try_neostore/model/fetchDataResponse.dart';
 import 'package:try_neostore/model/product_details.model.dart';
 import 'package:try_neostore/model/product_list_model.dart';
@@ -138,4 +140,61 @@ Future<ProductDetailsModel> productDetailsService(String _productId) async {
   } on DioError catch (dioError) {
     print(dioError);
   } catch (e) {}
+}
+
+Future<CartListModel> cartListService(
+    {@required String receivedAccessToken}) async {
+  var dio = Dio();
+  dio.options.headers['access_token'] = receivedAccessToken;
+  var data = await dio.get(urlListCartItems);
+  final cartListModel = cartListModelFromJson(data.data);
+
+  return cartListModel;
+}
+
+addItemCartService(
+    {@required int myProductId, @required String receivedAccessToken}) async {
+  var dio = Dio();
+  dio.options.headers['access_token'] = receivedAccessToken;
+
+  Map<String, dynamic> productData = {'product_id': myProductId, 'quantity': 1};
+
+  FormData formData = FormData.fromMap(productData);
+  var response = await dio.post(urlAddToCart, data: formData);
+  if (response.statusCode == 200) {
+    return response;
+  }
+}
+
+deleteItemCartService(
+    {@required int myProductId, @required String receivedAccessToken}) async {
+  var dio = Dio();
+  dio.options.headers['access_token'] = receivedAccessToken;
+
+  Map<String, dynamic> productData = {
+    'product_id': myProductId,
+  };
+
+  FormData formData = FormData.fromMap(productData);
+
+  await dio.post(urlDeleteCart, data: formData);
+}
+
+editItemCartService(
+    {@required int myProductId,
+    @required int quantity,
+    @required String receivedAccessToken}) async {
+  var dio = Dio();
+  dio.options.headers['access_token'] = receivedAccessToken;
+
+  Map<String, dynamic> productData = {
+    'product_id': myProductId,
+    'quantity': quantity
+  };
+
+  FormData formData = FormData.fromMap(productData);
+
+  var data = await dio.post(urlEditCart, data: formData);
+
+  print('$data *************************');
 }

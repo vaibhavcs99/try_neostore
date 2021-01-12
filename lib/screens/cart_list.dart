@@ -1,9 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:try_neostore/Utils/utils.dart';
 import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/cart_list_model.dart';
+import 'package:try_neostore/network/api_services.dart';
 
 class CartList extends StatefulWidget {
   final ApiResponse apiResponse;
@@ -14,14 +13,16 @@ class CartList extends StatefulWidget {
 }
 
 class _CartListState extends State<CartList> {
-  var product_id = 0;
+  List itemList = <int>[1, 2, 3, 4, 5, 6, 7, 8];
+  int dropDownValue = 1;
 
   @override
   Widget build(BuildContext context) {
+    var myAccessToken = widget.apiResponse.data.accessToken;
     return Scaffold(
         appBar: AppBar(),
         body: FutureBuilder<CartListModel>(
-            future: cartListService(),
+            future: cartListService(receivedAccessToken: myAccessToken),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());
@@ -64,28 +65,31 @@ class _CartListState extends State<CartList> {
                               Text(productData.product.productCategory),
                               Text(productData.quantity.toString()),
                               Text(productData.product.subTotal.toString()),
-                              Row(
-                                children: [
-                                  RaisedButton(
-                                    onPressed: () {
-                                      addItemCartService(
-                                          myProductId: productData.product.id);
-                                      setState(() {});
-                                    },
-                                    child: Text('Add'),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  RaisedButton(
-                                    onPressed: () {
-                                      deleteItemCartService(
-                                          myProductId: productData.product.id);
-                                      setState(() {});
-                                    },
-                                    child: Text('Remove from Cart'),
-                                  ),
-                                ],
+                              //******************************************************
+                              DropdownButton<int>(
+                                value: productData.quantity,
+                                items: itemList
+                                    .map((e) => DropdownMenuItem<int>(
+                                        value: e, child: Text('$e')))
+                                    .toList(),
+                                onChanged: (value) async {
+                                  await editItemCartService(
+                                      receivedAccessToken: myAccessToken,
+                                      myProductId: productData.product.id,
+                                      quantity: value);
+                                  setState(() {});
+                                },
+                              ), //*********
+
+                              RaisedButton(
+                                onPressed: () {
+                                  deleteItemCartService(
+                                      receivedAccessToken:
+                                          widget.apiResponse.data.accessToken,
+                                      myProductId: productData.product.id);
+                                  setState(() {});
+                                },
+                                child: Text('Remove from Cart'),
                               ),
                             ],
                           ),
@@ -94,43 +98,5 @@ class _CartListState extends State<CartList> {
                     ));
                   });
             }));
-  }
-
-  Future<CartListModel> cartListService() async {
-    var dio = Dio();
-    dio.options.headers['access_token'] = widget.apiResponse.data.accessToken;
-    var data = await dio.get(urlListCartItems);
-    final cartListModel = cartListModelFromJson(data.data);
-
-    return cartListModel;
-  }
-
-   addItemCartService({@required int myProductId}) async {
-    var dio = Dio();
-    dio.options.headers['access_token'] = widget.apiResponse.data.accessToken;
-
-    Map<String, dynamic> productData = {
-      'product_id': myProductId,
-      'quantity': 1
-    };
-
-    FormData formData = FormData.fromMap(productData);
-    var data = await dio.post(urlAddToCart, data: formData);
-    
-  }
-
-deleteItemCartService(
-      {@required int myProductId}) async {
-    var dio = Dio();
-    dio.options.headers['access_token'] = widget.apiResponse.data.accessToken;
-
-    Map<String, dynamic> productData = {
-      'product_id': myProductId,
-    };
-
-    FormData formData = FormData.fromMap(productData);
-
-    var data = await dio.post(urlDeleteCart, data: formData);
-
   }
 }

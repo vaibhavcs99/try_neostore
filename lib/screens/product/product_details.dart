@@ -8,10 +8,11 @@ import 'package:try_neostore/network/api_services.dart';
 
 class ProductDetails extends StatefulWidget {
   final Datum productInfo;
-    final ApiResponse apiResponse;
+  final ApiResponse apiResponse;
 
-
-  const ProductDetails({Key key, @required this.productInfo, @required this.apiResponse}) : super(key: key);
+  const ProductDetails(
+      {Key key, @required this.productInfo, @required this.apiResponse})
+      : super(key: key);
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
@@ -58,13 +59,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 child: Image.network(
                                     productDetails.productImages[index].image)),
                           );
-                        } on RangeError catch (e) {
+                        } on RangeError {
                           return Card(
-                            // child: Container(
-                            //     width: 130,
-                            //     child: Image.network(
-                            //         productDetails.productImages[0].image)),
-                          );
+                              // child: Container(
+                              //     width: 130,
+                              //     child: Image.network(
+                              //         productDetails.productImages[0].image)),
+                              );
                         }
                       },
                     ),
@@ -84,7 +85,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                     child: Row(
                       children: [
                         RaisedButton(
-                            onPressed: () => Navigator.pushNamed(context, route_cart_list,arguments: widget.apiResponse),
+                            onPressed: () {
+                              addItemCartService(
+                                  myProductId: productDetails.id,
+                                  receivedAccessToken:
+                                      widget.apiResponse.data.accessToken);
+                              Navigator.pushNamed(context, route_cart_list,
+                                  arguments: widget.apiResponse);
+                            },
                             child: Text('Buy Now')),
                         RaisedButton(
                             onPressed: () => print('Rate'),
