@@ -11,3 +11,5 @@ const String route_product_details = '/product_details';
 const String route_cart_list = '/cart_list';
 const String route_order_list = '/order_list';
 const String route_order_details = '/order_details';
+const String route_enter_address= '/enter_address';
+

@@ -32,6 +32,7 @@ String validatePassword(String name) {
   }
   return null;
 }
+
 String validateDob(String name) {
   if (name.length < 10) {
     return 'Enter valid DOB';
@@ -40,9 +41,24 @@ String validateDob(String name) {
 }
 
 String validatePhoneNumber(String phone) {
-
   if (phone.length < 10) {
     return 'Phone number must be of 10 digit';
+  }
+  return null;
+}
+
+String validateQuantity(String quantity) {
+  if (quantity.length < 1) {
+    return 'Enter a value';
+  }
+  return null;
+}
+
+//(**************************************)
+
+String validateFieldForValue(String name) {
+  if (name.length < 1) {
+    return 'Enter valid input';
   }
   return null;
 }

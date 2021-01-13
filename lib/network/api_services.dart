@@ -153,11 +153,16 @@ Future<CartListModel> cartListService(
 }
 
 addItemCartService(
-    {@required int myProductId, @required String receivedAccessToken}) async {
+    {@required int myProductId,
+    @required int quantity,
+    @required String receivedAccessToken}) async {
   var dio = Dio();
   dio.options.headers['access_token'] = receivedAccessToken;
 
-  Map<String, dynamic> productData = {'product_id': myProductId, 'quantity': 1};
+  Map<String, dynamic> productData = {
+    'product_id': myProductId,
+    'quantity': quantity
+  };
 
   FormData formData = FormData.fromMap(productData);
   var response = await dio.post(urlAddToCart, data: formData);
@@ -195,8 +200,21 @@ editItemCartService(
   FormData formData = FormData.fromMap(productData);
 
   var data = await dio.post(urlEditCart, data: formData);
-
 }
+
+orderItemsService(
+    {@required String address, @required String myAccessToken}) async {
+  var dio = Dio();
+
+  dio.options.headers['access_token'] = myAccessToken;
+  Map<String, dynamic> parameters = {'address': address};
+  FormData formData = FormData.fromMap(parameters);
+
+  var response = await dio.post(urlOrder, data: formData);
+
+  return response.statusCode;
+}
+
 Future<OrderListModel> orderListService(
     {@required String myAccessToken}) async {
   var dio = Dio();
@@ -206,7 +224,6 @@ Future<OrderListModel> orderListService(
   var orderListJson = await dio.get(urlOrderList);
   final orderListModel = orderListModelFromJson(orderListJson.data);
   return orderListModel;
-
 }
 
 Future<OrderDetailsModel> orderDetailsService(

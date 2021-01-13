@@ -5,6 +5,7 @@ import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/product_list_model.dart';
 import 'package:try_neostore/screens/cart_list.dart';
+import 'package:try_neostore/screens/order/enter_address.dart';
 import 'package:try_neostore/screens/order/order_details.dart';
 import 'package:try_neostore/screens/order/order_list.dart';
 import 'package:try_neostore/screens/product/product_details.dart';
@@ -97,6 +98,12 @@ class AppRouter {
           builder: (_) => CartList(
             apiResponse: apiResponse,
           ),
+        );
+        break;
+      case route_enter_address:
+        ApiResponse apiResponse = settings.arguments as ApiResponse;
+        return MaterialPageRoute(
+          builder: (_) => EnterAddress(apiResponse: apiResponse),
         );
         break;
       case route_order_list:

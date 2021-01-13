@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/utils.dart';
+import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/product_details.model.dart';
@@ -18,12 +19,17 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  int _quantity = 0;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     var productData = widget.productInfo;
     int selectedImage = 1; //TODO:DOESN'T WORK OUTSIDE BUILD
 
     return Scaffold(
+        key: _scaffoldKey,
         body: FutureBuilder<ProductDetailsModel>(
             future: productDetailsService(productData.id.toString()),
             builder: (context, snapshot) {
@@ -86,12 +92,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                       children: [
                         RaisedButton(
                             onPressed: () {
-                              addItemCartService(
-                                  myProductId: productDetails.id,
-                                  receivedAccessToken:
-                                      widget.apiResponse.data.accessToken);
-                              Navigator.pushNamed(context, route_cart_list,
-                                  arguments: widget.apiResponse);
+                              showAlertDialog(
+                                  productId: productDetails.id,
+                                  productName: productDetails.name,
+                                  productImageUrl:
+                                      productDetails.productImages.first.image);
+                              // addItemCartService(
+                              //     myProductId: productDetails.id,
+                              //     receivedAccessToken:
+                              //         widget.apiResponse.data.accessToken);
+                              // Navigator.pushNamed(context, route_cart_list,
+                              //     arguments: widget.apiResponse);
                             },
                             child: Text('Buy Now')),
                         RaisedButton(
@@ -103,5 +114,63 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ],
               );
             }));
+  }
+
+  void showAlertDialog(
+      {@required String productName,
+      @required String productImageUrl,
+      @required int productId}) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(productName),
+      content: SizedBox(
+          width: 100,
+          height: 250,
+          child: Form(
+            key: _formKey,
+            child: ListView(children: [
+              Container(
+                child: Image.network(productImageUrl),
+              ),
+              // Text('Enter Quantity of product'),
+              TextFormField(
+                autofocus: true,
+                decoration: const InputDecoration(
+                    labelText: 'Quantity', hintText: 'Enter a quantity'),
+                keyboardType: TextInputType.number,
+                validator: validateQuantity,
+                onSaved: (newValue) {
+                  _quantity = int.parse(newValue);
+                },
+              )
+            ]),
+          )),
+      actions: [
+        RaisedButton(
+          onPressed: () async {
+            if (_formKey.currentState.validate()) {
+              _formKey.currentState.save();
+              await addItemCartService(
+                  myProductId: productId,
+                  quantity: _quantity,
+                  receivedAccessToken: widget.apiResponse.data.accessToken);
+              Navigator.pop(context);
+              Navigator.pushNamed(context, route_cart_list,
+                  arguments: widget.apiResponse);
+            } else {
+              // _scaffoldKey.currentState.showSnackBar(
+              //     SnackBar(content: Text('Please Enter all Fields')));
+            }
+          },
+          child: Text('Add to cart'),
+        )
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return alertDialog;
+      },
+    );
   }
 }

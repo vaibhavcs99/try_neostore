@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/constants/urls.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/cart_list_model.dart';
@@ -30,76 +31,89 @@ class _CartListState extends State<CartList> {
               if (snapshot.data.count == null) {
                 return Center(child: Text('Cart is Empty'));
               }
-              return ListView.builder(
-                  itemCount: snapshot.data.count,
-                  itemBuilder: (context, index) {
-                    var productData = snapshot.data.data[index];
+              return Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: ListView.builder(
+                        itemCount: snapshot.data.count,
+                        itemBuilder: (context, index) {
+                          var productData = snapshot.data.data[index];
 
-                    return Card(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Column(
+                          return Card(
+                              child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: ClipRRect(
+                                          child: Container(
+                                        child: Image.network(
+                                            productData.product.productImages),
+                                      )),
+                                    )
+                                  ],
+                                ),
+                              ),
                               SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: ClipRRect(
-                                    child: Container(
-                                  child: Image.network(
-                                      productData.product.productImages),
-                                )),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 18,
-                        ),
-                        Expanded(
-                          flex: 8,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(productData.product.id.toString()),
-                              Text(productData.product.name),
-                              Text(productData.product.productCategory),
-                              Text(productData.quantity.toString()),
-                              Text(productData.product.subTotal.toString()),
-                              //******************************************************
-                              DropdownButton<int>(
-                                value: productData.quantity,
-                                items: itemList
-                                    .map((e) => DropdownMenuItem<int>(
-                                        value: e, child: Text('$e')))
-                                    .toList(),
-                                onChanged: (value) async {
-                                  await editItemCartService(
-                                      receivedAccessToken: myAccessToken,
-                                      myProductId: productData.product.id,
-                                      quantity: value);
-                                  setState(() {});
-                                },
-                              ), //*********
+                                width: 18,
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(productData.product.id.toString()),
+                                    Text(productData.product.name),
+                                    Text(productData.product.productCategory),
+                                    Text(productData.quantity.toString()),
+                                    Text(productData.product.subTotal
+                                        .toString()),
+                                    //******************************************************
+                                    DropdownButton<int>(
+                                      value: productData.quantity,
+                                      items: itemList
+                                          .map((e) => DropdownMenuItem<int>(
+                                              value: e, child: Text('$e')))
+                                          .toList(),
+                                      onChanged: (value) async {
+                                        await editItemCartService(
+                                            receivedAccessToken: myAccessToken,
+                                            myProductId: productData.product.id,
+                                            quantity: value);
+                                        setState(() {});
+                                      },
+                                    ), //*********
 
-                              RaisedButton(
-                                onPressed: () {
-                                  deleteItemCartService(
-                                      receivedAccessToken:
-                                          widget.apiResponse.data.accessToken,
-                                      myProductId: productData.product.id);
-                                  setState(() {});
-                                },
-                                child: Text('Remove from Cart'),
+                                    RaisedButton(
+                                      onPressed: () {
+                                        deleteItemCartService(
+                                            receivedAccessToken: widget
+                                                .apiResponse.data.accessToken,
+                                            myProductId:
+                                                productData.product.id);
+                                        setState(() {});
+                                      },
+                                      child: Text('Remove from Cart'),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
-                          ),
-                        ),
-                      ],
-                    ));
-                  });
+                          ));
+                        }),
+                  ),
+                  RaisedButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, route_enter_address,arguments: widget.apiResponse),
+                      child: Text('Order Now'))
+                ],
+              );
             }));
   }
 }
