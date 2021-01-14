@@ -27,6 +27,8 @@ dependencies:
   dio: ^3.0.10
   equatable: ^1.2.5
   flutter_bloc: ^6.1.1
+  flutter_rating_bar: ^3.2.0+1
+  rating_dialog: ^1.0.0
 
 dev_dependencies:
   flutter_test:

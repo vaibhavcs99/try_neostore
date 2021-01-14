@@ -239,3 +239,17 @@ Future<OrderDetailsModel> orderDetailsService(
 
   return orderDetailsModel;
 }
+
+setProductRatingService(
+    {@required String productId, @required double rating}) async {
+  var dio = Dio();
+  Map<String, dynamic> parameters = {'product_id': productId, 'rating': rating};
+  FormData formData = FormData.fromMap(parameters);
+
+  try {
+    var data = await dio.post(urlSetProductRating, data: formData);
+    print(data.data);
+  } on DioError catch (dioError) {
+    print(dioError.response.data);
+  }
+}

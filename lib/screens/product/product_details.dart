@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:rating_dialog/rating_dialog.dart';
 import 'package:try_neostore/Utils/utils.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
@@ -23,6 +25,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  double myFeedbackRating=3.0;
+
   @override
   Widget build(BuildContext context) {
     var productData = widget.productInfo;
@@ -41,6 +45,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Card(
                     child: Column(
                       children: [
+                        Text(productDetails.rating.toString()),
                         Text(productDetails.name),
                         Text(getProductCategoryName(
                             productDetails.productCategoryId)),
@@ -106,7 +111,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                             },
                             child: Text('Buy Now')),
                         RaisedButton(
-                            onPressed: () => print('Rate'),
+                            onPressed: () => showRatingDialog(
+                                productId: productDetails.id,
+                                productName: productDetails.name,
+                                productImage:
+                                    productDetails.productImages.first.image),
                             child: Text('Rate')),
                       ],
                     ),
@@ -170,6 +179,68 @@ class _ProductDetailsState extends State<ProductDetails> {
       context: context,
       builder: (context) {
         return alertDialog;
+      },
+    );
+  }
+
+  // showRatingDialog(
+  //     {@required String productName, @required String productImage}) {
+  //   showDialog(
+  //       context: context,
+  //       barrierDismissible: true,
+  //       builder: (context) {
+  //         return RatingDialog(
+  //             icon: Icon(Icons.ac_unit),
+  //             title: productName,
+  //             description: ,
+  //             onSubmitPressed: (int) => print('pressed Rating $int'),
+  //             submitButton: "null");
+  //       });
+  // }
+
+  showRatingDialog(
+      {@required String productName,
+      @required String productImage,
+      @required int productId}) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+              title: Text(productName),
+              content: SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: ListView(children: [
+                    Container(
+                      child: Image.network(productImage),
+                    ),
+                    myRatingbar(),
+                    Align(
+                                          child: RaisedButton(
+                          onPressed:()=>   setProductRatingService(
+                              productId: productId.toString(), rating: myFeedbackRating),child: Text('Rate Now'),),
+                    )
+                  ])));
+        });
+  }
+
+  myRatingbar() {
+    return RatingBar.builder(
+      initialRating: 3,
+      minRating: 1,
+      direction: Axis.horizontal,
+      allowHalfRating: true,
+      itemCount: 5,
+      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+      itemBuilder: (context, _) => Icon(
+        Icons.star,
+        color: Colors.red.shade400,
+      ),
+      onRatingUpdate: (rating) {
+        setState(() {
+          myFeedbackRating = rating;
+        });
       },
     );
   }
