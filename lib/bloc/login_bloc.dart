@@ -27,9 +27,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       Response response = await authenticateUserService(_userDetails);
       if (response.statusCode == 200) {
-        var _apiResponse = apiResponseFromJson(response.data);
+        String accessToken = apiResponseFromJson(response.data).data.accessToken;
         print('Login bloc successful!');
-        yield LoginSuccessful(apiResponse: _apiResponse);
+        yield LoginSuccessful(accessToken: accessToken);
       } else {
         print(response.toString());
         yield LoginFailed(error: 'Invalid redential');

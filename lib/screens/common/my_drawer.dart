@@ -113,7 +113,8 @@ class _MyDrawerState extends State<MyDrawer> {
                 onPressed: () async {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                  prefs.remove('email');
+                  prefs.remove('token');
+
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       route_login, (Route<dynamic> route) => false);
                 },

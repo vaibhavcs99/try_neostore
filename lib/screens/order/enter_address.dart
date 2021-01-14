@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/network/api_services.dart';
 
 class EnterAddress extends StatefulWidget {
@@ -117,7 +116,6 @@ class _EnterAddressState extends State<EnterAddress> {
       var response = await orderItemsService(
           address: _entireAddress,
           accessToken: widget.accessToken);
-      print(response.statusCode);
       if (response.statusCode == 200) {
         _scaffoldKey.currentState
             .showSnackBar(SnackBar(content: Text('Order Placed Successfully')));

@@ -69,10 +69,12 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       'profile_pic': 'null',
       'phone_no': '$_phoneNumber',
     };
-    var receivedMessage =
+    var response =
         await editAccountDetailsService(widget.accessToken, _userDetails);
 
-    showSnackBar("receivedMessage");
+    if (response.statusCode == 200) {
+      showSnackBar('Details updated successfully');
+    }
   }
   // void registerUser() async {
   //   var dio = Dio();

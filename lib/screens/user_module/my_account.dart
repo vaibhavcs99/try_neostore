@@ -69,29 +69,14 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
   }
 
   Future<FetchDataResponse> getDetails() async {
-    dynamic _receivedDynamicResponse =
-        await myAccountDetailsService(widget.accessToken);
-    if (_receivedDynamicResponse is String) {
-      // print(_receivedDynamicResponse);
-    } else if (_receivedDynamicResponse is FetchDataResponse) {
-      // print(_receivedDynamicResponse.data.userData.email);
-      return _receivedDynamicResponse;
+    var response = await myAccountDetailsService(widget.accessToken);
+    if (response.statusCode == 200) {
+      return fetchDataResponseFromJson(response.data);
+    }
+    if (response.statusCode == 500) {
+      print('Unsuccessful');
     }
   }
-  // Future<FetchDataResponse> getDetails() async {
-  //   var dio = Dio();
-  //   dio.options.headers['access_token'] = widget._apiResponse.data.accessToken;
-  //   try {
-  //     return await dio.get(urlFetchAccountDetails).then((value) {
-  //       return fetchDataResponseFromJson(value.data);
-  //     });
-  //   } on DioError catch (dioError) {
-  //     print('${dioError.error.toString()}');
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  //   return null;
-  // }
 
   Future<bool> _onBackPressed() {
     return showDialog(

@@ -12,9 +12,9 @@ class LoginLoading extends LoginState {}
 class LoginInitial extends LoginState {}
 
 class LoginSuccessful extends LoginState {
-  final ApiResponse apiResponse;
+  final String  accessToken;
 
-  LoginSuccessful({@required this.apiResponse});
+  LoginSuccessful({@required this.accessToken});
 }
 
 class LoginFailed extends LoginState {

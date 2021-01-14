@@ -96,10 +96,12 @@ class _ChangePasswordState extends State<ChangePassword> {
       'confirm_password': '$_confirmNewPassword',
     };
 
-    var receivedMessage = await changePasswordService(
+    var response = await changePasswordService(
         widget.accessToken, _passwordDetails);
 
-    showSnackBar('ok');
+     if (response.statusCode == 200) {
+      showSnackBar('Password Changed successfully');
+    }
   }
 
   showSnackBar(String title) {
