@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
-import 'package:try_neostore/bloc/register_bloc.dart';
+import 'package:try_neostore/bloc/registerBloc/register_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 
 class Register extends StatefulWidget {

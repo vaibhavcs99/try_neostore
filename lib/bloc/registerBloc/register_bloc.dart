@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:try_neostore/bloc/authBloc/authentication_bloc.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/network/api_services.dart';
 
@@ -11,7 +12,9 @@ part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  RegisterBloc() : super(RegisterInitial());
+  final AuthenticationBloc authenticationBloc;
+
+  RegisterBloc({@required this.authenticationBloc}) : super(RegisterInitial());
 
   @override
   Stream<RegisterState> mapEventToState(
@@ -35,10 +38,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       if (response.statusCode == 200) {
         String accessToken =
             apiResponseFromJson(response.data).data.accessToken;
-        print('ok');
+
+        authenticationBloc.add(LoggedIn(accessToken: accessToken));
+
         yield RegisterSuccessful(accessToken: accessToken);
       } else if (response.statusCode == 404) {
-        print('ll');
         yield RegisterFailed(error: 'Email Already Exists');
       }
     }
