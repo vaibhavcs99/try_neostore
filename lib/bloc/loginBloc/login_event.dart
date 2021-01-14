@@ -11,5 +11,8 @@ class OnLoginButtonPressed extends LoginEvent {
   final String email;
   final String password;
 
-  OnLoginButtonPressed({@required this.email, @required this.password});
+  OnLoginButtonPressed({
+    @required this.email,
+    @required this.password,
+  });
 }

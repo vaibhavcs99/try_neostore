@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:try_neostore/bloc/authentication_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/Utils/router.dart';
+import 'package:try_neostore/repository/user_session.dart';
 
 import 'bloc/login_bloc.dart';
+import 'bloc/register_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(BlocProvider(
-    create: (context) => LoginBloc(),
+  UserSession userSession= UserSession();
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(create: (_) => AuthenticationBloc(userSession: userSession)),
+      BlocProvider(create: (_) => LoginBloc(authenticationBloc:BlocProvider.of<AuthenticationBloc>(_))),
+      BlocProvider(create: (_) => RegisterBloc()),
+    ],
     child: NeoStore(),
   ));
 }

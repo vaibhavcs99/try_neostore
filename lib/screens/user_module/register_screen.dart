@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
+import 'package:try_neostore/bloc/register_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/model/api_response.dart';
-import 'package:try_neostore/network/api_services.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -26,27 +26,39 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(),
-      body: Center(
-        child: Form(
-          key: _formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: ListView(
-            children: [
-              firstNameField(),
-              lastNameField(),
-              emailField(),
-              passwordField(),
-              confirmPasswordField(),
-              buildGender(),
-              phoneNumberField(),
-              RaisedButton(
-                onPressed: () => _validateInputs(),
-                child: Text('Register'),
-              ),
-            ],
+    return BlocListener<RegisterBloc, RegisterState>(
+      listener: (context, state) {
+        if (state is RegisterSuccessful) {
+          Navigator.pushNamed(context, route_home_screen,
+              arguments: state.accessToken);
+        }
+        if (state is RegisterFailed) {
+          print(state.error);
+          showSnackBar(state.error);
+        }
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(),
+        body: Center(
+          child: Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: ListView(
+              children: [
+                firstNameField(),
+                lastNameField(),
+                emailField(),
+                passwordField(),
+                confirmPasswordField(),
+                buildGender(),
+                phoneNumberField(),
+                RaisedButton(
+                  onPressed: () => _validateInputs(),
+                  child: Text('Register'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -65,25 +77,16 @@ class _RegisterState extends State<Register> {
   }
 
   void registerUser() async {
-    Map<String, dynamic> userDetails = {
-      'first_name': '$_firstName',
-      'last_name': '$_lastName',
-      'email': '$_email',
-      'password': '$_password',
-      'confirm_password': '$_confirmPassword',
-      'gender': '$_gender',
-      'phone_no': '$_phoneNumber',
-    };
-
-    var response = await registerUserService(userDetails: userDetails);
-    if (response.statusCode == 200 ) {
-      var accessToken = apiResponseFromJson(response.data).data.accessToken;
-      Navigator.pushNamed(context, route_home_screen, arguments: accessToken);
-    }
-    if (response.statusCode == 404) {
-      showSnackBar('Email Already Exists');
-    }
+    BlocProvider.of<RegisterBloc>(context).add(OnRegisterButtonPressed(
+        email: _email,
+        password: _password,
+        firstName: _firstName,
+        lastName: _lastName,
+        confirmPassword: _confirmPassword,
+        phoneNumber: _phoneNumber,
+        gender: _gender));
   }
+
   // void registerUser() async {
   //   var dio = Dio();
 

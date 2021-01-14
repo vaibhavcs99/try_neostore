@@ -23,10 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) async {
           if (state is LoginSuccessful) {
-
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setString('token', state.accessToken);
-
+            
             Navigator.pushReplacementNamed(context, route_home_screen,
                 arguments: state.accessToken);
           }

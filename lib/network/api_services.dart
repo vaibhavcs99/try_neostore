@@ -1,17 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:try_neostore/constants/urls.dart';
-import 'package:try_neostore/model/api_response.dart';
-import 'package:try_neostore/model/cart_list_model.dart';
-import 'package:try_neostore/model/fetchDataResponse.dart';
-import 'package:try_neostore/model/order_details_model.dart';
-import 'package:try_neostore/model/order_list_model.dart';
-import 'package:try_neostore/model/product_details.model.dart';
-import 'package:try_neostore/model/product_list_model.dart';
 
-Future<Response> authenticateUserService(
-    Map<String, dynamic> userDetails) async {
+Future<Response> authenticateUserService(String email, String password) async {
   Dio dio = Dio();
+
+  Map<String, dynamic> userDetails = {'email': email, 'password': password};
 
   FormData formData = FormData.fromMap(userDetails);
   try {
@@ -104,7 +98,8 @@ Future<Response> myAccountDetailsService(String accessToken) async {
   }
 }
 
-Future<Response> productListService({@required String productCategoryId}) async {
+Future<Response> productListService(
+    {@required String productCategoryId}) async {
   var dio = Dio();
 
   Map<String, dynamic> json = {
@@ -186,7 +181,8 @@ Future<Response> deleteItemCartService(
   FormData formData = FormData.fromMap(productData);
 
   try {
-   var response =  await dio.post(urlDeleteCart, data: formData);return response;
+    var response = await dio.post(urlDeleteCart, data: formData);
+    return response;
   } on DioError catch (dioError) {
     return dioError.response;
   } catch (error) {
