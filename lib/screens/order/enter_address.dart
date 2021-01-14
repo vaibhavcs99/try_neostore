@@ -5,9 +5,9 @@ import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/network/api_services.dart';
 
 class EnterAddress extends StatefulWidget {
-  final ApiResponse apiResponse;
+  final String accessToken;
 
-  const EnterAddress({Key key, this.apiResponse}) : super(key: key);
+  const EnterAddress({Key key, this.accessToken}) : super(key: key);
   @override
   _EnterAddressState createState() => _EnterAddressState();
 }
@@ -114,17 +114,17 @@ class _EnterAddressState extends State<EnterAddress> {
           ' ' +
           _country;
       //
-      var statusCode = await orderItemsService(
+      var response = await orderItemsService(
           address: _entireAddress,
-          myAccessToken: widget.apiResponse.data.accessToken);
-      print(statusCode);
-      if (statusCode == 200) {
+          accessToken: widget.accessToken);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
         _scaffoldKey.currentState
             .showSnackBar(SnackBar(content: Text('Order Placed Successfully')));
         await Future.delayed(Duration(seconds: 3));
         Navigator.pushNamedAndRemoveUntil(
             context, route_home_screen, (route) => false,
-            arguments: widget.apiResponse);
+            arguments: widget.accessToken);
         // Navigator.of(context).pushNamedAndRemoveUntil(
         //     route_home_screen, (Route<dynamic> route) => false);
       }

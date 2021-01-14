@@ -28,7 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Response response = await authenticateUserService(_userDetails);
       if (response.statusCode == 200) {
         var _apiResponse = apiResponseFromJson(response.data);
-        print('Login bloc');
+        print('Login bloc successful!');
         yield LoginSuccessful(apiResponse: _apiResponse);
       } else {
         print(response.toString());

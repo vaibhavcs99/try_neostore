@@ -7,9 +7,9 @@ import 'package:try_neostore/network/api_services.dart';
 
 class ProductList extends StatefulWidget {
   final int index;
-  final ApiResponse apiResponse;
+  final String accessToken;
 
-  ProductList({@required this.index, @required this.apiResponse});
+  ProductList({@required this.index, @required this.accessToken});
 
   @override
   _ProductListState createState() => _ProductListState();
@@ -18,12 +18,12 @@ class ProductList extends StatefulWidget {
 class _ProductListState extends State<ProductList> {
   @override
   Widget build(BuildContext context) {
-    var _productCategory = widget.index.toString();
+    var productCategoryId = widget.index.toString();
 
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder<ProductsListModel>(
-          future: productListService(_productCategory),
+          future: getMyModel(productCategoryId: productCategoryId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return CircularProgressIndicator();
             return ListView.builder(
@@ -34,7 +34,7 @@ class _ProductListState extends State<ProductList> {
                   child: InkWell(
                     onTap: () => Navigator.pushNamed(
                         context, route_product_details,
-                        arguments:  ScreenParameters(parameter1: productData,parameter2: widget.apiResponse)),
+                        arguments:  ScreenParameters(parameter1: productData.id,parameter2: widget.accessToken)),
                     child: Card(
                         child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -84,25 +84,9 @@ class _ProductListState extends State<ProductList> {
           }),
     );
   }
+    Future<ProductsListModel> getMyModel({@required String productCategoryId}) async {
+    var myJson = await productListService(productCategoryId: productCategoryId);
+    var myModel = productsListModelFromJson(myJson.data);
+    return myModel;
+  }
 }
-
-// Future<ProductsListModel> makeGetRequest(String _productCategory) async {
-
-//   var dio = Dio();
-
-//   Map<String, dynamic> json = {
-//     'product_category_id': '$_productCategory',
-//   };
-
-//   // FormData formData = FormData.fromMap(json);
-
-//   try {
-//     var response = await dio.get(urlGetProductList, queryParameters: json);
-//     final productsListModel = productsListModelFromJson(response.data);
-//     print(productsListModel);
-//     return productsListModel;
-//   } on DioError catch (dioError) {
-//     print(dioError);
-//   } catch (e) {}
-//   // return response.data;
-// }

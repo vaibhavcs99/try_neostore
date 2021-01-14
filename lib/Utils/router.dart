@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/product_list_model.dart';
 import 'package:try_neostore/screens/cart_list.dart';
 import 'package:try_neostore/screens/order/enter_address.dart';
@@ -39,29 +38,29 @@ class AppRouter {
         );
         break;
       case route_my_account_details:
-        var data = settings.arguments as ApiResponse;
+        var accessToken = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (_) => MyAccountDetails(data),
+          builder: (_) => MyAccountDetails(accessToken: accessToken),
         );
         break;
       case route_edit_account_details:
-        var data = settings.arguments;
+        var accessToken = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (_) => EditAccountDetails(data),
+          builder: (_) => EditAccountDetails(accessToken: accessToken),
         );
         break;
       case route_change_password:
-        var data = settings.arguments as ApiResponse;
+        var accessToken = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (_) => ChangePassword(data),
+          builder: (_) => ChangePassword(accessToken: accessToken),
         );
         break;
 
 //*****************************************************************************************************
       case route_home_screen:
-        var data = settings.arguments as ApiResponse;
+        var accessToken = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (_) => HomeScreen(data),
+          builder: (_) => HomeScreen(accessToken: accessToken),
         );
         break;
       case route_splash_screen:
@@ -71,56 +70,58 @@ class AppRouter {
         break;
       case route_product_list:
         ScreenParameters parameters = settings.arguments as ScreenParameters;
+        String accessToken = parameters.parameter2 as String;
+
         return MaterialPageRoute(
           builder: (_) => ProductList(
             index: parameters.parameter1,
-            apiResponse: parameters.parameter2,
+            accessToken: accessToken,
           ),
         );
         break;
       case route_product_details:
         ScreenParameters parameters = settings.arguments as ScreenParameters;
-        Datum productInfo = parameters.parameter1 as Datum;
-        ApiResponse apiResponse = parameters.parameter2 as ApiResponse;
+        int productId = parameters.parameter1 as int;
+        String accessToken = parameters.parameter2 as String;
 
         return MaterialPageRoute(
           builder: (_) => ProductDetails(
-            productInfo: productInfo,
-            apiResponse: apiResponse,
+            productId: productId,
+            accessToken: accessToken,
           ),
         );
         break;
 //*****************************************************************************************************
 
       case route_cart_list:
-        ApiResponse apiResponse = settings.arguments as ApiResponse;
+        String accessToken = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => CartList(
-            apiResponse: apiResponse,
+            accessToken: accessToken,
           ),
         );
         break;
       case route_enter_address:
-        ApiResponse apiResponse = settings.arguments as ApiResponse;
+        String accessToken = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (_) => EnterAddress(apiResponse: apiResponse),
+          builder: (_) => EnterAddress(accessToken: accessToken),
         );
         break;
       case route_order_list:
-        ApiResponse apiResponse = settings.arguments as ApiResponse;
+        String accessToken = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (_) => MyOrders(apiResponse: apiResponse),
+          builder: (_) => MyOrders(accessToken: accessToken),
         );
         break;
       case route_order_details:
         ScreenParameters parameters = settings.arguments as ScreenParameters;
 
         int orderId = parameters.parameter1 as int;
-        ApiResponse apiResponse = parameters.parameter2 as ApiResponse;
+        String accessToken = parameters.parameter2 as String;
         return MaterialPageRoute(
           builder: (_) => OrderDetails(
             orderId: orderId,
-            apiResponse: apiResponse,
+            accessToken: accessToken,
           ),
         );
         break;

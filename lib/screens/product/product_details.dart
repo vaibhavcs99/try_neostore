@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:rating_dialog/rating_dialog.dart';
 import 'package:try_neostore/Utils/utils.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
@@ -10,11 +9,11 @@ import 'package:try_neostore/model/product_list_model.dart';
 import 'package:try_neostore/network/api_services.dart';
 
 class ProductDetails extends StatefulWidget {
-  final Datum productInfo;
-  final ApiResponse apiResponse;
+  final int productId;
+  final String accessToken;
 
   const ProductDetails(
-      {Key key, @required this.productInfo, @required this.apiResponse})
+      {Key key, @required this.productId, @required this.accessToken})
       : super(key: key);
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
@@ -25,17 +24,17 @@ class _ProductDetailsState extends State<ProductDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  double myFeedbackRating=3.0;
+  double myFeedbackRating = 3.0;
 
   @override
   Widget build(BuildContext context) {
-    var productData = widget.productInfo;
+    var productData = widget.productId;
     int selectedImage = 1; //TODO:DOESN'T WORK OUTSIDE BUILD
 
     return Scaffold(
         key: _scaffoldKey,
         body: FutureBuilder<ProductDetailsModel>(
-            future: productDetailsService(productData.id.toString()),
+            future: getMyModel(id: widget.productId),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
               var productDetails = snapshot.data.data;
@@ -125,6 +124,12 @@ class _ProductDetailsState extends State<ProductDetails> {
             }));
   }
 
+  Future<ProductDetailsModel> getMyModel({@required int id}) async {
+    var myJson = await productDetailsService(myProductId: id.toString());
+    var myModel = productDetailsModelFromJson(myJson.data);
+    return myModel;
+  }
+
   void showAlertDialog(
       {@required String productName,
       @required String productImageUrl,
@@ -161,10 +166,10 @@ class _ProductDetailsState extends State<ProductDetails> {
               await addItemCartService(
                   myProductId: productId,
                   quantity: _quantity,
-                  receivedAccessToken: widget.apiResponse.data.accessToken);
+                  accessToken: widget.accessToken);
               Navigator.pop(context);
               Navigator.pushNamed(context, route_cart_list,
-                  arguments: widget.apiResponse);
+                  arguments: widget.accessToken);
             } else {
               // _scaffoldKey.currentState.showSnackBar(
               //     SnackBar(content: Text('Please Enter all Fields')));
@@ -182,21 +187,6 @@ class _ProductDetailsState extends State<ProductDetails> {
       },
     );
   }
-
-  // showRatingDialog(
-  //     {@required String productName, @required String productImage}) {
-  //   showDialog(
-  //       context: context,
-  //       barrierDismissible: true,
-  //       builder: (context) {
-  //         return RatingDialog(
-  //             icon: Icon(Icons.ac_unit),
-  //             title: productName,
-  //             description: ,
-  //             onSubmitPressed: (int) => print('pressed Rating $int'),
-  //             submitButton: "null");
-  //       });
-  // }
 
   showRatingDialog(
       {@required String productName,
@@ -217,9 +207,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     myRatingbar(),
                     Align(
-                                          child: RaisedButton(
-                          onPressed:()=>   setProductRatingService(
-                              productId: productId.toString(), rating: myFeedbackRating),child: Text('Rate Now'),),
+                      child: RaisedButton(
+                        onPressed: () => setProductRatingService(
+                            productId: productId.toString(),
+                            rating: myFeedbackRating),
+                        child: Text('Rate Now'),
+                      ),
                     )
                   ])));
         });
@@ -228,7 +221,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   myRatingbar() {
     return RatingBar.builder(
       initialRating: 3,
-      minRating: 1,
+      minRating: 0.5,
       direction: Axis.horizontal,
       allowHalfRating: true,
       itemCount: 5,
@@ -237,6 +230,8 @@ class _ProductDetailsState extends State<ProductDetails> {
         Icons.star,
         color: Colors.red.shade400,
       ),
+      glow: true,
+      glowColor: Colors.redAccent,
       onRatingUpdate: (rating) {
         setState(() {
           myFeedbackRating = rating;

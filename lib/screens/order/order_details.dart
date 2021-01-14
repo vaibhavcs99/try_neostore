@@ -6,8 +6,8 @@ import 'package:try_neostore/network/api_services.dart';
 
 class OrderDetails extends StatefulWidget {
   final int orderId;
-  final ApiResponse apiResponse;
-  const OrderDetails({Key key, this.orderId, this.apiResponse})
+  final String accessToken;
+  const OrderDetails({Key key, this.orderId, this.accessToken})
       : super(key: key);
   @override
   _OrderDetailsState createState() => _OrderDetailsState();
@@ -19,9 +19,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder<OrderDetailsModel>(
-        future: orderDetailsService(
-            myAccessToken: widget.apiResponse.data.accessToken,
-            orderId: widget.orderId),
+        future: getMyModel(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           return ListView(
@@ -91,5 +89,11 @@ class _OrderDetailsState extends State<OrderDetails> {
       ),
     );
   }
-}
 
+  Future<OrderDetailsModel> getMyModel() async {
+    var myJson = await orderDetailsService(
+        accessToken: widget.accessToken, orderId: widget.orderId);
+    var myModel = orderDetailsModelFromJson(myJson.data);
+    return myModel;
+  }
+}

@@ -5,11 +5,11 @@ import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/network/api_services.dart';
 
 class ChangePassword extends StatefulWidget {
-  final ApiResponse _apiResponse;
+  final String accessToken;
 
   const ChangePassword(
-    this._apiResponse, {
-    Key key,
+ {
+    Key key, this.accessToken,
   }) : super(key: key);
   @override
   _ChangePasswordState createState() => _ChangePasswordState();
@@ -96,32 +96,11 @@ class _ChangePasswordState extends State<ChangePassword> {
       'confirm_password': '$_confirmNewPassword',
     };
 
-    String receivedMessage = await changePasswordService(
-        widget._apiResponse.data.accessToken, _passwordDetails);
+    var receivedMessage = await changePasswordService(
+        widget.accessToken, _passwordDetails);
 
-    showSnackBar(receivedMessage);
+    showSnackBar('ok');
   }
-  // void changePassword() async {
-  //   var dio = Dio();
-
-  //   dio.options.headers['access_token'] = widget._apiResponse.data.accessToken;
-
-  //   Map<String, dynamic> passwordDetails = {
-  //     'old_password': '$_currentPassword',
-  //     'password': '$_newPassword',
-  //     'confirm_password': '$_confirmNewPassword',
-  //   };
-
-  //   FormData _formData = FormData.fromMap(passwordDetails);
-
-  //   try {
-  //     await dio.post(urlChangePassword, data: _formData).then((value) async {
-  //       showSnackBar('Password Changed');
-  //     });
-  //   } on DioError catch (dioError) {
-  //     showSnackBar(dioError.message.toString());
-  //   } catch (e) {}
-  // }
 
   showSnackBar(String title) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));

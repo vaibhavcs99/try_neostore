@@ -55,9 +55,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   void sendPasswordResetMail() async {
     var _userEmail = {'email': '$_email'};
-    String resultReceived = await sendPasswordResetMailService(_userEmail);
+    var resultReceived = await sendPasswordResetMailService(_userEmail);
 
-    showSnackBar(resultReceived);
+    showSnackBar("resultReceived");
   }
   // void sendPasswordResetMail() async {
   //   var dio = Dio();

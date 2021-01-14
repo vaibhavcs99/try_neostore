@@ -75,16 +75,13 @@ class _RegisterState extends State<Register> {
       'phone_no': '$_phoneNumber',
     };
 
-    var _apiResponseReceivedFromService =
-        await registerUserService(userDetails);
-
-    if (_apiResponseReceivedFromService is String) {
-      showSnackBar(_apiResponseReceivedFromService);
-    } else if (_apiResponseReceivedFromService is ApiResponse) {
-      Navigator.pushNamed(context, route_home_screen,
-          arguments: _apiResponseReceivedFromService);
-    } else {
-      showSnackBar('$_apiResponseReceivedFromService');
+    var response = await registerUserService(userDetails: userDetails);
+    if (response.statusCode == 200 ) {
+      var accessToken = apiResponseFromJson(response.data).data.accessToken;
+      Navigator.pushNamed(context, route_home_screen, arguments: accessToken);
+    }
+    if (response.statusCode == 404) {
+      showSnackBar('Email Already Exists');
     }
   }
   // void registerUser() async {

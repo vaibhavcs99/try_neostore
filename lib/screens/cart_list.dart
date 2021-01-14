@@ -6,9 +6,9 @@ import 'package:try_neostore/model/cart_list_model.dart';
 import 'package:try_neostore/network/api_services.dart';
 
 class CartList extends StatefulWidget {
-  final ApiResponse apiResponse;
+  final String accessToken;
 
-  const CartList({Key key, @required this.apiResponse}) : super(key: key);
+  const CartList({Key key, @required this.accessToken}) : super(key: key);
   @override
   _CartListState createState() => _CartListState();
 }
@@ -19,11 +19,10 @@ class _CartListState extends State<CartList> {
 
   @override
   Widget build(BuildContext context) {
-    var myAccessToken = widget.apiResponse.data.accessToken;
     return Scaffold(
         appBar: AppBar(),
         body: FutureBuilder<CartListModel>(
-            future: cartListService(receivedAccessToken: myAccessToken),
+            future: getMyModel(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());
@@ -83,7 +82,7 @@ class _CartListState extends State<CartList> {
                                           .toList(),
                                       onChanged: (value) async {
                                         await editItemCartService(
-                                            receivedAccessToken: myAccessToken,
+                                            accessToken: widget.accessToken,
                                             myProductId: productData.product.id,
                                             quantity: value);
                                         setState(() {});
@@ -93,8 +92,7 @@ class _CartListState extends State<CartList> {
                                     RaisedButton(
                                       onPressed: () {
                                         deleteItemCartService(
-                                            receivedAccessToken: widget
-                                                .apiResponse.data.accessToken,
+                                            accessToken: widget.accessToken,
                                             myProductId:
                                                 productData.product.id);
                                         setState(() {});
@@ -110,10 +108,15 @@ class _CartListState extends State<CartList> {
                   ),
                   RaisedButton(
                       onPressed: () =>
-                          Navigator.pushNamed(context, route_enter_address,arguments: widget.apiResponse),
+                          Navigator.pushNamed(context, route_enter_address,arguments: widget.accessToken),
                       child: Text('Order Now'))
                 ],
               );
             }));
+  }
+    Future<CartListModel> getMyModel() async {
+    var myJson = await cartListService(accessToken: widget.accessToken);
+    var myModel = cartListModelFromJson(myJson.data);
+    return myModel;
   }
 }

@@ -9,172 +9,175 @@ import 'package:try_neostore/model/order_list_model.dart';
 import 'package:try_neostore/model/product_details.model.dart';
 import 'package:try_neostore/model/product_list_model.dart';
 
-Future<dynamic> authenticateUserService(
+Future<Response> authenticateUserService(
     Map<String, dynamic> userDetails) async {
   Dio dio = Dio();
 
   FormData formData = FormData.fromMap(userDetails);
   try {
-    var _receivedResponseFromServer = await dio.post(urlLogin, data: formData);
-    if (_receivedResponseFromServer.statusCode == 200) {
-      return _receivedResponseFromServer;
-    }
+    var response = await dio.post(urlLogin, data: formData);
+    return response;
   } on DioError catch (dioError) {
-    // return dioError.response.statusCode.toString();
     return dioError.response;
   } catch (error) {
     print(error);
   }
 }
 
-Future<dynamic> registerUserService(Map<String, dynamic> userDetails) async {
+Future<Response> registerUserService(
+    {@required Map<String, dynamic> userDetails}) async {
   var dio = Dio();
 
   FormData formData = FormData.fromMap(userDetails);
   try {
-    var _receivedResponseFromServer =
-        await dio.post(urlRegister, data: formData);
-    final sendResponseBack =
-        apiResponseFromJson(_receivedResponseFromServer.data);
-    return sendResponseBack;
+    var response = await dio.post(urlRegister, data: formData);
+
+    return response;
   } on DioError catch (dioError) {
-    print(dioError);
-    return dioError.response.statusCode;
-  } catch (e) {
-    return '$e';
+    return dioError.response;
+  } catch (error) {
+    print(error);
   }
 }
 
-Future<String> sendPasswordResetMailService(
+Future<Response> sendPasswordResetMailService(
     Map<String, dynamic> _userEmail) async {
   var dio = Dio();
 
   FormData formData = FormData.fromMap(_userEmail);
 
   try {
-    await dio.post(urlForgotPassword, data: formData);
-    return 'Password reset email is sent!';
+    var response = await dio.post(urlForgotPassword, data: formData);
+    return response;
   } on DioError catch (dioError) {
-    if (dioError.response.statusCode == 404) return ('Email not found');
-  } catch (e) {
-    return 'Something is wrong!';
+    return dioError.response;
+  } catch (error) {
+    print(error);
   }
-  return 'Something is wrong!';
 }
 
-Future<String> changePasswordService(
-    String receivedAccessToken, Map<String, dynamic> passwordDetails) async {
+Future<Response> changePasswordService(
+    String accessToken, Map<String, dynamic> passwordDetails) async {
   var dio = Dio();
 
-  dio.options.headers['access_token'] = receivedAccessToken;
+  dio.options.headers['access_token'] = accessToken;
 
   FormData _formData = FormData.fromMap(passwordDetails);
 
   try {
-    await dio.post(urlChangePassword, data: _formData);
-    return 'Password Changed';
+    var response = await dio.post(urlChangePassword, data: _formData);
+    return response;
   } on DioError catch (dioError) {
-    return dioError.message;
-  } catch (e) {
-    return 'Something is wrong';
+    return dioError.response;
+  } catch (error) {
+    print(error);
   }
 }
 
-Future<String> editAccountDetailsService(
-    String receivedAccessToken, Map<String, dynamic> userDetails) async {
+Future<Response> editAccountDetailsService(
+    String accessToken, Map<String, dynamic> userDetails) async {
   var dio = Dio();
 
-  dio.options.headers['access_token'] = receivedAccessToken;
+  dio.options.headers['access_token'] = accessToken;
 
   FormData formData = FormData.fromMap(userDetails);
   try {
-    await dio.post(urlUpdateAccountDetails, data: formData);
-    return 'Account Details Updated';
+    var response = await dio.post(urlUpdateAccountDetails, data: formData);
+    return response;
   } on DioError catch (dioError) {
-    return dioError.response.statusMessage;
-  } catch (e) {
-    return 'Something is Wrong!';
+    return dioError.response;
+  } catch (error) {
+    print(error);
   }
 }
 
-Future<dynamic> myAccountDetailsService(String receivedAccessToken) async {
+Future<Response> myAccountDetailsService(String accessToken) async {
   var dio = Dio();
-  dio.options.headers['access_token'] = receivedAccessToken;
+  dio.options.headers['access_token'] = accessToken;
   try {
-    var _responseFetchedFromServer = await dio.get(urlFetchAccountDetails);
-    return fetchDataResponseFromJson(_responseFetchedFromServer.data);
+    var response = await dio.get(urlFetchAccountDetails);
+    return response;
   } on DioError catch (dioError) {
-    return dioError.response.statusMessage;
-  } catch (e) {
-    return 'Something is wrong!';
+    return dioError.response;
+  } catch (error) {
+    print(error);
   }
 }
 
-Future<ProductsListModel> productListService(String _productCategory) async {
+Future<Response> productListService({@required String productCategoryId}) async {
   var dio = Dio();
 
   Map<String, dynamic> json = {
-    'product_category_id': '$_productCategory',
+    'product_category_id': '$productCategoryId',
   };
 
   try {
     var response = await dio.get(urlGetProductList, queryParameters: json);
-    final productsListModel = productsListModelFromJson(response.data);
-    return productsListModel;
+    return response;
   } on DioError catch (dioError) {
-    print(dioError);
-  } catch (e) {}
+    return dioError.response;
+  } catch (error) {
+    print(error);
+  }
 }
 
-Future<ProductDetailsModel> productDetailsService(String _productId) async {
+Future<Response> productDetailsService({@required String myProductId}) async {
   var dio = Dio();
 
   Map<String, dynamic> json = {
-    'product_id': '$_productId',
+    'product_id': '$myProductId',
   };
 
   try {
     var response = await dio.get(urlGetProductDetails, queryParameters: json);
-    final productsListModel = productDetailsModelFromJson(response.data);
-    return productsListModel;
-  } on DioError catch (dioError) {
-    print(dioError);
-  } catch (e) {}
-}
-
-Future<CartListModel> cartListService(
-    {@required String receivedAccessToken}) async {
-  var dio = Dio();
-  dio.options.headers['access_token'] = receivedAccessToken;
-  var data = await dio.get(urlListCartItems);
-  final cartListModel = cartListModelFromJson(data.data);
-
-  return cartListModel;
-}
-
-addItemCartService(
-    {@required int myProductId,
-    @required int quantity,
-    @required String receivedAccessToken}) async {
-  var dio = Dio();
-  dio.options.headers['access_token'] = receivedAccessToken;
-
-  Map<String, dynamic> productData = {
-    'product_id': myProductId,
-    'quantity': quantity
-  };
-
-  FormData formData = FormData.fromMap(productData);
-  var response = await dio.post(urlAddToCart, data: formData);
-  if (response.statusCode == 200) {
     return response;
+  } on DioError catch (dioError) {
+    return dioError.response;
+  } catch (error) {
+    print(error);
   }
 }
 
-deleteItemCartService(
-    {@required int myProductId, @required String receivedAccessToken}) async {
+Future<Response> cartListService({@required String accessToken}) async {
   var dio = Dio();
-  dio.options.headers['access_token'] = receivedAccessToken;
+  dio.options.headers['access_token'] = accessToken;
+  try {
+    var response = await dio.get(urlListCartItems);
+    return response;
+  } on DioError catch (dioError) {
+    return dioError.response;
+  } catch (error) {
+    print(error);
+  }
+}
+
+Future<Response> addItemCartService(
+    {@required int myProductId,
+    @required int quantity,
+    @required String accessToken}) async {
+  var dio = Dio();
+  dio.options.headers['access_token'] = accessToken;
+
+  Map<String, dynamic> productData = {
+    'product_id': myProductId,
+    'quantity': quantity
+  };
+
+  FormData formData = FormData.fromMap(productData);
+  try {
+    var response = await dio.post(urlAddToCart, data: formData);
+    return response;
+  } on DioError catch (dioError) {
+    return dioError.response;
+  } catch (error) {
+    print(error);
+  }
+}
+
+Future<Response> deleteItemCartService(
+    {@required int myProductId, @required String accessToken}) async {
+  var dio = Dio();
+  dio.options.headers['access_token'] = accessToken;
 
   Map<String, dynamic> productData = {
     'product_id': myProductId,
@@ -182,15 +185,21 @@ deleteItemCartService(
 
   FormData formData = FormData.fromMap(productData);
 
-  await dio.post(urlDeleteCart, data: formData);
+  try {
+   var response =  await dio.post(urlDeleteCart, data: formData);return response;
+  } on DioError catch (dioError) {
+    return dioError.response;
+  } catch (error) {
+    print(error);
+  }
 }
 
-editItemCartService(
+Future<Response> editItemCartService(
     {@required int myProductId,
     @required int quantity,
-    @required String receivedAccessToken}) async {
+    @required String accessToken}) async {
   var dio = Dio();
-  dio.options.headers['access_token'] = receivedAccessToken;
+  dio.options.headers['access_token'] = accessToken;
 
   Map<String, dynamic> productData = {
     'product_id': myProductId,
@@ -199,57 +208,79 @@ editItemCartService(
 
   FormData formData = FormData.fromMap(productData);
 
-  var data = await dio.post(urlEditCart, data: formData);
+  try {
+    var response = await dio.post(urlEditCart, data: formData);
+    return response;
+  } on DioError catch (dioError) {
+    return dioError.response;
+  } catch (error) {
+    print(error);
+  }
 }
 
-orderItemsService(
-    {@required String address, @required String myAccessToken}) async {
+Future<Response> orderItemsService(
+    {@required String address, @required String accessToken}) async {
   var dio = Dio();
 
-  dio.options.headers['access_token'] = myAccessToken;
+  dio.options.headers['access_token'] = accessToken;
   Map<String, dynamic> parameters = {'address': address};
   FormData formData = FormData.fromMap(parameters);
 
-  var response = await dio.post(urlOrder, data: formData);
-
-  return response.statusCode;
+  try {
+    var response = await dio.post(urlOrder, data: formData);
+    return response;
+  } on DioError catch (dioError) {
+    return dioError.response;
+  } catch (error) {
+    print(error);
+  }
 }
 
-Future<OrderListModel> orderListService(
-    {@required String myAccessToken}) async {
+Future<Response> orderListService({@required String accessToken}) async {
   var dio = Dio();
 
-  dio.options.headers['access_token'] = myAccessToken;
+  dio.options.headers['access_token'] = accessToken;
 
-  var orderListJson = await dio.get(urlOrderList);
-  final orderListModel = orderListModelFromJson(orderListJson.data);
-  return orderListModel;
+  try {
+    var response = await dio.get(urlOrderList);
+    return response;
+  } on DioError catch (dioError) {
+    return dioError.response;
+  } catch (error) {
+    print(error);
+  }
 }
 
-Future<OrderDetailsModel> orderDetailsService(
-    {@required String myAccessToken, @required int orderId}) async {
+Future<Response> orderDetailsService(
+    {@required String accessToken, @required int orderId}) async {
   var dio = Dio();
-  dio.options.headers['access_token'] = myAccessToken;
+  dio.options.headers['access_token'] = accessToken;
 
   Map<String, dynamic> parameters = {'order_id': orderId};
   // FormData formData = FormData.fromMap(parameters);
 
-  var response = await dio.get(urlOrderDetail, queryParameters: parameters);
-  final orderDetailsModel = orderDetailsModelFromJson(response.data);
-
-  return orderDetailsModel;
+  try {
+    var response = await dio.get(urlOrderDetail, queryParameters: parameters);
+    return response;
+  } on DioError catch (dioError) {
+    return dioError.response;
+  } catch (error) {
+    print(error);
+  }
 }
 
-setProductRatingService(
+Future<Response> setProductRatingService(
     {@required String productId, @required double rating}) async {
   var dio = Dio();
   Map<String, dynamic> parameters = {'product_id': productId, 'rating': rating};
   FormData formData = FormData.fromMap(parameters);
 
   try {
-    var data = await dio.post(urlSetProductRating, data: formData);
-    print(data.data);
+    var response = await dio.post(urlSetProductRating, data: formData);
+    return response;
   } on DioError catch (dioError) {
-    print(dioError.response.data);
+    return dioError.response;
+  } catch (error) {
+    print(error);
   }
 }

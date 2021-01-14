@@ -7,9 +7,9 @@ import 'package:try_neostore/model/api_response.dart';
 import 'common/my_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
-  final ApiResponse apiResponse;
+  final String  accessToken;
 
-  const HomeScreen(this.apiResponse, {Key key}) : super(key: key);
+  const HomeScreen( {Key key, this.accessToken}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -30,25 +30,21 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
               child: InkWell(
-                  onTap: () => Navigator.pushNamed(context, route_cart_list,arguments: widget.apiResponse),
+                  onTap: () => Navigator.pushNamed(context, route_cart_list,arguments: widget.accessToken),
                   child: Icon(Icons.shopping_cart_outlined)),
             )
           ],
         ),
         drawer: Drawer(
-          child: MyDrawer(apiResponse: widget.apiResponse),
+          child: MyDrawer(accessToken: widget.accessToken),
         ),
         body: Column(
           children: [
             ListView(
               shrinkWrap: true,
               children: [
-                Text("${widget.apiResponse.userMsg}"),
-                Text("${widget.apiResponse.data.accessToken}"),
-                Text("${widget.apiResponse.data.email}"),
-                Text("${widget.apiResponse.data.username}"),
-                Text("${widget.apiResponse.data.dob}"),
-                Text("${widget.apiResponse.data.modified}"),
+                Text("${widget.accessToken}"),
+
               ],
             ),
             Expanded(
@@ -63,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               //imdex+1 is product category id number
                               arguments: ScreenParameters(
                                   parameter1: index + 1,
-                                  parameter2: widget.apiResponse)),
+                                  parameter2: widget.accessToken)),
                           child: Card(
                             child: Text(productNames[index]),
                           ),

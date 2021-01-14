@@ -7,9 +7,9 @@ import 'package:try_neostore/network/api_services.dart';
 import 'package:try_neostore/screens/common/my_drawer.dart';
 
 class MyOrders extends StatefulWidget {
-  final ApiResponse apiResponse;
+  final String accessToken;
 
-  const MyOrders({Key key, this.apiResponse}) : super(key: key);
+  const MyOrders({Key key, this.accessToken}) : super(key: key);
   @override
   _MyOrdersState createState() => _MyOrdersState();
 }
@@ -23,12 +23,11 @@ class _MyOrdersState extends State<MyOrders> {
           appBar: AppBar(),
           drawer: Drawer(
               child: MyDrawer(
-            apiResponse: widget.apiResponse,
+            accessToken: widget.accessToken,
           )),
           body: Center(
               child: FutureBuilder<OrderListModel>(
-                  future: orderListService(
-                      myAccessToken: widget.apiResponse.data.accessToken),
+                  future: getMyModel(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) return CircularProgressIndicator();
                     if (snapshot.data.data.length == 0)
@@ -43,7 +42,9 @@ class _MyOrdersState extends State<MyOrders> {
                           trailing: Text(orderData.cost.toString()),
                           onTap: () => Navigator.pushNamed(
                               context, route_order_details,
-                              arguments: ScreenParameters(parameter1: orderData.id,parameter2: widget.apiResponse) ),
+                              arguments: ScreenParameters(
+                                  parameter1: orderData.id,
+                                  parameter2: widget.accessToken)),
                         );
                       },
                     );
@@ -69,5 +70,11 @@ class _MyOrdersState extends State<MyOrders> {
         );
       },
     );
+  }
+
+  Future<OrderListModel> getMyModel() async {
+    var myJson = await orderListService(accessToken: widget.accessToken);
+    var myModel = orderListModelFromJson(myJson.data);
+    return myModel;
   }
 }

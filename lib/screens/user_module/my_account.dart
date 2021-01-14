@@ -8,12 +8,9 @@ import 'package:try_neostore/model/fetchDataResponse.dart';
 import 'package:try_neostore/screens/common/my_drawer.dart';
 
 class MyAccountDetails extends StatefulWidget {
-  final ApiResponse _apiResponse;
+  final String accessToken;
 
-  const MyAccountDetails(
-    this._apiResponse, {
-    Key key,
-  }) : super(key: key);
+  const MyAccountDetails({Key key, this.accessToken}) : super(key: key);
   @override
   _MyAccountDetailsState createState() => _MyAccountDetailsState();
 }
@@ -23,11 +20,14 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(onWillPop: _onBackPressed,
-          child: Scaffold(
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
         appBar: AppBar(title: Text('My Account')),
         drawer: Drawer(
-          child: MyDrawer( apiResponse: widget._apiResponse,),
+          child: MyDrawer(
+            accessToken: widget.accessToken,
+          ),
         ),
         body: Center(
           child: FutureBuilder<FetchDataResponse>(
@@ -51,12 +51,12 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                       FlatButton(
                           onPressed: () => Navigator.pushNamed(
                               context, route_edit_account_details,
-                              arguments: widget._apiResponse),
+                              arguments: widget.accessToken),
                           child: Text('Edit Profile')),
                       FlatButton(
                         onPressed: () => Navigator.pushNamed(
                             context, route_change_password,
-                            arguments: widget._apiResponse),
+                            arguments: widget.accessToken),
                         child: Text('Reset Password'),
                       )
                     ],
@@ -70,7 +70,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
 
   Future<FetchDataResponse> getDetails() async {
     dynamic _receivedDynamicResponse =
-        await myAccountDetailsService(widget._apiResponse.data.accessToken);
+        await myAccountDetailsService(widget.accessToken);
     if (_receivedDynamicResponse is String) {
       // print(_receivedDynamicResponse);
     } else if (_receivedDynamicResponse is FetchDataResponse) {
@@ -93,7 +93,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
   //   return null;
   // }
 
-    Future<bool> _onBackPressed() {
+  Future<bool> _onBackPressed() {
     return showDialog(
       context: context,
       builder: (context) {

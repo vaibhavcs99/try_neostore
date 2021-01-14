@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/bloc/login_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
@@ -20,9 +21,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is LoginSuccessful) {
-            Navigator.pushReplacementNamed(context, route_home_screen,arguments: state.apiResponse);
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setString('email', state.apiResponse.data.email);
+            Navigator.pushReplacementNamed(context, route_home_screen,
+                arguments: state.apiResponse.data.accessToken);
           }
           if (state is LoginFailed) {
             showSnackBar('${state.error}');

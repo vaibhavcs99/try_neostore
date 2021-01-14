@@ -4,8 +4,8 @@ import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/network/api_services.dart';
 
 class EditAccountDetails extends StatefulWidget {
-  final ApiResponse _apiResponse;
-  EditAccountDetails(this._apiResponse);
+  final String accessToken;
+  EditAccountDetails({@required this.accessToken});
 
   @override
   _EditAccountDetailsState createState() => _EditAccountDetailsState();
@@ -69,10 +69,10 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       'profile_pic': 'null',
       'phone_no': '$_phoneNumber',
     };
-    String receivedMessage = await editAccountDetailsService(
-        widget._apiResponse.data.accessToken, _userDetails);
+    var receivedMessage =
+        await editAccountDetailsService(widget.accessToken, _userDetails);
 
-    showSnackBar(receivedMessage);
+    showSnackBar("receivedMessage");
   }
   // void registerUser() async {
   //   var dio = Dio();
