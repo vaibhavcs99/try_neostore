@@ -3,7 +3,7 @@ import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/order_list_model.dart';
-import 'package:try_neostore/network/api_services.dart';
+import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/screens/common/my_drawer.dart';
 
 class MyOrders extends StatefulWidget {

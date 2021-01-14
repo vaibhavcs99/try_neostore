@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/validators.dart';
-import 'package:try_neostore/network/api_services.dart';
+import 'package:try_neostore/repository/api_services.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override

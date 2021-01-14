@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/product_list_model.dart';
-import 'package:try_neostore/network/api_services.dart';
+import 'package:try_neostore/repository/api_services.dart';
 
 class ProductList extends StatefulWidget {
   final int index;

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/constants/urls.dart';
-import 'package:try_neostore/model/api_response.dart';
+
 import 'package:try_neostore/model/cart_list_model.dart';
-import 'package:try_neostore/network/api_services.dart';
+import 'package:try_neostore/repository/api_services.dart';
 
 class CartList extends StatefulWidget {
   final String accessToken;
