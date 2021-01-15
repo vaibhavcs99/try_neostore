@@ -7,9 +7,9 @@ import 'package:try_neostore/screens/widgets/my_drawer.dart';
 import 'widgets/my_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String  accessToken;
+  final String accessToken;
 
-  const HomeScreen( {Key key, this.accessToken}) : super(key: key);
+  const HomeScreen({Key key, this.accessToken}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -17,6 +17,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   List productNames = ['Tables', 'Chairs', 'Sofa', 'Bed', 'Dining set'];
+  List<String> productImages = [
+    "assets/tableicon.png",
+    "assets/chairsicon.png",
+    "assets/sofaicon.png",
+    "assets/cupboardicon.png",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
               child: InkWell(
-                  onTap: () => Navigator.pushNamed(context, route_cart_list,arguments: widget.accessToken),
+                  onTap: () => Navigator.pushNamed(context, route_cart_list,
+                      arguments: widget.accessToken),
                   child: Icon(Icons.shopping_cart_outlined)),
             )
           ],
@@ -44,27 +51,29 @@ class _HomeScreenState extends State<HomeScreen> {
               shrinkWrap: true,
               children: [
                 Text("${widget.accessToken}"),
-
               ],
             ),
             Expanded(
               child: Container(
                 child: GridView.count(
                     crossAxisCount: 2,
-                    children: List.generate(5, (index) {
+                    children: List.generate(4, (index) {
+                      print(productImages[0]);
                       return Container(
-                        child: InkWell(
-                          onTap: () => Navigator.pushNamed(
-                              context, route_product_list,
-                              //imdex+1 is product category id number
-                              arguments: ScreenParameters(
-                                  parameter1: index + 1,
-                                  parameter2: widget.accessToken)),
-                          child: Card(
-                            child: Text(productNames[index]),
-                          ),
+                          child: InkWell(
+                        onTap: () => Navigator.pushNamed(
+                            context, route_product_list,
+                            //imdex+1 is product category id number
+                            arguments: ScreenParameters(
+                                parameter1: index + 1,
+                                parameter2: widget.accessToken)),
+                        child: Card(
+                          child: Container(
+                              child: Image.asset(productImages[index])
+                              // child: Image(image: AssetImage('assets/chair_icon.imageset/chair_icon.png'),)
+                              ),
                         ),
-                      );
+                      ));
                     })),
               ),
             )

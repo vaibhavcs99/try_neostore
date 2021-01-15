@@ -3,7 +3,9 @@ import 'package:try_neostore/constants/constants.dart';
 
 import 'package:try_neostore/model/fetchDataResponse.dart';
 import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/screens/widgets/container_white_border.dart';
 import 'package:try_neostore/screens/widgets/my_drawer.dart';
+import 'package:try_neostore/screens/widgets/my_white_button.dart';
 
 class MyAccountDetails extends StatefulWidget {
   final String accessToken;
@@ -21,6 +23,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
+        backgroundColor: primaryRed2,
         appBar: AppBar(title: Text('My Account')),
         drawer: Drawer(
           child: MyDrawer(
@@ -38,20 +41,24 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                   return Column(
                     children: [
                       CircleAvatar(
+                        radius: 66,
                         backgroundImage: NetworkImage(
                             '${snapshot.data.data.productCategories[0].iconImage}'),
                       ),
-                      Text(userData.firstName ?? 'no data'),
-                      Text(userData.lastName ?? 'no data'),
-                      Text(userData.email ?? 'no data'),
-                      Text(userData.phoneNo ?? 'no data'),
-                      Text(userData.dob ?? 'no data'),
-                      FlatButton(
+                      BorderContainer(myText: userData.firstName),
+                      BorderContainer(myText: userData.lastName),
+                      BorderContainer(myText: userData.email),
+                      BorderContainer(myText: userData.phoneNo),
+                      BorderContainer(myText: userData.dob),
+                      MyWhiteButton(
                           onPressed: () => Navigator.pushNamed(
                               context, route_edit_account_details,
                               arguments: widget.accessToken),
-                          child: Text('Edit Profile')),
+                          myText: 'Edit Profile',),
                       FlatButton(
+                        color: Colors.white,
+                        minWidth: double.infinity,
+                        height: 52,
                         onPressed: () => Navigator.pushNamed(
                             context, route_change_password,
                             arguments: widget.accessToken),

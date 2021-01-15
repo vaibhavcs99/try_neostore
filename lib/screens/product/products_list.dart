@@ -3,6 +3,7 @@ import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/product_list_model.dart';
 import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/utils/utils.dart';
 
 class ProductList extends StatefulWidget {
   final int index;
@@ -20,11 +21,11 @@ class _ProductListState extends State<ProductList> {
     var productCategoryId = widget.index.toString();
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title:Text(getProductCategoryName(widget.index))),
       body: FutureBuilder<ProductsListModel>(
           future: getMyModel(productCategoryId: productCategoryId),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) return CircularProgressIndicator();
+            if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
             return ListView.builder(
               itemCount: snapshot.data.data.length,
               itemBuilder: (context, index) {

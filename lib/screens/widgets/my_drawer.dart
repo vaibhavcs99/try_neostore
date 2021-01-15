@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/fetchDataResponse.dart';
 import 'package:try_neostore/repository/api_services.dart';
 
@@ -19,7 +18,7 @@ class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
     //***************************** */
-    myAccountDetailsService(widget.accessToken);
+    // myAccountDetailsService(widget.accessToken);
     //***************************** */
 
     return ListView(

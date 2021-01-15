@@ -45,7 +45,11 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/shopping_gif.gif
+    - assets/chairsicon.png
+    - assets/cupboardicon.png
+    - assets/sofaicon.png
+    - assets/tableicon.png
+    # - assets/chair.imageset/chair.png
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -60,13 +64,16 @@ flutter:
     - family: HachiMaruPop
       fonts:
         - asset: fonts\HachiMaruPop-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+
+    - family: Gotham
+      fonts:
+        - asset: fonts\Gotham-Font\ttf\GothamBook.ttf
+        - asset: fonts\Gotham-Font\ttf\GothamMedium.ttf
+        - asset: fonts\Gotham-Font\ttf\GothamLight.ttf
+        - asset: fonts\Gotham-Font\ttf\GothamBold.ttf
+          weight: 700
+        - asset: fonts\Gotham-Font\ttf\GothamBookItalic.ttf
+          style: italic
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/validators.dart';
-import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
+import 'package:try_neostore/screens/widgets/my_white_button.dart';
+import 'package:try_neostore/utils/validators.dart' as validators;
 
 class EditAccountDetails extends StatefulWidget {
   final String accessToken;
@@ -33,15 +35,21 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             children: [
-              firstNameField(),
-              lastNameField(),
+              firstNameField(), lastNameField(),
               dateOfBirth(),
               emailField(),
               phoneNumberField(),
-              RaisedButton(
-                onPressed: () => _validateInputs(),
-                child: Text('EditAccountDetails'),
-              ),
+              // MyTextFormField(
+              //   myLabelText: 'First Name',
+              //   validator: validateName,
+              //   onSaved: (newValue) {
+              //     _firstName = newValue.trim();
+              //   },
+              // ),
+              // MyTextFormField(myLabelText: 'Last Name'),
+              MyWhiteButton(
+                  myText: 'Edit Account Details',
+                  onPressed: () => _validateInputs())
             ],
           ),
         ),
@@ -76,9 +84,10 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       showSnackBar('Details updated successfully');
     }
   }
+
   firstNameField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'First Name'),
+    return MyTextFormField(myIcon: Icon(Icons.person),
+      myLabelText: 'First Name',
       validator: validateName,
       onSaved: (newValue) {
         _firstName = newValue.trim();
@@ -87,8 +96,8 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   lastNameField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Last Name'),
+    return MyTextFormField(myIcon: Icon(Icons.person),
+      myLabelText: 'Last Name',
       validator: validateName,
       onSaved: (newValue) {
         _lastName = newValue.trim();
@@ -97,8 +106,8 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   emailField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Email'),
+    return MyTextFormField(myIcon: Icon(Icons.mail),
+      myLabelText: 'Email',
       validator: validateEmail,
       onSaved: (newValue) {
         _email = newValue.trim();
@@ -107,8 +116,8 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   phoneNumberField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Phone Number'),
+    return MyTextFormField(myIcon: Icon(Icons.phone),
+      myLabelText: 'Phone Number',
       validator: validatePhoneNumber,
       onSaved: (newValue) {
         _phoneNumber = int.parse(newValue.trim());
@@ -117,9 +126,9 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   dateOfBirth() {
-    return TextFormField(
-      decoration:
-          const InputDecoration(labelText: 'Date of Birth in dd-mm-yyyy'),
+    return MyTextFormField(myIcon: Icon(Icons.cake),
+      myLabelText:
+          'Date of Birth in dd-mm-yyyy',
       validator: validateDob,
       onSaved: (newValue) {
         _dob = newValue.trim();

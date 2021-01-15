@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
 
 class ChangePassword extends StatefulWidget {
   final String accessToken;
@@ -49,8 +50,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   currentPasswordField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Current Password'),
+    return MyTextFormField(myIcon: Icon(Icons.lock),
+      myLabelText: 'Current Password',
       validator: validatePassword,
       onSaved: (newValue) {
         _currentPassword = newValue.trim();
@@ -59,8 +60,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   newPasswordField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Password'),
+    return MyTextFormField(myIcon: Icon(Icons.lock),
+      myLabelText: 'Password',
       validator: validatePassword,
       onSaved: (newValue) {
         _newPassword = newValue.trim();
@@ -69,8 +70,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   confirmNewPasswordField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Password'),
+    return MyTextFormField(myIcon: Icon(Icons.lock),obscureText: true,
+      myLabelText:  'Confirm New Password',
       validator: validatePassword,
       onSaved: (newValue) {
         _confirmNewPassword = newValue.trim();
