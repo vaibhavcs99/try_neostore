@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/model/product_list_model.dart';
+import 'package:try_neostore/screens/widgets/splash_screen.dart';
 import 'package:try_neostore/screens/cart_list.dart';
 import 'package:try_neostore/screens/order/enter_address.dart';
 import 'package:try_neostore/screens/order/order_details.dart';
@@ -13,8 +13,6 @@ import 'package:try_neostore/screens/user_module/forgot_password.dart';
 import 'package:try_neostore/screens/home_screen.dart';
 import 'package:try_neostore/screens/user_module/login_screen.dart';
 import 'package:try_neostore/screens/user_module/register_screen.dart';
-import 'package:try_neostore/screens/common/splash_screen.dart';
-
 import '../screens/user_module/change_password.dart';
 import '../screens/user_module/edit_account_details.dart';
 import '../screens/user_module/my_account.dart';

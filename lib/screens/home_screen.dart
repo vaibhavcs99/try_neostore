@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/model/api_response.dart';
+import 'package:try_neostore/screens/widgets/my_drawer.dart';
 
-import 'common/my_drawer.dart';
+import 'widgets/my_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   final String  accessToken;

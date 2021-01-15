@@ -3,7 +3,7 @@ import 'package:try_neostore/constants/constants.dart';
 
 import 'package:try_neostore/model/fetchDataResponse.dart';
 import 'package:try_neostore/repository/api_services.dart';
-import 'package:try_neostore/screens/common/my_drawer.dart';
+import 'package:try_neostore/screens/widgets/my_drawer.dart';
 
 class MyAccountDetails extends StatefulWidget {
   final String accessToken;

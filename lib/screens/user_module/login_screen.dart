@@ -97,22 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // void authenticateUser() async {
-  // Map<String, dynamic> _userDetails = {
-  //   'email': '$_email',
-  //   'password': '$_password'
-  // };
-
-  // var _apiResponseReceived = await authenticateUserService(_userDetails);
-  // if (_apiResponseReceived is String) {
-  //   showSnackBar(_apiResponseReceived);
-  // } else if (_apiResponseReceived is ApiResponse) {
-  //   Navigator.popAndPushNamed(context, route_home_screen,
-  //       arguments: _apiResponseReceived);
-  // } else {
-  //   showSnackBar('Something is wrong!');
-  // }
-  // }
 
 //-------------------------------------------------------------------------------------------------------------
   //this part contains all the defined UI widget fields.

@@ -15,7 +15,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
         key: _scaffoldKey,
         appBar: AppBar(),
         body: Center(
@@ -55,24 +54,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   void sendPasswordResetMail() async {
     var _userEmail = {'email': '$_email'};
-    var resultReceived = await sendPasswordResetMailService(_userEmail);
-
-    showSnackBar("resultReceived");
+    var response = await sendPasswordResetMailService(_userEmail);
+    if (response.statusCode == 200) {
+      showSnackBar("Email Sent");
+    }
   }
-  // void sendPasswordResetMail() async {
-  //   var dio = Dio();
-  //   var _userEmail = {'email': '$_email'};
-
-  //   FormData formData = FormData.fromMap(_userEmail);
-
-  //   try {
-  //     await dio.post(urlForgotPassword, data: formData).then((value) async {
-  //       showSnackBar('Password reset email is sent!');
-  //     });
-  //   } on DioError catch (dioError) {
-  //     if (dioError.response.statusCode == 404) showSnackBar('Email not found');
-  //   } catch (e) {}
-  // }
 
   showSnackBar(String title) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));

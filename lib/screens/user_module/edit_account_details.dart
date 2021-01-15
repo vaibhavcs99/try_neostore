@@ -76,37 +76,6 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       showSnackBar('Details updated successfully');
     }
   }
-  // void registerUser() async {
-  //   var dio = Dio();
-
-  //   dio.options.headers['access_token'] = widget._apiResponse.data.accessToken;
-
-  //   Map<String, dynamic> userDetails = {
-  //     'first_name': '$_firstName',
-  //     'last_name': '$_lastName',
-  //     'email': '$_email',
-  //     'dob': '$_dob',
-  //     'profile_pic': 'null',
-  //     'phone_no': '$_phoneNumber',
-  //   };
-
-  //   FormData formData = FormData.fromMap(userDetails);
-  //   try {
-  //     await dio
-  //         .post(urlUpdateAccountDetails, data: formData)
-  //         .then((value) async {
-  //       showSnackBar('Account Details Updated');
-  //     });
-  //   } on DioError catch (dioError) {
-  //     showSnackBar(dioError.response.data);
-  //   } catch (e) {
-  //     showSnackBar(e.toString());
-  //   }
-  // }
-
-  //--------------------------------------------------------------------------------------------------------------
-  //this part contains all the defined UI widget fields.
-
   firstNameField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'First Name'),

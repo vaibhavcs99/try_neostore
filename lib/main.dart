@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/Utils/router.dart';
 import 'package:try_neostore/repository/user_session.dart';
@@ -35,7 +34,8 @@ class NeoStore extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: primaryRed2,
+        fontFamily: 'HachiMaruPop',
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: route_splash_screen,
