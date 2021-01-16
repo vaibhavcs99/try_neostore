@@ -28,7 +28,7 @@ class _EnterAddressState extends State<EnterAddress> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(),
+      appBar: AppBar(title:Text('Enter Address')),
       body: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -38,13 +38,13 @@ class _EnterAddressState extends State<EnterAddress> {
               children: [
                 TextFormField(
                     decoration:
-                        const InputDecoration(labelText: 'Street Address'),
+                        const InputDecoration(labelText: 'Street Address',labelStyle:TextStyle(color: Colors.black)),
                     validator: validateFieldForValue,
                     onSaved: (newValue) {
                       _streetAddress = newValue;
                     }),
                 TextFormField(
-                    decoration: const InputDecoration(labelText: 'Landmark'),
+                    decoration: const InputDecoration(labelText: 'Landmark',labelStyle:TextStyle(color: Colors.black)),
                     validator: validateFieldForValue,
                     onSaved: (newValue) {
                       _landmark = newValue;
@@ -52,7 +52,7 @@ class _EnterAddressState extends State<EnterAddress> {
                 Row(children: [
                   Expanded(
                     child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'City'),
+                        decoration: const InputDecoration(labelText: 'City',labelStyle:TextStyle(color: Colors.black)),
                         validator: validateFieldForValue,
                         onSaved: (newValue) {
                           _city = newValue;
@@ -60,7 +60,7 @@ class _EnterAddressState extends State<EnterAddress> {
                   ),
                   Expanded(
                     child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'State'),
+                        decoration: const InputDecoration(labelText: 'State',labelStyle:TextStyle(color: Colors.black)),
                         validator: validateFieldForValue,
                         onSaved: (newValue) {
                           _state = newValue;
@@ -72,7 +72,7 @@ class _EnterAddressState extends State<EnterAddress> {
                     child: TextFormField(
                         maxLength: 6,
                         decoration:
-                            const InputDecoration(labelText: 'Zip code'),
+                            const InputDecoration(labelText: 'Zip code',labelStyle:TextStyle(color: Colors.black)),
                         keyboardType: TextInputType.number,
                         validator: validateFieldForValue,
                         onSaved: (newValue) {
@@ -81,7 +81,7 @@ class _EnterAddressState extends State<EnterAddress> {
                   ),
                   Expanded(
                     child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'Country'),
+                        decoration: const InputDecoration(labelText: 'Country',labelStyle:TextStyle(color: Colors.black)),
                         validator: validateFieldForValue,
                         onSaved: (newValue) {
                           _country = newValue;
