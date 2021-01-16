@@ -26,6 +26,8 @@ class _RegisterState extends State<Register> {
   int _phoneNumber;
   String _gender = 'M';
 
+  var termsAndConditionValue = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegisterBloc, RegisterState>(
@@ -42,13 +44,21 @@ class _RegisterState extends State<Register> {
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: primaryRed2,
+        appBar: AppBar(title: Text('Register')),
         body: Center(
           child: Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: ListView(
               children: [
-                SizedBox(height:MediaQuery.of(context).size.height*0.06),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                Center(
+                  child: Text('NeoSTORE',
+                      style: TextStyle(
+                          fontSize: 45,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                ),
                 firstNameField(),
                 lastNameField(),
                 emailField(),
@@ -56,8 +66,13 @@ class _RegisterState extends State<Register> {
                 confirmPasswordField(),
                 buildGender(),
                 phoneNumberField(),
+                termsAndConditions(),
                 MyButton(
-                  onPressed: () => _validateInputs(),
+                  onPressed: () {
+                    (termsAndConditionValue == true)
+                        ? _validateInputs()
+                        : showSnackBar('Please agree to Terms & Conditions');
+                  },
                   myText: 'Register',
                 ),
               ],
@@ -67,7 +82,7 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
-//----------------------------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------------------------
 
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
@@ -93,7 +108,8 @@ class _RegisterState extends State<Register> {
   //this part contains all the defined UI widget fields.
 
   firstNameField() {
-    return MyTextFormField(myIcon: Icon(Icons.person,color: Colors.white),
+    return MyTextFormField(
+      myIcon: Icon(Icons.person, color: Colors.white),
       myLabelText: 'First Name',
       validator: validateName,
       onSaved: (newValue) {
@@ -103,7 +119,8 @@ class _RegisterState extends State<Register> {
   }
 
   lastNameField() {
-    return MyTextFormField(myIcon: Icon(Icons.person,color: Colors.white),
+    return MyTextFormField(
+      myIcon: Icon(Icons.person, color: Colors.white),
       myLabelText: 'Last Name',
       validator: validateName,
       onSaved: (newValue) {
@@ -113,7 +130,8 @@ class _RegisterState extends State<Register> {
   }
 
   emailField() {
-    return MyTextFormField(myIcon: Icon(Icons.mail,color: Colors.white),
+    return MyTextFormField(
+      myIcon: Icon(Icons.mail, color: Colors.white),
       myLabelText: 'Email',
       keyboardType: TextInputType.emailAddress,
       validator: validateEmail,
@@ -124,7 +142,8 @@ class _RegisterState extends State<Register> {
   }
 
   passwordField() {
-    return MyTextFormField(myIcon: Icon(Icons.lock,color: Colors.white),
+    return MyTextFormField(
+      myIcon: Icon(Icons.lock, color: Colors.white),
       myLabelText: 'Password',
       obscureText: true,
       keyboardType: TextInputType.visiblePassword,
@@ -136,7 +155,8 @@ class _RegisterState extends State<Register> {
   }
 
   confirmPasswordField() {
-    return MyTextFormField(myIcon: Icon(Icons.lock,color: Colors.white),
+    return MyTextFormField(
+      myIcon: Icon(Icons.lock, color: Colors.white),
       myLabelText: 'Confirm Password',
       obscureText: true,
       keyboardType: TextInputType.visiblePassword,
@@ -148,7 +168,8 @@ class _RegisterState extends State<Register> {
   }
 
   phoneNumberField() {
-    return MyTextFormField(myIcon: Icon(Icons.phone_android,color: Colors.white),
+    return MyTextFormField(
+      myIcon: Icon(Icons.phone_android, color: Colors.white),
       myLabelText: 'Phone Number',
       keyboardType: TextInputType.number,
       validator: validatePhoneNumber,
@@ -159,38 +180,36 @@ class _RegisterState extends State<Register> {
   }
 
   Row buildGender() {
-    return Row(
+    return Row(mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(flex: 3, child: Text('Gender')),
-        Expanded(
-          flex: 1,
-          child: Checkbox(
-            value: _maleCheckBox,
-            onChanged: (value) {
+        Text('Gender',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w500)),SizedBox(width: 28.0),
+        Checkbox(checkColor: primaryRed2,activeColor: Colors.white,
+          value: _maleCheckBox,
+          onChanged: (value) {
+            _gender = 'M';
+            setState(() {
               _gender = 'M';
-              setState(() {
-                _gender = 'M';
-                _maleCheckBox = value;
-                _femaleCheckBox = !value;
-              });
-            },
-          ),
+              _maleCheckBox = value;
+              _femaleCheckBox = !value;
+            });
+          },
         ),
-        Expanded(flex: 1, child: Text('Male')),
-        Expanded(
-          flex: 1,
-          child: Checkbox(
-            value: _femaleCheckBox,
-            onChanged: (value) {
-              setState(() {
-                _gender = 'F';
-                _femaleCheckBox = value;
-                _maleCheckBox = !value;
-              });
-            },
-          ),
+        Text('Male'),
+        Checkbox(checkColor: primaryRed2,activeColor: Colors.white,
+          value: _femaleCheckBox,
+          onChanged: (value) {
+            setState(() {
+              _gender = 'F';
+              _femaleCheckBox = value;
+              _maleCheckBox = !value;
+            });
+          },
         ),
-        Expanded(flex: 1, child: Text('Female')),
+        Text('Female'),
       ],
     );
   }
@@ -198,5 +217,25 @@ class _RegisterState extends State<Register> {
   //-------------------------------------------------------------------------------------------------------------
   showSnackBar(String title) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
+  }
+
+  termsAndConditions() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Checkbox(checkColor: primaryRed2,activeColor: Colors.white,
+            value: termsAndConditionValue ?? false,
+            onChanged: (value) {
+              setState(() {
+                termsAndConditionValue = !termsAndConditionValue;
+              });
+            }),
+        Text('I agreee the Terms & Conditions',
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 13.0,
+                color: Colors.white)),
+      ],
+    );
   }
 }

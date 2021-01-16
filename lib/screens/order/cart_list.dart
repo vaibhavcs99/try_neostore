@@ -3,6 +3,7 @@ import 'package:try_neostore/constants/constants.dart';
 
 import 'package:try_neostore/model/cart_list_model.dart';
 import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/screens/widgets/my_button.dart';
 
 class CartList extends StatefulWidget {
   final String accessToken;
@@ -19,7 +20,7 @@ class _CartListState extends State<CartList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(title:Text('My Cart',style: TextStyle(fontWeight: FontWeight.bold),)),
         body: FutureBuilder<CartListModel>(
             future: getMyModel(),
             builder: (context, snapshot) {
@@ -32,7 +33,7 @@ class _CartListState extends State<CartList> {
               return Column(
                 children: [
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.75 ,
                     child: ListView.builder(
                         itemCount: snapshot.data.count,
                         itemBuilder: (context, index) {
@@ -105,10 +106,10 @@ class _CartListState extends State<CartList> {
                           ));
                         }),
                   ),
-                  RaisedButton(
+                MyButton(color: primaryRed2,
                       onPressed: () =>
                           Navigator.pushNamed(context, route_enter_address,arguments: widget.accessToken),
-                      child: Text('Order Now'))
+                      myText: 'Order Now',textColor: Colors.white,)
                 ],
               );
             }));
