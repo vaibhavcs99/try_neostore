@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:try_neostore/constants/urls.dart';
-import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/model/order_details_model.dart';
 import 'package:try_neostore/repository/api_services.dart';
 
