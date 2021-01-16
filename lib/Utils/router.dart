@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/screens/widgets/splash_screen.dart';
-import 'package:try_neostore/screens/cart_list.dart';
+import 'package:try_neostore/screens/order/cart_list.dart';
 import 'package:try_neostore/screens/order/enter_address.dart';
 import 'package:try_neostore/screens/order/order_details.dart';
 import 'package:try_neostore/screens/order/order_list.dart';

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/bloc/registerBloc/register_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
+import 'package:try_neostore/screens/widgets/my_button.dart';
+import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -39,13 +41,14 @@ class _RegisterState extends State<Register> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(),
+        backgroundColor: primaryRed2,
         body: Center(
           child: Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: ListView(
               children: [
+                SizedBox(height:MediaQuery.of(context).size.height*0.06),
                 firstNameField(),
                 lastNameField(),
                 emailField(),
@@ -53,9 +56,9 @@ class _RegisterState extends State<Register> {
                 confirmPasswordField(),
                 buildGender(),
                 phoneNumberField(),
-                RaisedButton(
+                MyButton(
                   onPressed: () => _validateInputs(),
-                  child: Text('Register'),
+                  myText: 'Register',
                 ),
               ],
             ),
@@ -86,41 +89,12 @@ class _RegisterState extends State<Register> {
         phoneNumber: _phoneNumber,
         gender: _gender));
   }
-
-  // void registerUser() async {
-  //   var dio = Dio();
-
-  //   Map<String, dynamic> userDetails = {
-  //     'first_name': '$_firstName',
-  //     'last_name': '$_lastName',
-  //     'email': '$_email',
-  //     'password': '$_password',
-  //     'confirm_password': '$_confirmPassword',
-  //     'gender': '$_gender',
-  //     'phone_no': '$_phoneNumber',
-  //   };
-
-  //   FormData formData = FormData.fromMap(userDetails);
-  //   try {
-  //     await dio.post(urlRegister, data: formData).then((value) {
-  //       final apiResponse = apiResponseFromJson(value.data);
-  //       Navigator.pushNamed(context, route_home_screen, arguments: apiResponse);
-  //     });
-  //   } on DioError catch (dioError) {
-  //     print(dioError);
-  //     showSnackBar(dioError.response.data);
-  //   } catch (e) {
-  //     print(e);
-  //     showSnackBar(e.toString());
-  //   }
-  // }
-
   //--------------------------------------------------------------------------------------------------------------
   //this part contains all the defined UI widget fields.
 
   firstNameField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'First Name'),
+    return MyTextFormField(myIcon: Icon(Icons.person,color: Colors.white),
+      myLabelText: 'First Name',
       validator: validateName,
       onSaved: (newValue) {
         _firstName = newValue.trim();
@@ -129,8 +103,8 @@ class _RegisterState extends State<Register> {
   }
 
   lastNameField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Last Name'),
+    return MyTextFormField(myIcon: Icon(Icons.person,color: Colors.white),
+      myLabelText: 'Last Name',
       validator: validateName,
       onSaved: (newValue) {
         _lastName = newValue.trim();
@@ -139,8 +113,8 @@ class _RegisterState extends State<Register> {
   }
 
   emailField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Email'),
+    return MyTextFormField(myIcon: Icon(Icons.mail,color: Colors.white),
+      myLabelText: 'Email',
       keyboardType: TextInputType.emailAddress,
       validator: validateEmail,
       onSaved: (newValue) {
@@ -150,8 +124,9 @@ class _RegisterState extends State<Register> {
   }
 
   passwordField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Password'),
+    return MyTextFormField(myIcon: Icon(Icons.lock,color: Colors.white),
+      myLabelText: 'Password',
+      obscureText: true,
       keyboardType: TextInputType.visiblePassword,
       validator: validatePassword,
       onSaved: (newValue) {
@@ -161,8 +136,9 @@ class _RegisterState extends State<Register> {
   }
 
   confirmPasswordField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Confirm Password'),
+    return MyTextFormField(myIcon: Icon(Icons.lock,color: Colors.white),
+      myLabelText: 'Confirm Password',
+      obscureText: true,
       keyboardType: TextInputType.visiblePassword,
       validator: validatePassword,
       onSaved: (newValue) {
@@ -172,8 +148,8 @@ class _RegisterState extends State<Register> {
   }
 
   phoneNumberField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Phone Number'),
+    return MyTextFormField(myIcon: Icon(Icons.phone_android,color: Colors.white),
+      myLabelText: 'Phone Number',
       keyboardType: TextInputType.number,
       validator: validatePhoneNumber,
       onSaved: (newValue) {

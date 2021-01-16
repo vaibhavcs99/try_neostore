@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyTextFormField extends StatelessWidget {
+  final TextInputType keyboardType;
   final bool obscureText;
   final String myLabelText;
   final FormFieldValidator<String> validator;
@@ -11,7 +12,9 @@ class MyTextFormField extends StatelessWidget {
       {@required this.myLabelText,
       @required this.validator,
       @required this.onSaved,
-      @required this.myIcon, this.obscureText});
+      @required this.myIcon,
+      this.obscureText,
+      this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +36,10 @@ class MyTextFormField extends StatelessWidget {
             labelText: myLabelText,
             labelStyle:
                 TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+              
         validator: validator,
         onSaved: onSaved,
+        keyboardType: keyboardType,style: TextStyle(color: Colors.white),
       ),
     );
   }

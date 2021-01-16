@@ -92,7 +92,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Rs. ${productDetails2.cost.toString()}',
                                   style: TextStyle(
@@ -218,8 +219,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     AlertDialog alertDialog = AlertDialog(
       title: Text(productName),
       content: SizedBox(
-          width: 100,
-          height: 250,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height*0.5,
           child: Form(
             key: _formKey,
             child: ListView(children: [
@@ -236,29 +237,33 @@ class _ProductDetailsState extends State<ProductDetails> {
                 onSaved: (newValue) {
                   _quantity = int.parse(newValue);
                 },
+              ),
+              Align(
+                              child: SizedBox(
+                  width: MediaQuery.of(context).size.width/2  ,
+                  child: FlatButton(textColor: Colors.white,
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        await addItemCartService(
+                            myProductId: productId,
+                            quantity: _quantity,
+                            accessToken: widget.accessToken);
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, route_cart_list,
+                            arguments: widget.accessToken);
+                      } else {
+                        // _scaffoldKey.currentState.showSnackBar(
+                        //     SnackBar(content: Text('Please Enter all Fields')));
+                      }
+                    },
+                    color: Colors.red,
+                    child: Text('Submit'),
+                  ),
+                ),
               )
             ]),
           )),
-      actions: [
-        RaisedButton(
-          onPressed: () async {
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
-              await addItemCartService(
-                  myProductId: productId,
-                  quantity: _quantity,
-                  accessToken: widget.accessToken);
-              Navigator.pop(context);
-              Navigator.pushNamed(context, route_cart_list,
-                  arguments: widget.accessToken);
-            } else {
-              // _scaffoldKey.currentState.showSnackBar(
-              //     SnackBar(content: Text('Please Enter all Fields')));
-            }
-          },
-          child: Text('Add to cart'),
-        )
-      ],
     );
 
     showDialog(

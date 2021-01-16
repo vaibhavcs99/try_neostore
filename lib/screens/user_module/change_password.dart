@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/validators.dart';
+import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
 
@@ -27,6 +28,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
+        backgroundColor: primaryRed2,
         appBar: AppBar(
           title: Text('Change Password'),
           

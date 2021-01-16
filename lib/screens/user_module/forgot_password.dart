@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/validators.dart';
+import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/screens/widgets/my_button.dart';
+import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -16,7 +19,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(),
+        backgroundColor: primaryRed2,
         body: Center(
           child: Form(
             key: _formKey,
@@ -24,11 +27,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Enter your email address below to to reset password'),
+                Text('Enter your email address.',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500)),
                 emailField(),
-                RaisedButton(
+                MyButton(
                     onPressed: () => _validateInputs(),
-                    child: Text('Change Password')),
+                    myText: 'Reset'),
               ],
             ),
           ),
@@ -36,8 +43,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   emailField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Email'),
+    return MyTextFormField(
+      myLabelText: 'Email',
+      myIcon: Icon(Icons.person, color: Colors.white),
       validator: validateEmail,
       onSaved: (newValue) {
         _email = newValue.trim();

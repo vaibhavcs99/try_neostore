@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/bloc/loginBloc/login_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
+import 'package:try_neostore/screens/widgets/my_button.dart';
+import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -23,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) async {
           if (state is LoginSuccessful) {
-            
             Navigator.pushReplacementNamed(context, route_home_screen,
                 arguments: state.accessToken);
           }
@@ -33,51 +34,54 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         child: Scaffold(
             key: _scaffoldKey,
-            appBar: AppBar(title: Text('Login')),
+            backgroundColor: primaryRed2,
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => Navigator.pushNamed(context, route_register),
+              backgroundColor: primaryRed1,
+              shape: RoundedRectangleBorder(),
+              child: Icon(Icons.add, size: 50),
+            ),
             body: Center(
               child: Form(
                 key: _formKey,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: ListView(
                   children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                    Center(
+                      child: Text('NeoSTORE',
+                          style: TextStyle(
+                              fontSize: 45,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                    ),
                     emailField(),
                     passwordField(),
-                    RaisedButton(
-                      onPressed: () => _validateInputs(),
-                      child: Text('Login'),
-                    ),
+                    MyButton(
+                        onPressed: () => _validateInputs(), myText: 'Login'),
                     SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
-                    RichText(
-                        text: TextSpan(
-                            text: 'Forgot your Password?',
-                            style:
-                                TextStyle(color: Colors.blue, fontSize: 20.0),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushNamed(
-                                    context, route_forgot_password);
-                              })),
-                    SizedBox(
-                      height: 20,
+                    Center(
+                      child: RichText(
+                          text: TextSpan(
+                              text: 'Forgot Password?',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 20.0,fontWeight: FontWeight.w500),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushNamed(
+                                      context, route_forgot_password);
+                                })),
                     ),
-                    RichText(
-                        text: TextSpan(
-                      text: "Don't have an account? ",
-                      style: TextStyle(color: Colors.black, fontSize: 20.0),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: 'Sign Up',
-                            style: TextStyle(
-                                color: Colors.blue), //FIXME:WHY DOUBLE DOT
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushNamed(context, route_register);
-                              })
-                      ],
-                    )),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.25),
+                    Padding(
+                      padding: const EdgeInsets.only(left:33.0),
+                      child: Text(
+                        "Don't have an account? ",
+                        style: TextStyle(color: Colors.white, fontSize: 20.0,fontWeight: FontWeight.w500),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -97,14 +101,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-
 //-------------------------------------------------------------------------------------------------------------
   //this part contains all the defined UI widget fields.
   emailField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Email'),
+    return MyTextFormField(
+      myLabelText: 'Email',
       keyboardType: TextInputType.emailAddress,
       validator: validateEmail,
+      myIcon: Icon(
+        Icons.person,
+        color: Colors.white,
+      ),
       onSaved: (newValue) {
         _email = newValue;
       },
@@ -112,8 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   passwordField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Password'),
+    return MyTextFormField(
+      myIcon: Icon(Icons.lock, color: Colors.white),obscureText: true,
+      myLabelText: 'Password',
       keyboardType: TextInputType.visiblePassword,
       validator: validatePassword,
       onSaved: (newValue) {

@@ -43,7 +43,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                       CircleAvatar(
                         radius: 66,
                         backgroundImage: NetworkImage(
-                            '${snapshot.data.data.productCategories[0].iconImage}'),
+                            'https://cdn.wallpapersafari.com/91/96/D8ZYbS.jpg'),
                       ),
                       BorderContainer(myText: userData.firstName),
                       BorderContainer(myText: userData.lastName),

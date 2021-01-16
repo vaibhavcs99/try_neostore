@@ -21,83 +21,101 @@ class _MyDrawerState extends State<MyDrawer> {
     // myAccountDetailsService(widget.accessToken);
     //***************************** */
 
-    return ListView(
-      children: [
-        FutureBuilder<FetchDataResponse>(
-            future: getMyData(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return LinearProgressIndicator();
-              var user = snapshot.data.data.userData;
-
-              return UserAccountsDrawerHeader(
-                accountName: Text(
-                  '${user.firstName}' + ' ' + '${user.lastName}',
-                  style: TextStyle(fontSize: 23),
-                ),
-                accountEmail: Text('${user.email}'),
-                // currentAccountPicture: CircleAvatar(backgroundImage: NetworkImage(user.profilePic)),
-              );
-            }),
-        ListTile(
-            title: Text('Home'),
-            leading: Icon(Icons.home),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, route_home_screen,
-                  arguments: widget.accessToken);
-            }),
-        ListTile(
-            title: Text('My Cart'),
-            leading: Icon(Icons.shopping_cart),
-            onTap: () {}),
-        ListTile(
-            title: Text('Tables'),
-            leading: Icon(Icons.shopping_cart),
-            onTap: () => Navigator.pushNamed(context, route_product_list,
-                //imdex+1 is product category id number
-                arguments: ScreenParameters(
-                    parameter1: 1, parameter2: widget.accessToken))),
-        ListTile(
-            title: Text('Chair'),
-            leading: Icon(Icons.shopping_cart),
-            onTap: () => Navigator.pushNamed(context, route_product_list,
-                //imdex+1 is product category id number
-                arguments: ScreenParameters(
-                    parameter1: 2, parameter2: widget.accessToken))),
-        ListTile(
-            title: Text('Sofas'),
-            leading: Icon(Icons.shopping_cart),
-            onTap: () => Navigator.pushNamed(context, route_product_list,
-                //imdex+1 is product category id number
-                arguments: ScreenParameters(
-                    parameter1: 3, parameter2: widget.accessToken))),
-        ListTile(
-            title: Text('Bed'),
-            leading: Icon(Icons.shopping_cart),
-            onTap: () => Navigator.pushNamed(context, route_product_list,
-                //imdex+1 is product category id number
-                arguments: ScreenParameters(
-                    parameter1: 4, parameter2: widget.accessToken))),
-        ListTile(
-          title: Text('My Account'),
-          leading: Icon(Icons.person),
-          onTap: () => Navigator.pushReplacementNamed(
-              context, route_my_account_details,
-              arguments: widget.accessToken),
-        ),
-        ListTile(title: Text('Store Locator'), leading: Icon(Icons.map)),
-        ListTile(
-            title: Text('My Orders'),
-            leading: Icon(Icons.view_list),
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          buildUserAccountHeader(),
+          ListTile(
+              title: Text('Home'),
+              leading: Icon(Icons.home),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, route_home_screen,
+                    arguments: widget.accessToken);
+              }),
+          ListTile(
+              title: Text('My Cart'),
+              leading: Icon(Icons.shopping_cart),
+              onTap: () {}),
+          ListTile(
+              title: Text('Tables'),
+              leading: Icon(Icons.shopping_cart),
+              onTap: () => Navigator.pushNamed(context, route_product_list,
+                  //imdex+1 is product category id number
+                  arguments: ScreenParameters(
+                      parameter1: 1, parameter2: widget.accessToken))),
+          ListTile(
+              title: Text('Chair'),
+              leading: Icon(Icons.shopping_cart),
+              onTap: () => Navigator.pushNamed(context, route_product_list,
+                  //imdex+1 is product category id number
+                  arguments: ScreenParameters(
+                      parameter1: 2, parameter2: widget.accessToken))),
+          ListTile(
+              title: Text('Sofas'),
+              leading: Icon(Icons.shopping_cart),
+              onTap: () => Navigator.pushNamed(context, route_product_list,
+                  //imdex+1 is product category id number
+                  arguments: ScreenParameters(
+                      parameter1: 3, parameter2: widget.accessToken))),
+          ListTile(
+              title: Text('Bed'),
+              leading: Icon(Icons.shopping_cart),
+              onTap: () => Navigator.pushNamed(context, route_product_list,
+                  //imdex+1 is product category id number
+                  arguments: ScreenParameters(
+                      parameter1: 4, parameter2: widget.accessToken))),
+          ListTile(
+            title: Text('My Account'),
+            leading: Icon(Icons.person),
             onTap: () => Navigator.pushReplacementNamed(
-                context, route_order_list,
-                arguments: widget.accessToken)),
-        ListTile(
-          title: Text('LogOut'),
-          leading: Icon(Icons.exit_to_app),
-          onTap: _onLogOut,
-        )
-      ],
+                context, route_my_account_details,
+                arguments: widget.accessToken),
+          ),
+          ListTile(title: Text('Store Locator'), leading: Icon(Icons.map)),
+          ListTile(
+              title: Text('My Orders'),
+              leading: Icon(Icons.view_list),
+              onTap: () => Navigator.pushReplacementNamed(
+                  context, route_order_list,
+                  arguments: widget.accessToken)),
+          ListTile(
+            title: Text('LogOut'),
+            leading: Icon(Icons.exit_to_app),
+            onTap: _onLogOut,
+          )
+        ],
+      ),
     );
+  }
+
+  FutureBuilder<FetchDataResponse> buildUserAccountHeader() {
+    return FutureBuilder<FetchDataResponse>(
+        future: getMyData(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return UserAccountsDrawerHeader(
+              accountName: Text(
+                '',
+                style: TextStyle(fontSize: 23),
+              ),
+              accountEmail: Text(''),
+            );
+          var user = snapshot.data.data.userData;
+
+          return UserAccountsDrawerHeader(
+            currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://www.govloop.com/wp-content/uploads/2016/02/panda-1024x576.jpg')),
+            accountName: Text(
+              '${user.firstName}' + ' ' + '${user.lastName}',
+              style: TextStyle(fontSize: 23),
+            ),
+            accountEmail: Text('${user.email}'),
+            // currentAccountPicture: CircleAvatar(backgroundImage: NetworkImage(user.profilePic)),
+          );
+        });
   }
 
   _onLogOut() {
