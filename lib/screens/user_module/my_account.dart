@@ -5,7 +5,7 @@ import 'package:try_neostore/model/fetchDataResponse.dart';
 import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/screens/widgets/container_white_border.dart';
 import 'package:try_neostore/screens/widgets/my_drawer.dart';
-import 'package:try_neostore/screens/widgets/my_white_button.dart';
+import 'package:try_neostore/screens/widgets/my_button.dart';
 
 class MyAccountDetails extends StatefulWidget {
   final String accessToken;
@@ -50,7 +50,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                       BorderContainer(myText: userData.email),
                       BorderContainer(myText: userData.phoneNo),
                       BorderContainer(myText: userData.dob),
-                      MyWhiteButton(
+                      MyButton(
                           onPressed: () => Navigator.pushNamed(
                               context, route_edit_account_details,
                               arguments: widget.accessToken),

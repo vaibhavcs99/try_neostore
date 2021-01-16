@@ -20,5 +20,11 @@ const Color primaryRed1= Color(0xFFFE3F3F);
 const Color primaryRed2= Color(0xFFE91B1A);
 const Color primaryRed3= Color(0xFFE91B1A);
 const Color primaryRed4= Color(0xFFE91B1A);
+const Color primaryBlack= Color(0xFF4F4F4F);
+
+const Color colorRedText= Color(0xFFFE4040);
+const Color colorGreyBackground= Color(0xFFEFEFEF);
+
+
 
 

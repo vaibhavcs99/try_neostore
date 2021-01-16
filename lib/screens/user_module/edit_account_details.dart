@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/validators.dart';
+import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
-import 'package:try_neostore/screens/widgets/my_white_button.dart';
+import 'package:try_neostore/screens/widgets/my_button.dart';
 import 'package:try_neostore/utils/validators.dart' as validators;
 
 class EditAccountDetails extends StatefulWidget {
@@ -26,7 +27,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(backgroundColor: primaryRed2,
       key: _scaffoldKey,
       appBar: AppBar(title: Text('Edit Account Details')),
       body: Center(
@@ -47,7 +48,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
               //   },
               // ),
               // MyTextFormField(myLabelText: 'Last Name'),
-              MyWhiteButton(
+              MyButton(
                   myText: 'Edit Account Details',
                   onPressed: () => _validateInputs())
             ],

@@ -81,12 +81,13 @@ class AppRouter {
         ScreenParameters parameters = settings.arguments as ScreenParameters;
         int productId = parameters.parameter1 as int;
         String accessToken = parameters.parameter2 as String;
+        String productName = parameters.parameter3 as String;
 
         return MaterialPageRoute(
           builder: (_) => ProductDetails(
-            productId: productId,
-            accessToken: accessToken,
-          ),
+              productId: productId,
+              accessToken: accessToken,
+              productName: productName),
         );
         break;
 //*****************************************************************************************************

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 String getProductCategoryName(int id) {
   List productNames = ['Tables', 'Chairs', 'Sofa', 'Bed', 'Dining set'];
 
@@ -15,4 +17,11 @@ String getProductCategoryName(int id) {
     default:
       return 'Unknown Category';
   }
+}
+
+getRatingBar(int rating) {
+  return Row(children: [
+    for (var i = 0; i < rating; i++) Image.asset('assets/star_check.png'),
+    for (var i = 0; i < 5-rating; i++) Image.asset('assets/star_unchek.png'),
+  ]);
 }

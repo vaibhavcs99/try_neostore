@@ -5,13 +5,19 @@ import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/product_details.model.dart';
 import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/screens/widgets/my_button.dart';
+import 'package:try_neostore/utils/utils.dart' as utils;
 
 class ProductDetails extends StatefulWidget {
   final int productId;
+  final String productName;
   final String accessToken;
 
   const ProductDetails(
-      {Key key, @required this.productId, @required this.accessToken})
+      {Key key,
+      @required this.productId,
+      @required this.accessToken,
+      @required this.productName})
       : super(key: key);
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
@@ -21,105 +27,182 @@ class _ProductDetailsState extends State<ProductDetails> {
   int _quantity = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  int selectedImage = 0;
 
   double myFeedbackRating = 3.0;
 
   @override
   Widget build(BuildContext context) {
-    var productData = widget.productId;
-    int selectedImage = 1; //TODO:DOESN'T WORK OUTSIDE BUILD
-
     return Scaffold(
         key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text(widget.productName),
+        ),
         body: FutureBuilder<ProductDetailsModel>(
             future: getMyModel(id: widget.productId),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return CircularProgressIndicator();
+              if (!snapshot.hasData)
+                return Center(child: CircularProgressIndicator());
               var productDetails = snapshot.data.data;
+              var productDetails2 = productDetails;
               return ListView(
                 shrinkWrap: true,
                 children: [
                   Card(
-                    child: Column(
-                      children: [
-                        Text(productDetails.rating.toString()),
-                        Text(productDetails.name),
-                        Text(getProductCategoryName(
-                            productDetails.productCategoryId)),
-                        Text(productDetails.producer),
-                      ],
-                    ),
-                  ),
-                  Container(
-                      height: 200,
-                      child: Image.network(
-                          productDetails.productImages[selectedImage].image)),
-                  SizedBox(
-                    height: 200,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 3,
-                      itemBuilder: (context, index) {
-                        try {
-                          return Card(
-                            child: Container(
-                                width: 130,
-                                child: Image.network(
-                                    productDetails.productImages[index].image)),
-                          );
-                        } on RangeError {
-                          return Card(
-                              // child: Container(
-                              //     width: 130,
-                              //     child: Image.network(
-                              //         productDetails.productImages[0].image)),
-                              );
-                        }
-                      },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            productDetails.name,
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                              getProductCategoryName(
+                                  productDetails.productCategoryId),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w100)),
+                          SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 75,
+                                child: Text(productDetails.producer,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w100)),
+                              ),
+                              Expanded(
+                                  flex: 25,
+                                  child: SizedBox(
+                                      height: 18,
+                                      child:
+                                          getRatingBar(productDetails.rating)))
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Card(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Description',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 24)),
-                        Text(productDetails.description),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Rs. ${productDetails2.cost.toString()}',
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      color: colorRedText,
+                                      fontWeight: FontWeight.w500)),
+                              Image.asset('assets/icons/share.png')
+                            ],
+                          ),
+                        ),
+                        Container(
+                            height: 200,
+                            child: Image.network(productDetails
+                                .productImages[selectedImage].image)),
+                        SizedBox(
+                          height: 140,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 3,
+                            itemBuilder: (context, index) {
+                              try {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        print(index);
+                                        selectedImage = index;
+                                      });
+                                    },
+                                    child: Container(
+                                        width: 120,
+                                        child: Image.network(productDetails
+                                            .productImages[index].image)),
+                                  ),
+                                );
+                              } on RangeError {
+                                return Card(
+                                    // child: Container(
+                                    //     width: 130,
+                                    //     child: Image.network(
+                                    //         productDetails.productImages[0].image)),
+                                    );
+                              }
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),
+                  buildDescription(productDetails),
                   Card(
                     child: Row(
                       children: [
-                        RaisedButton(
-                            onPressed: () {
-                              showAlertDialog(
-                                  productId: productDetails.id,
-                                  productName: productDetails.name,
-                                  productImageUrl:
-                                      productDetails.productImages.first.image);
-                              // addItemCartService(
-                              //     myProductId: productDetails.id,
-                              //     receivedAccessToken:
-                              //         widget.apiResponse.data.accessToken);
-                              // Navigator.pushNamed(context, route_cart_list,
-                              //     arguments: widget.apiResponse);
-                            },
-                            child: Text('Buy Now')),
-                        RaisedButton(
+                        Expanded(
+                          child: MyButton(
+                              aspectX: 227,
+                              aspectY: 68,
+                              textColor: Colors.white,
+                              color: Colors.red,
+                              onPressed: () {
+                                showAlertDialog(
+                                    productId: productDetails.id,
+                                    productName: productDetails.name,
+                                    productImageUrl: productDetails
+                                        .productImages.first.image);
+                              },
+                              myText: 'Buy Now',
+                              fontSize: 20.0),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: MyButton(
+                            aspectX: 227,
+                            aspectY: 68,
+                            textColor: Colors.grey,
+                            color: colorGreyBackground,
                             onPressed: () => showRatingDialog(
                                 productId: productDetails.id,
                                 productName: productDetails.name,
                                 productImage:
                                     productDetails.productImages.first.image),
-                            child: Text('Rate')),
+                            myText: 'Rate',
+                            fontSize: 20.0,
+                          ),
+                        ),
                       ],
                     ),
                   )
                 ],
               );
             }));
+  }
+
+  Widget buildDescription(Data productDetails) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Description',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+            SizedBox(height: 4),
+            Text(productDetails.description, style: TextStyle(fontSize: 20)),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<ProductDetailsModel> getMyModel({@required int id}) async {

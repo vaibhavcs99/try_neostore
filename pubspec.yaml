@@ -49,6 +49,9 @@ flutter:
     - assets/cupboardicon.png
     - assets/sofaicon.png
     - assets/tableicon.png
+    - assets/star_check.png
+    - assets/star_unchek.png
+    - assets/icons/share.png
     # - assets/chair.imageset/chair.png
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -68,10 +71,13 @@ flutter:
     - family: Gotham
       fonts:
         - asset: fonts\Gotham-Font\ttf\GothamBook.ttf
+          weight: 100
         - asset: fonts\Gotham-Font\ttf\GothamMedium.ttf
+          weight: 500
         - asset: fonts\Gotham-Font\ttf\GothamLight.ttf
+          weight: 200
         - asset: fonts\Gotham-Font\ttf\GothamBold.ttf
-          weight: 700
+          weight: 900
         - asset: fonts\Gotham-Font\ttf\GothamBookItalic.ttf
           style: italic
   #
