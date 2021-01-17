@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/screens/widgets/my_button.dart';
 
 class EnterAddress extends StatefulWidget {
   final String accessToken;
@@ -28,73 +29,195 @@ class _EnterAddressState extends State<EnterAddress> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(title:Text('Enter Address')),
+      appBar: AppBar(title: Text('Enter Address')),
       body: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: ListView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            children: [
+              buildAddress(),
+              SizedBox(height: 27),
+              buildLandMark(),
+              SizedBox(height: 27),
+              buildCityAndState(),
+              SizedBox(height: 27),
+              buildZipAndCountry(),
+              SizedBox(height: 27),
+              MyButton(
+                  onPressed: () => validateInputs(), myText: 'Order Now',color: Colors.red,textColor: Colors.white)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row buildZipAndCountry() {
+    return Row(children: [
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              children: [
-                TextFormField(
-                    decoration:
-                        const InputDecoration(labelText: 'Street Address',labelStyle:TextStyle(color: Colors.black)),
-                    validator: validateFieldForValue,
-                    onSaved: (newValue) {
-                      _streetAddress = newValue;
-                    }),
-                TextFormField(
-                    decoration: const InputDecoration(labelText: 'Landmark',labelStyle:TextStyle(color: Colors.black)),
-                    validator: validateFieldForValue,
-                    onSaved: (newValue) {
-                      _landmark = newValue;
-                    }),
-                Row(children: [
-                  Expanded(
-                    child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'City',labelStyle:TextStyle(color: Colors.black)),
-                        validator: validateFieldForValue,
-                        onSaved: (newValue) {
-                          _city = newValue;
-                        }),
+            Text('ZIP CODE',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17.0,
+                    letterSpacing: 1.2)),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: Colors.white),
+              child: TextFormField(
+                  // maxLength: 6,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
                   ),
-                  Expanded(
-                    child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'State',labelStyle:TextStyle(color: Colors.black)),
-                        validator: validateFieldForValue,
-                        onSaved: (newValue) {
-                          _state = newValue;
-                        }),
-                  )
-                ]),
-                Row(children: [
-                  Expanded(
-                    child: TextFormField(
-                        maxLength: 6,
-                        decoration:
-                            const InputDecoration(labelText: 'Zip code',labelStyle:TextStyle(color: Colors.black)),
-                        keyboardType: TextInputType.number,
-                        validator: validateFieldForValue,
-                        onSaved: (newValue) {
-                          _zipCode = newValue;
-                        }),
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'Country',labelStyle:TextStyle(color: Colors.black)),
-                        validator: validateFieldForValue,
-                        onSaved: (newValue) {
-                          _country = newValue;
-                        }),
-                  )
-                ]),
-              ],
+                  keyboardType: TextInputType.number,
+                  validator: validateFieldForValue,
+                  onSaved: (newValue) {
+                    _zipCode = newValue;
+                  }),
             ),
-            RaisedButton(
-                onPressed: () => validateInputs(), child: Text('Order Now'))
           ],
         ),
       ),
+      SizedBox(width: 13),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('COUNTRY',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17.0,
+                    letterSpacing: 1.2)),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: Colors.white),
+              child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  validator: validateFieldForValue,
+                  onSaved: (newValue) {
+                    _country = newValue;
+                  }),
+            ),
+          ],
+        ),
+      )
+    ]);
+  }
+
+  Row buildCityAndState() {
+    return Row(children: [
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('CITY',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17.0,
+                    letterSpacing: 1.2)),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: Colors.white),
+              child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  validator: validateFieldForValue,
+                  onSaved: (newValue) {
+                    _city = newValue;
+                  }),
+            )
+          ],
+        ),
+      ),
+      SizedBox(width: 13),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('STATE',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17.0,
+                    letterSpacing: 1.2)),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: Colors.white),
+              child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  validator: validateFieldForValue,
+                  onSaved: (newValue) {
+                    _state = newValue;
+                  }),
+            ),
+          ],
+        ),
+      )
+    ]);
+  }
+
+  Column buildAddress() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('ADDRESS',
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 17.0,
+                letterSpacing: 1.2)),
+        Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0), color: Colors.white),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    labelStyle: TextStyle(color: Colors.black)),
+                validator: validateFieldForValue,
+                onSaved: (newValue) {
+                  _streetAddress = newValue;
+                }),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildLandMark() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('LANDMARK',
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 17.0,
+                letterSpacing: 1.2)),
+        Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0), color: Colors.white),
+          child: TextFormField(
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+              ),
+              validator: validateFieldForValue,
+              onSaved: (newValue) {
+                _landmark = newValue;
+              }),
+        )
+      ],
     );
   }
 
@@ -114,8 +237,7 @@ class _EnterAddressState extends State<EnterAddress> {
           _country;
       //
       var response = await orderItemsService(
-          address: _entireAddress,
-          accessToken: widget.accessToken);
+          address: _entireAddress, accessToken: widget.accessToken);
       if (response.statusCode == 200) {
         _scaffoldKey.currentState
             .showSnackBar(SnackBar(content: Text('Order Placed Successfully')));

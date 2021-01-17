@@ -35,6 +35,7 @@ class _CartListState extends State<CartList> {
               if (snapshot.data.count == null) {
                 return Center(child: Text('Cart is Empty'));
               }
+              totalPrice = snapshot.data.total;
               return Column(
                 children: [
                   SizedBox(
@@ -43,8 +44,8 @@ class _CartListState extends State<CartList> {
                         itemCount: snapshot.data.count,
                         itemBuilder: (context, index) {
                           var productData = snapshot.data.data[index];
-                          totalPrice = snapshot.data.total;
-
+                          
+                          print(totalPrice);
                           return Dismissible(
                             key: Key(productData.product.id.toString()),
                             background: slideLeftBackground(),
@@ -121,11 +122,13 @@ class _CartListState extends State<CartList> {
                           children: [
                             Text('TOTAL',
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold,fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15.0,
                                     letterSpacing: 1.2)),
                             Text('Rs. $totalPrice',
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold,fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15.0,
                                     letterSpacing: 1.2))
                           ],
                         ),
