@@ -35,7 +35,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
           key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
-            children: [
+            children: [SizedBox(height: 33),
               firstNameField(), lastNameField(),
               dateOfBirth(),
               emailField(),
@@ -87,7 +87,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   firstNameField() {
-    return MyTextFormField(myIcon: Icon(Icons.person),
+    return MyTextFormField(myIcon: Icon(Icons.person,color: Colors.white),
       myLabelText: 'First Name',
       validator: validateName,
       onSaved: (newValue) {
@@ -97,7 +97,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   lastNameField() {
-    return MyTextFormField(myIcon: Icon(Icons.person),
+    return MyTextFormField(myIcon: Icon(Icons.person,color: Colors.white),
       myLabelText: 'Last Name',
       validator: validateName,
       onSaved: (newValue) {
@@ -107,7 +107,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   emailField() {
-    return MyTextFormField(myIcon: Icon(Icons.mail),
+    return MyTextFormField(myIcon: Icon(Icons.mail,color: Colors.white),
       myLabelText: 'Email',
       validator: validateEmail,
       onSaved: (newValue) {
@@ -117,7 +117,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   phoneNumberField() {
-    return MyTextFormField(myIcon: Icon(Icons.phone),
+    return MyTextFormField(myIcon: Icon(Icons.phone,color: Colors.white),
       myLabelText: 'Phone Number',
       validator: validatePhoneNumber,
       onSaved: (newValue) {
@@ -127,7 +127,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   dateOfBirth() {
-    return MyTextFormField(myIcon: Icon(Icons.cake),
+    return MyTextFormField(myIcon: Icon(Icons.cake,color: Colors.white),
       myLabelText:
           'Date of Birth in dd-mm-yyyy',
       validator: validateDob,

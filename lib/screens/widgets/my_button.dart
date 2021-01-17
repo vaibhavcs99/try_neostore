@@ -22,7 +22,7 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 33, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 33, vertical: 13),
       child: AspectRatio(
         aspectRatio: (aspectX ?? 880) / (aspectY ?? 142),
         child: FlatButton(

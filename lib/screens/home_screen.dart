@@ -1,4 +1,5 @@
 //TODO: Show snackbar on arrival.
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
@@ -18,10 +19,16 @@ class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   List productNames = ['Tables', 'Chairs', 'Sofa', 'Bed', 'Dining set'];
   List<String> productImages = [
-    "assets/tableicon.png",
-    "assets/chairsicon.png",
-    "assets/sofaicon.png",
-    "assets/cupboardicon.png",
+    'assets/tableicon.png',
+    'assets/chairsicon.png',
+    'assets/sofaicon.png',
+    'assets/cupboardicon.png',
+  ];
+  List<String> sliderImages = [
+    'assets/slider_img1.jpg',
+    'assets/slider_img2.jpg',
+    'assets/slider_img3.jpg',
+    'assets/slider_img4.jpg',
   ];
 
   @override
@@ -45,40 +52,49 @@ class _HomeScreenState extends State<HomeScreen> {
         drawer: Drawer(
           child: MyDrawer(accessToken: widget.accessToken),
         ),
-        body: Column(
+        body: ListView(
           children: [
-            ListView(
-              shrinkWrap: true,
-              children: [
-                Text("${widget.accessToken}"),
-              ],
+            CarouselSlider(
+              options: CarouselOptions(aspectRatio: 16/9,autoPlay: true,enlargeCenterPage: true),
+              items: sliderImages.map((i) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Image.asset(i));
+                  },
+                );
+              }).toList(),
             ),
-            Expanded(
-              child: Container(
-                child: GridView.count(
-                    crossAxisCount: 2,
-                    children: List.generate(4, (index) {
-                      print(productImages[0]);
-                      return Container(
-                          child: InkWell(
-                        onTap: () => Navigator.pushNamed(
-                            context, route_product_list,
-                            //imdex+1 is product category id number
-                            arguments: ScreenParameters(
-                                parameter1: index + 1,
-                                parameter2: widget.accessToken)),
-                        child: Card(
-                          child: Container(
-                              child: Image.asset(productImages[index])
-                              // child: Image(image: AssetImage('assets/chair_icon.imageset/chair_icon.png'),)
-                              ),
-                        ),
-                      ));
-                    })),
-              ),
-            )
+            buildProductsGrid(context)
           ],
         ),
+      ),
+    );
+  }
+
+  SizedBox buildProductsGrid(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: Container(
+        child: GridView.count(
+            crossAxisCount: 2,
+            children: List.generate(4, (index) {
+              print(productImages[0]);
+              return Container(
+                  child: InkWell(
+                onTap: () => Navigator.pushNamed(context, route_product_list,
+                    //imdex+1 is product category id number
+                    arguments: ScreenParameters(
+                        parameter1: index + 1, parameter2: widget.accessToken)),
+                child: Card(
+                  child: Container(child: Image.asset(productImages[index])
+                      // child: Image(image: AssetImage('assets/chair_icon.imageset/chair_icon.png'),)
+                      ),
+                ),
+              ));
+            })),
       ),
     );
   }

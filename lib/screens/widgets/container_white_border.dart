@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class BorderContainer extends StatelessWidget {
   final String myText;
-  BorderContainer({@required this.myText});
+
+  final Icon myIcon;
+  BorderContainer({@required this.myText, @required this.myIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +14,18 @@ class BorderContainer extends StatelessWidget {
           aspectRatio: 22 / 3,
           child: Container(
               alignment: Alignment.center,
-              child: Text(myText ?? 'no data',
-                  style: TextStyle(color: Colors.white, fontSize: 18,fontWeight: FontWeight.w600)),
+              child: Row(
+                children: [
+                  SizedBox(width: 8),
+                  myIcon,
+                  SizedBox(width: 12),
+                  Text(myText ?? 'No data',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600)),
+                ],
+              ),
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.white)))),
     );

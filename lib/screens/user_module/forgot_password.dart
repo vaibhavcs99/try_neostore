@@ -31,7 +31,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,
-                        fontWeight: FontWeight.w500)),
+                        fontWeight: FontWeight.w500)),SizedBox(height: 13),
                 emailField(),
                 MyButton(
                     onPressed: () => _validateInputs(),

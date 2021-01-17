@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  carousel_slider: ^2.3.1
   cupertino_icons: ^1.0.0
   dio: ^3.0.10
   equatable: ^1.2.5
@@ -53,6 +54,10 @@ flutter:
     - assets/star_unchek.png
     - assets/icons/share.png
     - assets/icons/Plus.png
+    - assets/slider_img1.jpg
+    - assets/slider_img2.jpg
+    - assets/slider_img3.jpg
+    - assets/slider_img4.jpg
     # - assets/chair.imageset/chair.png
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -81,6 +86,5 @@ flutter:
           weight: 900
         - asset: fonts\Gotham-Font\ttf\GothamBookItalic.ttf
           style: italic
-  #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

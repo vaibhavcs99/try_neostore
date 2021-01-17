@@ -45,11 +45,11 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                         backgroundImage: NetworkImage(
                             'https://cdn.wallpapersafari.com/91/96/D8ZYbS.jpg'),
                       ),
-                      BorderContainer(myText: userData.firstName),
-                      BorderContainer(myText: userData.lastName),
-                      BorderContainer(myText: userData.email),
-                      BorderContainer(myText: userData.phoneNo),
-                      BorderContainer(myText: userData.dob),
+                      BorderContainer(myText: userData.firstName,myIcon: Icon(Icons.person,color: Colors.white)),
+                      BorderContainer(myText: userData.lastName,myIcon: Icon(Icons.person,color: Colors.white)),
+                      BorderContainer(myText: userData.email,myIcon: Icon(Icons.mail,color: Colors.white)),
+                      BorderContainer(myText: userData.phoneNo,myIcon: Icon(Icons.phone_android,color: Colors.white)),
+                      BorderContainer(myText: userData.dob,myIcon: Icon(Icons.cake,color: Colors.white)),
                       MyButton(
                           onPressed: () => Navigator.pushNamed(
                               context, route_edit_account_details,
@@ -62,7 +62,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                         onPressed: () => Navigator.pushNamed(
                             context, route_change_password,
                             arguments: widget.accessToken),
-                        child: Text('Reset Password'),
+                        child: Text('RESET PASSWORD',style: TextStyle(color: Colors.grey.shade700,fontSize: 21,fontWeight: FontWeight.w500)),
                       )
                     ],
                   );

@@ -20,8 +20,11 @@ class _LoginScreenState extends State<LoginScreen> {
   String _email;
   String _password;
 
+
   @override
   Widget build(BuildContext context) {
+      bool keyboardIsClosed= MediaQuery.of(context).viewInsets.bottom==0;
+
     return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) async {
           if (state is LoginSuccessful) {
@@ -35,11 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Scaffold(
             key: _scaffoldKey,
             backgroundColor: primaryRed2,
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => Navigator.pushNamed(context, route_register),
-              backgroundColor: primaryRed1,
-              shape: RoundedRectangleBorder(),
-              child: Icon(Icons.add, size: 50),
+            floatingActionButton: Visibility(visible: keyboardIsClosed,
+                          child: FloatingActionButton(
+                onPressed: () => Navigator.pushNamed(context, route_register),
+                backgroundColor: primaryRed1,
+                shape: RoundedRectangleBorder(),
+                child: Icon(Icons.add, size: 50),
+              ),
             ),
             body: Center(
               child: Form(
@@ -55,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.bold,
                               color: Colors.white)),
                     ),
+                    SizedBox(height: 49),
                     emailField(),
                     passwordField(),
                     MyButton(
@@ -74,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       context, route_forgot_password);
                                 })),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.25),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.20),
                     Padding(
                       padding: const EdgeInsets.only(left:33.0),
                       child: Text(
