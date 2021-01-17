@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
+import 'package:try_neostore/bloc/forgot_password_bloc/forgot_password_bloc.dart';
+import 'package:try_neostore/bloc/loginBloc/login_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
@@ -17,29 +20,40 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: primaryRed2,
-        body: Center(
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Enter your email address.',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500)),SizedBox(height: 13),
-                emailField(),
-                MyButton(
-                    onPressed: () => _validateInputs(),
-                    myText: 'Reset'),
-              ],
+    return BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
+      listener: (context, state) {
+        if (state is ForgotPasswordSuccessful) {
+          showSnackBar('Email Sent Successfully');
+        }
+        if (state is ForgotPasswordUnsuccessful) {
+          showSnackBar(state.error);
+        }
+      },
+      child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: primaryRed2,
+          body: Center(
+            child: Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildEmailText(),
+                  SizedBox(height: 13),
+                  emailField(),
+                  MyButton(onPressed: () => _validateInputs(), myText: 'Reset'),
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
+  }
+
+  Text buildEmailText() {
+    return Text('Enter your email address.',
+        style: TextStyle(
+            color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w500));
   }
 
   emailField() {
@@ -56,15 +70,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      sendPasswordResetMail(); //same method as authenticate user.
-    }
-  }
-
-  void sendPasswordResetMail() async {
-    var _userEmail = {'email': '$_email'};
-    var response = await sendPasswordResetMailService(_userEmail);
-    if (response.statusCode == 200) {
-      showSnackBar("Email Sent");
+      BlocProvider.of<ForgotPasswordBloc>(context)
+          .add(OnResetButtonPresssed(email: _email));
     }
   }
 

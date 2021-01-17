@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:try_neostore/bloc/forgot_password_bloc/forgot_password_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/Utils/router.dart';
 import 'package:try_neostore/repository/user_session.dart';
@@ -20,6 +21,7 @@ void main() async {
       BlocProvider(
           create: (_) => RegisterBloc(
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(_))),
+      BlocProvider(create: (_) => ForgotPasswordBloc()),
     ],
     child: NeoStore(),
   ));
@@ -36,8 +38,8 @@ class NeoStore extends StatelessWidget {
       theme: ThemeData(
         primaryColor: primaryRed2,
         scaffoldBackgroundColor: colorGreyBackground,
-     
-        fontFamily: 'Gotham',hintColor: Colors.white,
+        fontFamily: 'Gotham',
+        hintColor: Colors.white,
         buttonTheme: ButtonThemeData(
           buttonColor: Colors.white,
         ),
