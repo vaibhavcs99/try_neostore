@@ -31,14 +31,16 @@ class _MyOrdersState extends State<MyOrders> {
                     if (!snapshot.hasData) return CircularProgressIndicator();
                     if (snapshot.data.data.length == 0)
                       return Text('Order List is empty');
-                    return ListView.builder(
+                    return ListView.separated(
+                      separatorBuilder: (context, index) =>
+                          Divider(thickness: 4),
                       itemCount: snapshot.data.data.length,
                       itemBuilder: (context, index) {
                         var orderData = snapshot.data.data[index];
                         return ListTile(
-                          title: Text(orderData.id.toString()),
-                          subtitle: Text(orderData.created),
-                          trailing: Text(orderData.cost.toString()),
+                          title: Text('Order ID : ${orderData.id.toString()}'),
+                          subtitle: Text('Ordered Date : ${orderData.created}'),
+                          trailing: Text('Rs. ${orderData.cost.toString()}'),
                           onTap: () => Navigator.pushNamed(
                               context, route_order_details,
                               arguments: ScreenParameters(

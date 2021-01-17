@@ -19,7 +19,7 @@ class _OrderDetailsState extends State<OrderDetails> {
       body: FutureBuilder<OrderDetailsModel>(
         future: getMyModel(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return CircularProgressIndicator();
+          if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
           return ListView(
             children: [
               SizedBox(
@@ -30,32 +30,46 @@ class _OrderDetailsState extends State<OrderDetails> {
                     var orderData = snapshot.data.data.orderDetails[index];
                     return Card(
                       child: Container(
-                        height: 100,
+                        height: MediaQuery.of(context).size.height*0.18,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Expanded(
+                                flex: 1,
                                 child: Container(
-                              width: 100,
-                              child: Image.network(orderData.prodImage),
-                            )),
+                                  width: 100,
+                                  child: Image.network(orderData.prodImage),
+                                )),
                             Expanded(
-                              child: Column(
-                                children: [
-                                  Text(orderData.prodName),
-                                  Text(orderData.prodCatName),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                          child: Text(
-                                              orderData.quantity.toString())),
-                                      SizedBox(width: 40),
-                                      Expanded(
-                                          child:
-                                              Text(orderData.total.toString())),
-                                    ],
-                                  ),
-                                ],
+                              flex: 3,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, top: 17.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(orderData.prodName,
+                                        style: TextStyle(fontSize: 23)),
+                                    SizedBox(height: 7),
+                                    Text(orderData.prodCatName),
+                                    SizedBox(height: 13),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right:14.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                              'QTY : ${orderData.quantity.toString()}',
+                                              style: TextStyle(fontSize: 15)),
+                                          SizedBox(width: 40),
+                                          Text(
+                                              'Rs. ${orderData.total.toString()}'),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             )
                           ],
@@ -65,21 +79,31 @@ class _OrderDetailsState extends State<OrderDetails> {
                   },
                 ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Total'),
-                    ),
+              Card(
+                child: SizedBox(
+                  height: 66,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text('TOTAL',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                                letterSpacing: 1.2)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text('Rs. ${snapshot.data.data.cost}',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                                letterSpacing: 1.2)),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Rs. ${snapshot.data.data.cost}'),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           );

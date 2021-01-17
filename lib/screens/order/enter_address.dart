@@ -64,7 +64,7 @@ class _EnterAddressState extends State<EnterAddress> {
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 17.0,
-                    letterSpacing: 1.2)),
+                    letterSpacing: 1.2)),SizedBox(height: 17),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
@@ -92,7 +92,7 @@ class _EnterAddressState extends State<EnterAddress> {
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 17.0,
-                    letterSpacing: 1.2)),
+                    letterSpacing: 1.2)),SizedBox(height: 17),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
@@ -122,7 +122,7 @@ class _EnterAddressState extends State<EnterAddress> {
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 17.0,
-                    letterSpacing: 1.2)),
+                    letterSpacing: 1.2)),SizedBox(height: 17),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
@@ -148,7 +148,7 @@ class _EnterAddressState extends State<EnterAddress> {
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 17.0,
-                    letterSpacing: 1.2)),
+                    letterSpacing: 1.2)),SizedBox(height: 17),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
@@ -176,7 +176,7 @@ class _EnterAddressState extends State<EnterAddress> {
             style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 17.0,
-                letterSpacing: 1.2)),
+                letterSpacing: 1.2)),SizedBox(height: 17),
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0), color: Colors.white),
@@ -204,7 +204,7 @@ class _EnterAddressState extends State<EnterAddress> {
             style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 17.0,
-                letterSpacing: 1.2)),
+                letterSpacing: 1.2)),SizedBox(height: 17),
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0), color: Colors.white),
