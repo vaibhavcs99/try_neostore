@@ -28,11 +28,15 @@ class _ProductDetailsState extends State<ProductDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int selectedImage = 0;
-
+  double screenWidth;
+  double screenHeight;
   double myFeedbackRating = 3.0;
 
   @override
   Widget build(BuildContext context) {
+    screenWidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -48,145 +52,148 @@ class _ProductDetailsState extends State<ProductDetails> {
               return ListView(
                 shrinkWrap: true,
                 children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            productDetails.name,
-                            style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                              getProductCategoryName(
-                                  productDetails.productCategoryId),
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w100)),
-                          SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 75,
-                                child: Text(productDetails.producer,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w100)),
-                              ),
-                              Expanded(
-                                  flex: 25,
-                                  child: SizedBox(
-                                      height: 18,
-                                      child:
-                                          getRatingBar(productDetails.rating)))
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Rs. ${productDetails2.cost.toString()}',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      color: colorRedText,
-                                      fontWeight: FontWeight.w500)),
-                              Image.asset('assets/icons/share.png')
-                            ],
-                          ),
-                        ),
-                        Container(
-                            height: 200,
-                            child: Image.network(productDetails
-                                .productImages[selectedImage].image)),
-                        SizedBox(
-                          height: 140,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              try {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4.0),
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        print(index);
-                                        selectedImage = index;
-                                      });
-                                    },
-                                    child: Container(
-                                        width: 120,
-                                        child: Image.network(productDetails
-                                            .productImages[index].image)),
-                                  ),
-                                );
-                              } on RangeError {
-                                return Card(
-                                    // child: Container(
-                                    //     width: 130,
-                                    //     child: Image.network(
-                                    //         productDetails.productImages[0].image)),
-                                    );
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  buildDetailsAndRating(productDetails),
+                  buildImages(productDetails2, productDetails),
                   buildDescription(productDetails),
-                  Card(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: MyButton(
-                              aspectX: 227,
-                              aspectY: 68,
-                              textColor: Colors.white,
-                              color: Colors.red,
-                              onPressed: () {
-                                showAlertDialog(
-                                    productId: productDetails.id,
-                                    productName: productDetails.name,
-                                    productImageUrl: productDetails
-                                        .productImages.first.image);
-                              },
-                              myText: 'Buy Now',
-                              fontSize: 20.0),
-                        ),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: MyButton(
-                            aspectX: 227,
-                            aspectY: 68,
-                            textColor: Colors.grey,
-                            color: colorGreyBackground,
-                            onPressed: () => showRatingDialog(
-                                productId: productDetails.id,
-                                productName: productDetails.name,
-                                productImage:
-                                    productDetails.productImages.first.image),
-                            myText: 'Rate',
-                            fontSize: 20.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
+                  buildButtonsRow(productDetails)
                 ],
               );
             }));
+  }
+
+  Card buildButtonsRow(Data productDetails) {
+    return Card(
+      child: Row(
+        children: [
+          Expanded(
+            child: MyButton(
+                aspectX: 227,
+                aspectY: (screenWidth/4).round(),
+                textColor: Colors.white,
+                color: Colors.red,
+                onPressed: () {
+                  showAlertDialog(
+                      productId: productDetails.id,
+                      productName: productDetails.name,
+                      productImageUrl:
+                          productDetails.productImages.first.image);
+                },
+                myText: 'Buy Now',
+                fontSize: 20.0),
+          ),
+          SizedBox(width: 8),
+          Expanded(
+            child: MyButton(
+              aspectX: 227,
+              aspectY: (screenWidth/4).round(),
+              textColor: Colors.grey,
+              color: colorGreyBackground,
+              onPressed: () => showRatingDialog(
+                  productId: productDetails.id,
+                  productName: productDetails.name,
+                  productImage: productDetails.productImages.first.image),
+              myText: 'Rate',
+              fontSize: 20.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Card buildImages(Data productDetails2, Data productDetails) {
+    return Card(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Rs. ${productDetails2.cost.toString()}',
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: colorRedText,
+                        fontWeight: FontWeight.w500)),
+                Image.asset('assets/icons/share.png')
+              ],
+            ),
+          ),
+          Container(
+              height: 200,
+              child: Image.network(
+                  productDetails.productImages[selectedImage].image)),
+          SizedBox(
+            height: 140,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                try {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          print(index);
+                          selectedImage = index;
+                        });
+                      },
+                      child: Container(
+                          width: 120,
+                          child: Image.network(
+                              productDetails.productImages[index].image)),
+                    ),
+                  );
+                } on RangeError {
+                  return Card(
+                      // child: Container(
+                      //     width: 130,
+                      //     child: Image.network(
+                      //         productDetails.productImages[0].image)),
+                      );
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Card buildDetailsAndRating(Data productDetails) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              productDetails.name,
+              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500),
+            ),
+            SizedBox(height: 4),
+            Text(getProductCategoryName(productDetails.productCategoryId),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w100)),
+            SizedBox(height: 4),
+            Row(
+              children: [
+                Expanded(
+                  flex: 75,
+                  child: Text(productDetails.producer,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w100)),
+                ),
+                Expanded(
+                    flex: 25,
+                    child: SizedBox(
+                        height: 18, child: getRatingBar(productDetails.rating)))
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildDescription(Data productDetails) {
@@ -199,7 +206,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             Text('Description',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
             SizedBox(height: 4),
-            Text(productDetails.description, style: TextStyle(fontSize: 20)),
+            Text(productDetails.description, style: TextStyle(fontSize: 18)),
           ],
         ),
       ),
@@ -220,7 +227,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       title: Text(productName),
       content: SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height*0.5,
+          height: MediaQuery.of(context).size.height * 0.5,
           child: Form(
             key: _formKey,
             child: ListView(children: [
@@ -239,9 +246,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                 },
               ),
               Align(
-                              child: SizedBox(
-                  width: MediaQuery.of(context).size.width/2  ,
-                  child: FlatButton(textColor: Colors.white,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: FlatButton(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                    textColor: Colors.white,
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
@@ -305,24 +313,27 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   myRatingbar() {
-    return RatingBar.builder(
-      initialRating: 3,
-      minRating: 0.5,
-      direction: Axis.horizontal,
-      allowHalfRating: true,
-      itemCount: 5,
-      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (context, _) => Icon(
-        Icons.star,
-        color: Colors.red.shade400,
+    return Center(
+      child: RatingBar.builder(
+        initialRating: 3,
+        minRating: 0.5,
+        direction: Axis.horizontal,
+        allowHalfRating: true,
+        itemCount: 5,
+        itemSize: 35.0,
+        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+        itemBuilder: (context, _) => Icon(
+          Icons.star,
+          color: Colors.red.shade400,
+        ),
+        glow: true,
+        glowColor: Colors.redAccent,
+        onRatingUpdate: (rating) {
+          setState(() {
+            myFeedbackRating = rating;
+          });
+        },
       ),
-      glow: true,
-      glowColor: Colors.redAccent,
-      onRatingUpdate: (rating) {
-        setState(() {
-          myFeedbackRating = rating;
-        });
-      },
     );
   }
 }

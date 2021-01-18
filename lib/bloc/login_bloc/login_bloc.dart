@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:try_neostore/bloc/authBloc/authentication_bloc.dart';
+import 'package:try_neostore/bloc/auth_bloc/authentication_bloc.dart';
 import 'package:try_neostore/model/api_response.dart';
 import 'package:try_neostore/repository/api_services.dart';
 

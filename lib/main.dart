@@ -5,9 +5,10 @@ import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/Utils/router.dart';
 import 'package:try_neostore/repository/user_session.dart';
 
-import 'bloc/authBloc/authentication_bloc.dart';
-import 'bloc/loginBloc/login_bloc.dart';
-import 'bloc/registerBloc/register_bloc.dart';
+import 'bloc/auth_bloc/authentication_bloc.dart';
+import 'bloc/login_bloc/login_bloc.dart';
+import 'bloc/product_list_bloc/product_list_bloc.dart';
+import 'bloc/register_bloc/register_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,7 @@ void main() async {
           create: (_) => RegisterBloc(
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(_))),
       BlocProvider(create: (_) => ForgotPasswordBloc()),
+      BlocProvider(create: (_) => ProductListBloc()),
     ],
     child: NeoStore(),
   ));

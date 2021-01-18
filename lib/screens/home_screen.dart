@@ -53,24 +53,26 @@ class _HomeScreenState extends State<HomeScreen> {
           child: MyDrawer(accessToken: widget.accessToken),
         ),
         body: ListView(
-          children: [
-            CarouselSlider(
-              options: CarouselOptions(aspectRatio: 16/9,autoPlay: true,enlargeCenterPage: true),
-              items: sliderImages.map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Image.asset(i));
-                  },
-                );
-              }).toList(),
-            ),
-            buildProductsGrid(context)
-          ],
+          children: [buildCarouselSlider(), buildProductsGrid(context)],
         ),
       ),
+    );
+  }
+
+  CarouselSlider buildCarouselSlider() {
+    return CarouselSlider(
+      options: CarouselOptions(
+          aspectRatio: 16 / 9, autoPlay: true, enlargeCenterPage: true),
+      items: sliderImages.map((image) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                child: Image.asset(image));
+          },
+        );
+      }).toList(),
     );
   }
 
@@ -81,7 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: GridView.count(
             crossAxisCount: 2,
             children: List.generate(4, (index) {
-              print(productImages[0]);
               return Container(
                   child: InkWell(
                 onTap: () => Navigator.pushNamed(context, route_product_list,
