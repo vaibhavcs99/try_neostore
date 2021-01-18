@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:try_neostore/Utils/utils.dart';
 import 'package:try_neostore/Utils/validators.dart';
+import 'package:try_neostore/bloc/product_details_bloc/product_details_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/product_details.model.dart';
-import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
 import 'package:try_neostore/utils/utils.dart' as utils;
 
@@ -30,35 +31,63 @@ class _ProductDetailsState extends State<ProductDetails> {
   int selectedImage = 0;
   double screenWidth;
   double screenHeight;
-  double myFeedbackRating = 3.0;
+  double feedbackRating = 3.0;
 
   @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
 
+    BlocProvider.of<ProductDetailsBloc>(context)
+        .add(OnShowProductDetails(productId: widget.productId));
+
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
           title: Text(widget.productName),
         ),
-        body: FutureBuilder<ProductDetailsModel>(
-            future: getMyModel(id: widget.productId),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData)
-                return Center(child: CircularProgressIndicator());
-              var productDetails = snapshot.data.data;
-              var productDetails2 = productDetails;
-              return ListView(
-                shrinkWrap: true,
-                children: [
-                  buildDetailsAndRating(productDetails),
-                  buildImages(productDetails2, productDetails),
-                  buildDescription(productDetails),
-                  buildButtonsRow(productDetails)
-                ],
-              );
-            }));
+        body: BlocConsumer<ProductDetailsBloc, ProductDetailsState>(
+          listener: (context, state) {
+            if (state is ProductBuyNowSuccessful) {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, route_cart_list,
+                  arguments: widget.accessToken);
+            }
+          },
+          // ignore: missing_return
+          builder: (context, state) {
+            if (state is ProductRatingSuccessful) {
+              var productDetails = state.productDetailsModel.data;
+              return buildProductScreen(productDetails,
+                  showRatingSnackBar: true);
+            }
+            if (state is ProductDetailsSuccessful) {
+              var productDetails = state.productDetailsModel.data;
+
+              return buildProductScreen(productDetails);
+            }
+            return Center(child: CircularProgressIndicator());
+          },
+        ));
+  }
+
+  ListView buildProductScreen(Data productDetails,
+      {bool showRatingSnackBar = false}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (showRatingSnackBar) {
+        showSnackBar('Rating submitted successfully');
+        showRatingSnackBar = false;
+      }
+    });
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        buildDetailsAndRating(productDetails),
+        buildImages(productDetails),
+        buildDescription(productDetails),
+        buildButtonsRow(productDetails)
+      ],
+    );
   }
 
   Card buildButtonsRow(Data productDetails) {
@@ -68,7 +97,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           Expanded(
             child: MyButton(
                 aspectX: 227,
-                aspectY: (screenWidth/4).round(),
+                aspectY: (screenWidth / 4).round(),
                 textColor: Colors.white,
                 color: Colors.red,
                 onPressed: () {
@@ -85,7 +114,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           Expanded(
             child: MyButton(
               aspectX: 227,
-              aspectY: (screenWidth/4).round(),
+              aspectY: (screenWidth / 4).round(),
               textColor: Colors.grey,
               color: colorGreyBackground,
               onPressed: () => showRatingDialog(
@@ -101,7 +130,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     );
   }
 
-  Card buildImages(Data productDetails2, Data productDetails) {
+  Card buildImages(Data productDetails) {
     return Card(
       child: Column(
         children: [
@@ -110,7 +139,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Rs. ${productDetails2.cost.toString()}',
+                Text('₹ ${productDetails.cost.toString()}',
                     style: TextStyle(
                         fontSize: 25,
                         color: colorRedText,
@@ -213,12 +242,6 @@ class _ProductDetailsState extends State<ProductDetails> {
     );
   }
 
-  Future<ProductDetailsModel> getMyModel({@required int id}) async {
-    var myJson = await productDetailsService(myProductId: id.toString());
-    var myModel = productDetailsModelFromJson(myJson.data);
-    return myModel;
-  }
-
   void showAlertDialog(
       {@required String productName,
       @required String productImageUrl,
@@ -234,7 +257,6 @@ class _ProductDetailsState extends State<ProductDetails> {
               Container(
                 child: Image.network(productImageUrl),
               ),
-              // Text('Enter Quantity of product'),
               TextFormField(
                 autofocus: true,
                 decoration: const InputDecoration(
@@ -248,21 +270,18 @@ class _ProductDetailsState extends State<ProductDetails> {
               Align(
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width / 2,
-                  child: FlatButton(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4)),
                     textColor: Colors.white,
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
-                        await addItemCartService(
-                            myProductId: productId,
-                            quantity: _quantity,
-                            accessToken: widget.accessToken);
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, route_cart_list,
-                            arguments: widget.accessToken);
-                      } else {
-                        // _scaffoldKey.currentState.showSnackBar(
-                        //     SnackBar(content: Text('Please Enter all Fields')));
+                        BlocProvider.of<ProductDetailsBloc>(context).add(
+                            OnBuyNowClicked(
+                                productId: productId,
+                                quantity: _quantity,
+                                accessToken: widget.accessToken));
                       }
                     },
                     color: Colors.red,
@@ -302,9 +321,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                     myRatingbar(),
                     Align(
                       child: RaisedButton(
-                        onPressed: () => setProductRatingService(
-                            productId: productId.toString(),
-                            rating: myFeedbackRating),
+                        onPressed: () {
+                          BlocProvider.of<ProductDetailsBloc>(context).add(
+                              OnRateButtonClicked(
+                                  feedbackRating: feedbackRating,
+                                  productId: productId.toString()));
+                          Navigator.pop(context);
+                        },
                         child: Text('Rate Now'),
                       ),
                     )
@@ -329,11 +352,13 @@ class _ProductDetailsState extends State<ProductDetails> {
         glow: true,
         glowColor: Colors.redAccent,
         onRatingUpdate: (rating) {
-          setState(() {
-            myFeedbackRating = rating;
-          });
+          feedbackRating = rating;
         },
       ),
     );
+  }
+
+  showSnackBar(String title) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
   }
 }

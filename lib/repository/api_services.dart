@@ -116,11 +116,11 @@ Future<Response> productListService(
   }
 }
 
-Future<Response> productDetailsService({@required String myProductId}) async {
+Future<Response> productDetailsService({@required String productId}) async {
   var dio = Dio();
 
   Map<String, dynamic> json = {
-    'product_id': '$myProductId',
+    'product_id': '$productId',
   };
 
   try {
@@ -147,14 +147,14 @@ Future<Response> cartListService({@required String accessToken}) async {
 }
 
 Future<Response> addItemCartService(
-    {@required int myProductId,
+    {@required int productId,
     @required int quantity,
     @required String accessToken}) async {
   var dio = Dio();
   dio.options.headers['access_token'] = accessToken;
 
   Map<String, dynamic> productData = {
-    'product_id': myProductId,
+    'product_id': productId,
     'quantity': quantity
   };
 
@@ -170,12 +170,12 @@ Future<Response> addItemCartService(
 }
 
 Future<Response> deleteItemCartService(
-    {@required int myProductId, @required String accessToken}) async {
+    {@required int productId, @required String accessToken}) async {
   var dio = Dio();
   dio.options.headers['access_token'] = accessToken;
 
   Map<String, dynamic> productData = {
-    'product_id': myProductId,
+    'product_id': productId,
   };
 
   FormData formData = FormData.fromMap(productData);
@@ -191,14 +191,14 @@ Future<Response> deleteItemCartService(
 }
 
 Future<Response> editItemCartService(
-    {@required int myProductId,
+    {@required int productId,
     @required int quantity,
     @required String accessToken}) async {
   var dio = Dio();
   dio.options.headers['access_token'] = accessToken;
 
   Map<String, dynamic> productData = {
-    'product_id': myProductId,
+    'product_id': productId,
     'quantity': quantity
   };
 

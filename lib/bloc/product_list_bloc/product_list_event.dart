@@ -7,8 +7,6 @@ abstract class ProductListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class OnListTileClicked extends ProductListEvent {}
-
 class ShowProductList extends ProductListEvent {
   final String productCategoryId;
 

@@ -52,7 +52,7 @@ class _CartListState extends State<CartList> {
                             onDismissed: (direction) {
                               deleteItemCartService(
                                   accessToken: widget.accessToken,
-                                  myProductId: productData.product.id);
+                                  productId: productData.product.id);
                             },
                             child: Card(
                                 child: Row(
@@ -98,7 +98,7 @@ class _CartListState extends State<CartList> {
                                         onChanged: (value) async {
                                           await editItemCartService(
                                               accessToken: widget.accessToken,
-                                              myProductId:
+                                              productId:
                                                   productData.product.id,
                                               quantity: value);
                                           setState(() {});

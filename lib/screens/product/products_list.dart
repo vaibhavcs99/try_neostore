@@ -4,7 +4,6 @@ import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/bloc/product_list_bloc/product_list_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/product_list_model.dart';
-import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/utils/utils.dart';
 
 class ProductList extends StatefulWidget {
@@ -18,9 +17,12 @@ class ProductList extends StatefulWidget {
 }
 
 class _ProductListState extends State<ProductList> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     var productCategoryId = widget.index.toString();
+
     BlocProvider.of<ProductListBloc>(context)
         .add(ShowProductList(productCategoryId: productCategoryId));
 
@@ -45,7 +47,7 @@ class _ProductListState extends State<ProductList> {
             return Center(child: CircularProgressIndicator());
           }
           if (state is ProductListUnsuccessful) {
-            //TODO: SHOW  SNACKBAR
+            showSnackBar('No data found');
           }
         },
       ),
@@ -127,12 +129,8 @@ class _ProductListState extends State<ProductList> {
       ),
     );
   }
-// ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  // Future<ProductsListModel> getMyModel(
-  //     {@required String productCategoryId}) async {
-  //   var myJson = await productListService(productCategoryId: productCategoryId);
-  //   var myModel = productsListModelFromJson(myJson.data);
-  //   return myModel;
-  // }
+  showSnackBar(String title) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(title)));
+  }
 }
