@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
+import 'package:try_neostore/bloc/address_bloc/address_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
 
 class EnterAddress extends StatefulWidget {
@@ -23,31 +24,46 @@ class _EnterAddressState extends State<EnterAddress> {
   String _country;
   String _zipCode;
 
-  var _entireAddress;
+  String _entireAddress;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(title: Text('Enter Address')),
-      body: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView(
-            children: [
-              buildAddress(),
-              SizedBox(height: 27),
-              buildLandMark(),
-              SizedBox(height: 27),
-              buildCityAndState(),
-              SizedBox(height: 27),
-              buildZipAndCountry(),
-              SizedBox(height: 27),
-              MyButton(
-                  onPressed: () => validateInputs(), myText: 'Order Now',color: Colors.red,textColor: Colors.white)
-            ],
+    return BlocListener<AddressBloc, AddressState>(
+      listener: (context, state) async {
+        if (state is OrderSuccessful) {
+          _scaffoldKey.currentState.showSnackBar(
+              SnackBar(content: Text('Order Placed Successfully')));
+          await Future.delayed(Duration(seconds: 3));
+          Navigator.pushNamedAndRemoveUntil(
+              context, route_home_screen, (route) => false,
+              arguments: widget.accessToken);
+        }
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(title: Text('Enter Address')),
+        body: Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView(
+              children: [
+                buildAddress(),
+                SizedBox(height: 27),
+                buildLandMark(),
+                SizedBox(height: 27),
+                buildCityAndState(),
+                SizedBox(height: 27),
+                buildZipAndCountry(),
+                SizedBox(height: 27),
+                MyButton(
+                    onPressed: () => validateInputs(),
+                    myText: 'Order Now',
+                    color: Colors.red,
+                    textColor: Colors.white)
+              ],
+            ),
           ),
         ),
       ),
@@ -64,7 +80,8 @@ class _EnterAddressState extends State<EnterAddress> {
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 17.0,
-                    letterSpacing: 1.2)),SizedBox(height: 17),
+                    letterSpacing: 1.2)),
+            SizedBox(height: 17),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
@@ -92,7 +109,8 @@ class _EnterAddressState extends State<EnterAddress> {
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 17.0,
-                    letterSpacing: 1.2)),SizedBox(height: 17),
+                    letterSpacing: 1.2)),
+            SizedBox(height: 17),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
@@ -122,7 +140,8 @@ class _EnterAddressState extends State<EnterAddress> {
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 17.0,
-                    letterSpacing: 1.2)),SizedBox(height: 17),
+                    letterSpacing: 1.2)),
+            SizedBox(height: 17),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
@@ -148,7 +167,8 @@ class _EnterAddressState extends State<EnterAddress> {
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 17.0,
-                    letterSpacing: 1.2)),SizedBox(height: 17),
+                    letterSpacing: 1.2)),
+            SizedBox(height: 17),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
@@ -176,7 +196,8 @@ class _EnterAddressState extends State<EnterAddress> {
             style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 17.0,
-                letterSpacing: 1.2)),SizedBox(height: 17),
+                letterSpacing: 1.2)),
+        SizedBox(height: 17),
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0), color: Colors.white),
@@ -204,7 +225,8 @@ class _EnterAddressState extends State<EnterAddress> {
             style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 17.0,
-                letterSpacing: 1.2)),SizedBox(height: 17),
+                letterSpacing: 1.2)),
+        SizedBox(height: 17),
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0), color: Colors.white),
@@ -236,18 +258,8 @@ class _EnterAddressState extends State<EnterAddress> {
           ' ' +
           _country;
       //
-      var response = await orderItemsService(
-          address: _entireAddress, accessToken: widget.accessToken);
-      if (response.statusCode == 200) {
-        _scaffoldKey.currentState
-            .showSnackBar(SnackBar(content: Text('Order Placed Successfully')));
-        await Future.delayed(Duration(seconds: 3));
-        Navigator.pushNamedAndRemoveUntil(
-            context, route_home_screen, (route) => false,
-            arguments: widget.accessToken);
-        // Navigator.of(context).pushNamedAndRemoveUntil(
-        //     route_home_screen, (Route<dynamic> route) => false);
-      }
+      BlocProvider.of<AddressBloc>(context).add(OnOrderNowPressed(
+          accessToken: widget.accessToken, address: _entireAddress));
     }
   }
 }

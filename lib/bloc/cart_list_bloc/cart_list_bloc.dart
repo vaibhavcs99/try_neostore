@@ -18,12 +18,14 @@ class CartListBloc extends Bloc<CartListEvent, CartListState> {
     CartListEvent event,
   ) async* {
     if (event is OnShowCartList) {
+      
+
       yield CartListLoading();
       var response = await cartListService(accessToken: event.accessToken);
 
-      CartListModel cartListModel = cartListModelFromJson(response.data);
-
       if (response.statusCode == 200) {
+        CartListModel cartListModel = cartListModelFromJson(response.data);
+
         yield CartListSuccessful(cartListModel: cartListModel);
       } else {
         String error = errorModelFromJson(response.data).userMsg;

@@ -5,9 +5,12 @@ import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/Utils/router.dart';
 import 'package:try_neostore/repository/user_session.dart';
 
+import 'bloc/address_bloc/address_bloc.dart';
 import 'bloc/auth_bloc/authentication_bloc.dart';
 import 'bloc/cart_list_bloc/cart_list_bloc.dart';
 import 'bloc/login_bloc/login_bloc.dart';
+import 'bloc/order_details_bloc/order_details_bloc.dart';
+import 'bloc/order_list_bloc/order_list_bloc.dart';
 import 'bloc/product_details_bloc/product_details_bloc.dart';
 import 'bloc/product_list_bloc/product_list_bloc.dart';
 import 'bloc/register_bloc/register_bloc.dart';
@@ -28,6 +31,9 @@ void main() async {
       BlocProvider(create: (_) => ProductListBloc()),
       BlocProvider(create: (_) => ProductDetailsBloc()),
       BlocProvider(create: (_) => CartListBloc()),
+      BlocProvider(create: (_) => AddressBloc()),
+      BlocProvider(create: (_) => OrderListBloc()),
+      BlocProvider(create: (_) => OrderDetailsBloc()),
     ],
     child: NeoStore(),
   ));

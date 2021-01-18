@@ -30,7 +30,6 @@ class _CartListState extends State<CartList> {
         body:
             BlocBuilder<CartListBloc, CartListState>(builder: (context, state) {
           print(state.toString());
-
           if (state is CartListSuccessful) {
             return buildCartScreen(context, state);
           }
@@ -45,7 +44,10 @@ class _CartListState extends State<CartList> {
         }));
   }
 
-  Padding buildCartScreen(BuildContext context,  state) {
+  Widget buildCartScreen(BuildContext context, state) {
+    if (state.cartListModel.count == null)
+      return Center(child: Text('Cart is empty!'));
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -58,7 +60,7 @@ class _CartListState extends State<CartList> {
     );
   }
 
-  SizedBox buildListTile(BuildContext context,  state) {
+  SizedBox buildListTile(BuildContext context, state) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.65,
       child: ListView.builder(
