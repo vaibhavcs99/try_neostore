@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:try_neostore/bloc/cart_list_bloc/cart_list_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 
 import 'package:try_neostore/model/cart_list_model.dart';
@@ -16,136 +18,160 @@ class CartList extends StatefulWidget {
 class _CartListState extends State<CartList> {
   List itemList = <int>[1, 2, 3, 4, 5, 6, 7, 8];
   int dropDownValue = 1;
-  int totalPrice;
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<CartListBloc>(context)
+        .add(OnShowCartList(accessToken: widget.accessToken));
     return Scaffold(
         appBar: AppBar(
-            title: Text(
-          'My Cart',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        )),
-        body: FutureBuilder<CartListModel>(
-            future: getMyModel(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (snapshot.data.count == null) {
-                return Center(child: Text('Cart is Empty'));
-              }
-              totalPrice = snapshot.data.total;
-              return Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.65,
-                    child: ListView.builder(
-                        itemCount: snapshot.data.count,
-                        itemBuilder: (context, index) {
-                          var productData = snapshot.data.data[index];
-                          
-                          print(totalPrice);
-                          return Dismissible(
-                            key: Key(productData.product.id.toString()),
-                            background: slideLeftBackground(),
-                            onDismissed: (direction) {
-                              deleteItemCartService(
-                                  accessToken: widget.accessToken,
-                                  productId: productData.product.id);
-                            },
-                            child: Card(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: ClipRRect(
-                                            child: Container(
-                                          child: Image.network(productData
-                                              .product.productImages),
-                                        )),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 18,
-                                ),
-                                Expanded(
-                                  flex: 8,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(productData.product.name,
-                                          style: TextStyle(fontSize: 23)),
-                                      Text(productData.product.productCategory),
-                                      // Text(productData.product.subTotal.toString()),
-                                      //******************************************************
-                                      DropdownButton<int>(
-                                        iconEnabledColor: Colors.black,
-                                        value: productData.quantity,
-                                        items: itemList
-                                            .map((e) => DropdownMenuItem<int>(
-                                                value: e, child: Text('$e')))
-                                            .toList(),
-                                        onChanged: (value) async {
-                                          await editItemCartService(
-                                              accessToken: widget.accessToken,
-                                              productId:
-                                                  productData.product.id,
-                                              quantity: value);
-                                          setState(() {});
-                                        },
-                                      ), //*********
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )),
-                          );
-                        }),
-                  ),
-                  Card(
-                    child: SizedBox(
-                      height: 66.0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('TOTAL',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.0,
-                                    letterSpacing: 1.2)),
-                            Text('Rs. $totalPrice',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.0,
-                                    letterSpacing: 1.2))
-                          ],
-                        ),
+            title:
+                Text('My Cart', style: TextStyle(fontWeight: FontWeight.bold))),
+        body:
+            BlocBuilder<CartListBloc, CartListState>(builder: (context, state) {
+          print(state.toString());
+
+          if (state is CartListSuccessful) {
+            return buildCartScreen(context, state);
+          }
+          if (state is CartDeleteItemSuccessful) {
+            return buildCartScreen(context, state);
+          }
+          if (state is CartEditSuccessful) {
+            return buildCartScreen(context, state);
+          }
+
+          return Center(child: CircularProgressIndicator());
+        }));
+  }
+
+  Padding buildCartScreen(BuildContext context,  state) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          buildListTile(context, state),
+          buildTotalPrice(state.cartListModel.total),
+          buildOrderButton(context)
+        ],
+      ),
+    );
+  }
+
+  SizedBox buildListTile(BuildContext context,  state) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.65,
+      child: ListView.builder(
+          itemCount: state.cartListModel.count,
+          itemBuilder: (context, index) {
+            var productData = state.cartListModel.data[index];
+
+            return Dismissible(
+              key: Key(productData.product.id.toString()),
+              background: slideLeftBackground(),
+              onDismissed: (direction) {
+                BlocProvider.of<CartListBloc>(context).add(OnDeleteSwiped(
+                    productId: productData.product.id,
+                    accessToken: widget.accessToken));
+              },
+              child: Card(
+                  child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    buildProductImage(productData),
+                    SizedBox(
+                      width: 18,
+                    ),
+                    Expanded(
+                      flex: 8,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 8),
+                          Text(productData.product.name,
+                              style: TextStyle(fontSize: 20)),
+                          SizedBox(height: 6),
+                          Text(productData.product.productCategory),
+                          buildDropdownButton(productData, context),
+                        ],
                       ),
                     ),
-                  ),
-                  MyButton(
-                    color: primaryRed2,
-                    onPressed: () => Navigator.pushNamed(
-                        context, route_enter_address,
-                        arguments: widget.accessToken),
-                    myText: 'Order Now',
-                    textColor: Colors.white,
-                  )
-                ],
-              );
-            }));
+                  ],
+                ),
+              )),
+            );
+          }),
+    );
+  }
+
+  DropdownButton<int> buildDropdownButton(
+      Datum productData, BuildContext context) {
+    return DropdownButton<int>(
+      iconEnabledColor: Colors.black,
+      value: productData.quantity,
+      items: itemList
+          .map((e) => DropdownMenuItem<int>(value: e, child: Text('$e')))
+          .toList(),
+      onChanged: (value) {
+        BlocProvider.of<CartListBloc>(context).add(OnDropDownPressed(
+            productId: productData.product.id,
+            quantity: value,
+            accessToken: widget.accessToken));
+        setState(() {});
+      },
+    );
+  }
+
+  MyButton buildOrderButton(BuildContext context) {
+    return MyButton(
+      color: primaryRed2,
+      onPressed: () => Navigator.pushNamed(context, route_enter_address,
+          arguments: widget.accessToken),
+      myText: 'Order Now',
+      textColor: Colors.white,
+    );
+  }
+
+  Card buildTotalPrice(int totalPrice) {
+    return Card(
+      child: SizedBox(
+        height: 66.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('TOTAL',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                      letterSpacing: 1.2)),
+              Text('Rs. $totalPrice',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                      letterSpacing: 1.2))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Expanded buildProductImage(Datum productData) {
+    return Expanded(
+      flex: 2,
+      child: SizedBox(
+        width: 100,
+        height: 100,
+        child: ClipRRect(
+            child: Container(
+          child: Image.network(productData.product.productImages),
+        )),
+      ),
+    );
   }
 
   Future<CartListModel> getMyModel() async {

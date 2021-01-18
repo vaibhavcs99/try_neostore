@@ -6,6 +6,7 @@ import 'package:try_neostore/Utils/router.dart';
 import 'package:try_neostore/repository/user_session.dart';
 
 import 'bloc/auth_bloc/authentication_bloc.dart';
+import 'bloc/cart_list_bloc/cart_list_bloc.dart';
 import 'bloc/login_bloc/login_bloc.dart';
 import 'bloc/product_details_bloc/product_details_bloc.dart';
 import 'bloc/product_list_bloc/product_list_bloc.dart';
@@ -26,6 +27,7 @@ void main() async {
       BlocProvider(create: (_) => ForgotPasswordBloc()),
       BlocProvider(create: (_) => ProductListBloc()),
       BlocProvider(create: (_) => ProductDetailsBloc()),
+      BlocProvider(create: (_) => CartListBloc()),
     ],
     child: NeoStore(),
   ));

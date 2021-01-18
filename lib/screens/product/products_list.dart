@@ -29,29 +29,27 @@ class _ProductListState extends State<ProductList> {
     return Scaffold(
       appBar: AppBar(title: Text(getProductCategoryName(widget.index))),
       body: BlocBuilder<ProductListBloc, ProductListState>(
-        // ignore: missing_return
         builder: (context, state) {
           if (state is ProductListSuccessful) {
-            return ListView.builder(
-              itemCount: state.productsListModel.data.length,
-              itemBuilder: (context, index) {
-                Datum productData = state.productsListModel.data[index];
-                return buildListTile(context, productData);
-              },
-            );
-          }
-          if (state is ProductListLoading) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (state is ProductListInitial) {
-            return Center(child: CircularProgressIndicator());
+            return buildProductListScreen(state);
           }
           if (state is ProductListUnsuccessful) {
             showSnackBar('No data found');
           }
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
+  }
+
+  ListView buildProductListScreen( state) {
+    return ListView.builder(
+            itemCount: state.productsListModel.data.length,
+            itemBuilder: (context, index) {
+              Datum productData = state.productsListModel.data[index];
+              return buildListTile(context, productData);
+            },
+          );
   }
 
   Container buildListTile(BuildContext context, Datum productData) {

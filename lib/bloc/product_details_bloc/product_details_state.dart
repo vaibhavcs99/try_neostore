@@ -30,9 +30,13 @@ class ProductBuyNowUnsuccessful extends ProductDetailsState {}
 class ProductRatingLoading extends ProductDetailsState {}
 
 class ProductRatingSuccessful extends ProductDetailsState {
-   final ProductDetailsModel productDetailsModel;
+  final ProductDetailsModel productDetailsModel;
 
   ProductRatingSuccessful({@required this.productDetailsModel});
 }
 
-class ProductRatingUnsuccessful extends ProductDetailsState {}
+class ProductRatingUnsuccessful extends ProductDetailsState {
+  final String error;
+
+  ProductRatingUnsuccessful({@required this.error});
+}

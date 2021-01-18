@@ -53,13 +53,16 @@ class _ProductDetailsState extends State<ProductDetails> {
               Navigator.pushNamed(context, route_cart_list,
                   arguments: widget.accessToken);
             }
+            if (state is ProductRatingSuccessful) {
+              showSnackBar('Rating submitted successfully');
+              Navigator.pop(context);
+            }
           },
           // ignore: missing_return
           builder: (context, state) {
             if (state is ProductRatingSuccessful) {
               var productDetails = state.productDetailsModel.data;
-              return buildProductScreen(productDetails,
-                  showRatingSnackBar: true);
+              return buildProductScreen(productDetails);
             }
             if (state is ProductDetailsSuccessful) {
               var productDetails = state.productDetailsModel.data;
@@ -71,14 +74,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         ));
   }
 
-  ListView buildProductScreen(Data productDetails,
-      {bool showRatingSnackBar = false}) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (showRatingSnackBar) {
-        showSnackBar('Rating submitted successfully');
-        showRatingSnackBar = false;
-      }
-    });
+  ListView buildProductScreen(Data productDetails) {
     return ListView(
       shrinkWrap: true,
       children: [
@@ -164,7 +160,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          print(index);
+                          
                           selectedImage = index;
                         });
                       },
@@ -326,7 +322,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                               OnRateButtonClicked(
                                   feedbackRating: feedbackRating,
                                   productId: productId.toString()));
-                          Navigator.pop(context);
                         },
                         child: Text('Rate Now'),
                       ),

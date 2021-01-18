@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:try_neostore/model/error.dart';
 import 'package:try_neostore/model/product_details.model.dart';
 import 'package:try_neostore/repository/api_services.dart';
 
@@ -60,10 +61,12 @@ class ProductDetailsBloc
 
         if (response.statusCode == 200) {
           var productDetailsModel = productDetailsModelFromJson(response.data);
+
           yield ProductRatingSuccessful(
               productDetailsModel: productDetailsModel);
         } else {
-          yield ProductRatingUnsuccessful();
+          var error = errorModelFromJson(response.data);
+          yield ProductRatingUnsuccessful(error:error.userMsg);
         }
       }
     }
