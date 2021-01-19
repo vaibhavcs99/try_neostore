@@ -33,7 +33,7 @@ class ProductDetailsBloc
         yield ProductDetailsUnsuccessful();
       }
     }
-
+//************************************************************************************** */
     if (event is OnBuyNowClicked) {
       yield ProductBuyNowLoading();
 
@@ -43,12 +43,20 @@ class ProductDetailsBloc
           accessToken: event.accessToken);
 
       if (response.statusCode == 200) {
-        yield ProductBuyNowSuccessful();
+        var response =
+            await productDetailsService(productId: event.productId.toString());
+
+        if (response.statusCode == 200) {
+          var productDetailsModel = productDetailsModelFromJson(response.data);
+
+          yield ProductBuyNowSuccessful(productDetailsModel:productDetailsModel);
+        }
+        
       } else {
         yield ProductBuyNowUnsuccessful();
       }
     }
-
+//************************************************************************************** */
     if (event is OnRateButtonClicked) {
       yield ProductRatingLoading();
 
@@ -66,7 +74,7 @@ class ProductDetailsBloc
               productDetailsModel: productDetailsModel);
         } else {
           var error = errorModelFromJson(response.data);
-          yield ProductRatingUnsuccessful(error:error.userMsg);
+          yield ProductRatingUnsuccessful(error: error.userMsg);
         }
       }
     }

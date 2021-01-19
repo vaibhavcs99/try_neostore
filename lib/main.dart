@@ -5,6 +5,7 @@ import 'package:try_neostore/bloc/forgot_password_bloc/forgot_password_bloc.dart
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/Utils/router.dart';
 import 'package:try_neostore/repository/user_session.dart';
+import 'package:try_neostore/repository/user_repository.dart';
 
 import 'bloc/address_bloc/address_bloc.dart';
 import 'bloc/auth_bloc/authentication_bloc.dart';
@@ -23,31 +24,7 @@ import 'bloc/edit_account_bloc/edit_account_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   UserSession userSession = UserSession();
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider(create: (_) => AuthenticationBloc(userSession: userSession)),
-      BlocProvider(
-          create: (_) => LoginBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(_))),
-      BlocProvider(
-          create: (_) => RegisterBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(_))),
-      BlocProvider(create: (_) => ForgotPasswordBloc()),
-      BlocProvider(create: (_) => ProductListBloc()),
-      BlocProvider(create: (_) => ProductDetailsBloc()),
-      BlocProvider(create: (_) => CartListBloc()),
-      BlocProvider(create: (_) => AddressBloc()),
-      BlocProvider(create: (_) => OrderListBloc()),
-      BlocProvider(create: (_) => OrderDetailsBloc()),
-      BlocProvider(create: (_) => MyAccountBloc()),
-      BlocProvider(create: (context) => ChangePasswordBloc(myAccountBloc: context.read<MyAccountBloc>())),
-      BlocProvider(create: (_) => EditAccountBloc()),
-      BlocProvider(
-          create: (_) => DrawerBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(_)))
-    ],
-    child: NeoStore(),
-  ));
+  runApp(providers(userSession));
 }
 
 class NeoStore extends StatelessWidget {
@@ -62,7 +39,7 @@ class NeoStore extends StatelessWidget {
             SizerUtil().init(constraints, orientation);
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
+              title: 'Neostore',
               theme: buildThemeData(),
               initialRoute: route_splash_screen,
               onGenerateRoute: _appRouter.onGenerateRoute,
@@ -85,4 +62,37 @@ class NeoStore extends StatelessWidget {
       visualDensity: VisualDensity.adaptivePlatformDensity,
     );
   }
+}
+
+MultiBlocProvider providers(UserSession userSession) {
+  return MultiBlocProvider(
+    providers: [
+      BlocProvider(
+          create: (_) => AuthenticationBloc(userSession: userSession)),
+          
+      BlocProvider(
+          create: (context) => LoginBloc(
+              // userRepository: context.read<UserRepository>(),
+              authenticationBloc: context.read<AuthenticationBloc>())),
+      BlocProvider(
+          create: (context) => RegisterBloc(
+              authenticationBloc: context.read<AuthenticationBloc>())),
+      BlocProvider(create: (_) => ForgotPasswordBloc()),
+      BlocProvider(create: (_) => ProductListBloc()),
+      BlocProvider(create: (_) => ProductDetailsBloc()),
+      BlocProvider(create: (_) => CartListBloc()),
+      BlocProvider(create: (_) => AddressBloc()),
+      BlocProvider(create: (_) => OrderListBloc()),
+      BlocProvider(create: (_) => OrderDetailsBloc()),
+      BlocProvider(create: (_) => MyAccountBloc()),
+      BlocProvider(
+          create: (context) => ChangePasswordBloc(
+              myAccountBloc: context.read<MyAccountBloc>())),
+      BlocProvider(create: (_) => EditAccountBloc()),
+      BlocProvider(
+          create: (_) => DrawerBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(_)))
+    ],
+    child: NeoStore(),
+  );
 }

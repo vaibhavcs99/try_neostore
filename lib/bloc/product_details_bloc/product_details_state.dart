@@ -22,7 +22,12 @@ class ProductDetailsUnsuccessful extends ProductDetailsState {}
 //************************************************************************
 class ProductBuyNowLoading extends ProductDetailsState {}
 
-class ProductBuyNowSuccessful extends ProductDetailsState {}
+class ProductBuyNowSuccessful extends ProductDetailsState {
+  final ProductDetailsModel productDetailsModel;
+  ProductBuyNowSuccessful({
+    @required this.productDetailsModel,
+  });
+}
 
 class ProductBuyNowUnsuccessful extends ProductDetailsState {}
 
@@ -32,7 +37,9 @@ class ProductRatingLoading extends ProductDetailsState {}
 class ProductRatingSuccessful extends ProductDetailsState {
   final ProductDetailsModel productDetailsModel;
 
-  ProductRatingSuccessful({@required this.productDetailsModel});
+  ProductRatingSuccessful({
+    @required this.productDetailsModel,
+  });
 }
 
 class ProductRatingUnsuccessful extends ProductDetailsState {

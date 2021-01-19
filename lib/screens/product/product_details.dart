@@ -6,7 +6,6 @@ import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/bloc/product_details_bloc/product_details_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/product_details.model.dart';
-import 'package:try_neostore/screens/widgets/my_button.dart';
 import 'package:sizer/sizer.dart';
 import 'package:try_neostore/utils/utils.dart' as utils;
 
@@ -30,15 +29,11 @@ class _ProductDetailsState extends State<ProductDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int selectedImage = 0;
-  double screenWidth;
-  double screenHeight;
+
   double feedbackRating = 3.0;
 
   @override
   Widget build(BuildContext context) {
-    screenWidth = MediaQuery.of(context).size.width;
-    screenHeight = MediaQuery.of(context).size.height;
-
     BlocProvider.of<ProductDetailsBloc>(context)
         .add(OnShowProductDetails(productId: widget.productId));
 
@@ -49,10 +44,10 @@ class _ProductDetailsState extends State<ProductDetails> {
         ),
         body: BlocConsumer<ProductDetailsBloc, ProductDetailsState>(
           listener: (context, state) {
+            print('Product Details:$state');
             if (state is ProductBuyNowSuccessful) {
+              showBuySnackBar();
               Navigator.pop(context);
-              Navigator.pushNamed(context, route_cart_list,
-                  arguments: widget.accessToken);
             }
             if (state is ProductRatingSuccessful) {
               showSnackBar('Rating submitted successfully');
@@ -65,9 +60,12 @@ class _ProductDetailsState extends State<ProductDetails> {
               var productDetails = state.productDetailsModel.data;
               return buildProductScreen(productDetails);
             }
+            if (state is ProductBuyNowSuccessful) {
+              var productDetails = state.productDetailsModel.data;
+              return buildProductScreen(productDetails);
+            }
             if (state is ProductDetailsSuccessful) {
               var productDetails = state.productDetailsModel.data;
-
               return buildProductScreen(productDetails);
             }
             return Center(child: CircularProgressIndicator());
@@ -75,53 +73,79 @@ class _ProductDetailsState extends State<ProductDetails> {
         ));
   }
 
-  ListView buildProductScreen(Data productDetails) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        buildDetailsAndRating(productDetails),
-        buildImages(productDetails),
-        buildDescription(productDetails),
-        buildButtonsRow(productDetails)
-      ],
+  void showBuySnackBar() {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text('Item added to the cart successfully'),
+        behavior: SnackBarBehavior.floating,
+        action: SnackBarAction(
+          label: 'Chekout',
+          onPressed: () => Navigator.pushNamed(context, route_cart_list,arguments:widget.accessToken),
+          textColor: primaryRed2,
+        ),
+      ),
     );
   }
 
-  Card buildButtonsRow(Data productDetails) {
-    return Card(
+  Widget buildProductScreen(Data productDetails) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 1.0.w),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          SizedBox(height: 1.0.h),
+          buildDetailsAndRating(productDetails),
+          SizedBox(height: 1.0.h),
+          buildImages(productDetails),
+          SizedBox(height: 1.0.h),
+          buildDescription(productDetails),
+          SizedBox(height: 1.0.h),
+          buildButtonsRow(productDetails),
+          SizedBox(height: 2.0.h),
+        ],
+      ),
+    );
+  }
+
+  Widget buildButtonsRow(Data productDetails) {
+    return Container(
       child: Row(
         children: [
+          SizedBox(width: 3.0.w),
           Expanded(
-            child: MyButton(
-                aspectX: 227,
-                aspectY: (screenWidth / 3).round(),
-                textColor: Colors.white,
-                color: Colors.red,
-                onPressed: () {
-                  showAlertDialog(
-                      productId: productDetails.id,
-                      productName: productDetails.name,
-                      productImageUrl:
-                          productDetails.productImages.first.image);
-                },
-                myText: 'Buy Now',
-                fontSize: 16.0.sp),
+            child: FlatButton(
+              minWidth: 5.0.w,
+              height: 8.0.h,
+              textColor: Colors.white,
+              color: Colors.red,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              onPressed: () {
+                showAlertDialog(
+                    productId: productDetails.id,
+                    productName: productDetails.name,
+                    productImageUrl: productDetails.productImages.first.image);
+              },
+              child: Text('Buy Now', style: TextStyle(fontSize: 20.0.sp)),
+            ),
           ),
-
+          SizedBox(width: 2.0.w),
           Expanded(
-            child: MyButton(
-              aspectX: 227,
-              aspectY: (screenWidth / 3).round(),
-              textColor: Colors.grey,
-              color: colorGreyBackground,
+            child: FlatButton(
+              minWidth: 5.0.w,
+              height: 8.0.h,
+              textColor: Colors.grey.shade800,
+              color: Colors.grey.shade300,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               onPressed: () => showRatingDialog(
                   productId: productDetails.id,
                   productName: productDetails.name,
                   productImage: productDetails.productImages.first.image),
-              myText: 'Rate',
-              fontSize: 20.0,
+              child: Text('Rate', style: TextStyle(fontSize: 20.0.sp)),
             ),
           ),
+          SizedBox(width: 3.0.w),
         ],
       ),
     );
@@ -145,12 +169,14 @@ class _ProductDetailsState extends State<ProductDetails> {
               ],
             ),
           ),
+          SizedBox(height: 1.0.h),
           Container(
-              height: 200,
+              height: 26.0.h,
               child: Image.network(
                   productDetails.productImages[selectedImage].image)),
-          SizedBox(
-            height: 140,
+          SizedBox(height: 2.0.h),
+          Container(
+            height: 14.0.h,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: 3,
@@ -161,12 +187,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          
                           selectedImage = index;
                         });
                       },
                       child: Container(
-                          width: 120,
+                          padding: EdgeInsets.all(2.0.w),
+                          width: 30.0.w,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.red.shade200, width: 2.0)),
                           child: Image.network(
                               productDetails.productImages[index].image)),
                     ),
@@ -182,6 +211,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               },
             ),
           ),
+          SizedBox(height: 2.0.h),
         ],
       ),
     );
@@ -207,13 +237,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                 Expanded(
                   flex: 55,
                   child: Text(productDetails.producer,
-                      style:
-                          TextStyle(fontSize: 16.0, fontWeight: FontWeight.w100)),
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.w100)),
                 ),
                 Expanded(
                     flex: 45,
                     child: SizedBox(
-                        height: 4.0.h, child: getRatingBar(productDetails.rating)))
+                        height: 4.0.h,
+                        child: getRatingBar(productDetails.rating)))
               ],
             ),
           ],
@@ -246,8 +277,10 @@ class _ProductDetailsState extends State<ProductDetails> {
     AlertDialog alertDialog = AlertDialog(
       title: Text(productName),
       content: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.5,
+          width: 65.0.w,
+          height: 41.0.h,
+          // width: MediaQuery.of(context).size.width,
+          // height: MediaQuery.of(context).size.height * 0.5,
           child: Form(
             key: _formKey,
             child: ListView(children: [
@@ -256,17 +289,22 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
               TextFormField(
                 autofocus: true,
-                decoration: const InputDecoration(
-                    labelText: 'Quantity', hintText: 'Enter a quantity'),
+                decoration: InputDecoration(
+                    labelText: 'Quantity',
+                    hintText: 'Enter a quantity',
+                    labelStyle: TextStyle(fontSize: 16.0.sp)),
                 keyboardType: TextInputType.number,
+                initialValue: 1.toString(),
                 validator: validateQuantity,
                 onSaved: (newValue) {
                   _quantity = int.parse(newValue);
                 },
               ),
+              SizedBox(height: 1.0.h),
               Align(
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
+                  width: 42.0.w,
+                  height: 6.0.h,
                   child: FlatButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4)),
@@ -339,14 +377,14 @@ class _ProductDetailsState extends State<ProductDetails> {
         direction: Axis.horizontal,
         allowHalfRating: true,
         itemCount: 5,
-        itemSize: 35.0,
-        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+        itemSize: 11.0.w,
+        itemPadding: EdgeInsets.symmetric(horizontal: 1.0.w),
         itemBuilder: (context, _) => Icon(
           Icons.star,
-          color: Colors.red.shade400,
+          color: Colors.yellow.shade600,
         ),
         glow: true,
-        glowColor: Colors.redAccent,
+        glowColor: Colors.yellow.shade800,
         onRatingUpdate: (rating) {
           feedbackRating = rating;
         },
