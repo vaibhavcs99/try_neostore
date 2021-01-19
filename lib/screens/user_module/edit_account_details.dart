@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
+import 'package:try_neostore/bloc/edit_account_bloc/edit_account_bloc.dart';
 import 'package:try_neostore/utils/validators.dart' as validators;
 
 class EditAccountDetails extends StatefulWidget {
@@ -22,36 +23,40 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   String _lastName;
   String _email;
   int _phoneNumber;
-
   String _dob;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: primaryRed2,
-      key: _scaffoldKey,
-      appBar: AppBar(title: Text('Edit Account Details')),
-      body: Center(
-        child: Form(
-          key: _formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: ListView(
-            children: [SizedBox(height: 33),
-              firstNameField(), lastNameField(),
-              dateOfBirth(),
-              emailField(),
-              phoneNumberField(),
-              // MyTextFormField(
-              //   myLabelText: 'First Name',
-              //   validator: validateName,
-              //   onSaved: (newValue) {
-              //     _firstName = newValue.trim();
-              //   },
-              // ),
-              // MyTextFormField(myLabelText: 'Last Name'),
-              MyButton(
-                  myText: 'Update Details',
-                  onPressed: () => _validateInputs())
-            ],
+    return BlocListener<EditAccountBloc, EditAccountState>(
+      listener: (context, state) {
+        if (state is EditAccountSuccessful) {
+          showSnackBar('Details Updated Successfully!');
+        }
+        if (state is EditAccountUnsuccessful) {
+          showSnackBar('Something went wrong!');
+        }
+      },
+      child: Scaffold(
+        backgroundColor: primaryRed2,
+        key: _scaffoldKey,
+        appBar: AppBar(title: Text('Edit Account Details')),
+        body: Center(
+          child: Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: ListView(
+              children: [
+                SizedBox(height: 33),
+                firstNameField(),
+                lastNameField(),
+                dateOfBirth(),
+                emailField(),
+                phoneNumberField(),
+                MyButton(
+                    myText: 'Update Details',
+                    onPressed: () => _validateInputs())
+              ],
+            ),
           ),
         ),
       ),
@@ -78,16 +83,13 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       'profile_pic': 'null',
       'phone_no': '$_phoneNumber',
     };
-    var response =
-        await editAccountDetailsService(widget.accessToken, _userDetails);
-
-    if (response.statusCode == 200) {
-      showSnackBar('Details updated successfully');
-    }
+    BlocProvider.of<EditAccountBloc>(context).add(OnUpdateDetailsPressed(
+        accessToken: widget.accessToken, userDetails: _userDetails));
   }
 
   firstNameField() {
-    return MyTextFormField(myIcon: Icon(Icons.person,color: Colors.white),
+    return MyTextFormField(
+      myIcon: Icon(Icons.person, color: Colors.white),
       myLabelText: 'First Name',
       validator: validateName,
       onSaved: (newValue) {
@@ -97,7 +99,8 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   lastNameField() {
-    return MyTextFormField(myIcon: Icon(Icons.person,color: Colors.white),
+    return MyTextFormField(
+      myIcon: Icon(Icons.person, color: Colors.white),
       myLabelText: 'Last Name',
       validator: validateName,
       onSaved: (newValue) {
@@ -107,7 +110,8 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   emailField() {
-    return MyTextFormField(myIcon: Icon(Icons.mail,color: Colors.white),
+    return MyTextFormField(
+      myIcon: Icon(Icons.mail, color: Colors.white),
       myLabelText: 'Email',
       validator: validateEmail,
       onSaved: (newValue) {
@@ -117,7 +121,8 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   phoneNumberField() {
-    return MyTextFormField(myIcon: Icon(Icons.phone,color: Colors.white),
+    return MyTextFormField(
+      myIcon: Icon(Icons.phone, color: Colors.white),
       myLabelText: 'Phone Number',
       validator: validatePhoneNumber,
       onSaved: (newValue) {
@@ -127,9 +132,9 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   dateOfBirth() {
-    return MyTextFormField(myIcon: Icon(Icons.cake,color: Colors.white),
-      myLabelText:
-          'Date of Birth in dd-mm-yyyy',
+    return MyTextFormField(
+      myIcon: Icon(Icons.cake, color: Colors.white),
+      myLabelText: 'Date of Birth, DD/MM/YYYY',
       validator: validateDob,
       onSaved: (newValue) {
         _dob = newValue.trim();

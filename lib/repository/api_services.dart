@@ -77,8 +77,10 @@ Future<Response> changePasswordService({
   }
 }
 
-Future<Response> editAccountDetailsService(
-    String accessToken, Map<String, dynamic> userDetails) async {
+Future<Response> editAccountDetailsService({
+  @required String accessToken,
+  @required Map<String, dynamic> userDetails,
+}) async {
   var dio = Dio();
 
   dio.options.headers['access_token'] = accessToken;

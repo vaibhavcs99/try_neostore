@@ -23,7 +23,7 @@ class MyAccountBloc extends Bloc<MyAccountEvent, MyAccountState> {
         yield MyAccountSuccessful(fetchDataResponse: fetchDataResponse);
       }
       if (response.statusCode == 500) {
-        print('Unsuccessful');
+        yield MyAccountUnsuccessful();
       }
     }
   }

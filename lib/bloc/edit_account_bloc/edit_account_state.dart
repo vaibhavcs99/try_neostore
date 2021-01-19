@@ -8,3 +8,6 @@ abstract class EditAccountState extends Equatable {
 }
 
 class EditAccountInitial extends EditAccountState {}
+class EditAccountLoading extends EditAccountState {}
+class EditAccountSuccessful extends EditAccountState {}
+class EditAccountUnsuccessful extends EditAccountState {}
