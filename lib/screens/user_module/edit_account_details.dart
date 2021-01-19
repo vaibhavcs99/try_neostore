@@ -49,7 +49,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
               // ),
               // MyTextFormField(myLabelText: 'Last Name'),
               MyButton(
-                  myText: 'Edit Account Details',
+                  myText: 'Update Details',
                   onPressed: () => _validateInputs())
             ],
           ),

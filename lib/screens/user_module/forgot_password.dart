@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/bloc/forgot_password_bloc/forgot_password_bloc.dart';
-import 'package:try_neostore/bloc/login_bloc/login_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
 import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
 

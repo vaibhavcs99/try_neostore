@@ -1,9 +1,9 @@
-//TODO: Show snackbar on arrival.
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/screens/widgets/my_drawer.dart';
+import 'package:sizer/sizer.dart';
 
 import 'widgets/my_drawer.dart';
 
@@ -18,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   List productNames = ['Tables', 'Chairs', 'Sofa', 'Bed', 'Dining set'];
+
   List<String> productImages = [
     'assets/tableicon.png',
     'assets/chairsicon.png',
@@ -33,6 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -41,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text('Home'),
           actions: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              padding: EdgeInsets.symmetric(horizontal: 2.0.h),
               child: InkWell(
                   onTap: () => Navigator.pushNamed(context, route_cart_list,
                       arguments: widget.accessToken),
@@ -53,7 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: MyDrawer(accessToken: widget.accessToken),
         ),
         body: ListView(
-          children: [buildCarouselSlider(), buildProductsGrid(context)],
+          children: [
+            buildCarouselSlider(),
+            buildProductsGrid(context),
+          ],
         ),
       ),
     );
@@ -62,12 +68,15 @@ class _HomeScreenState extends State<HomeScreen> {
   CarouselSlider buildCarouselSlider() {
     return CarouselSlider(
       options: CarouselOptions(
-          aspectRatio: 16 / 9, autoPlay: true, enlargeCenterPage: true),
+          aspectRatio: 16 / 9,
+          autoPlay: true,
+          enlargeCenterPage: true,
+          disableCenter: true),
       items: sliderImages.map((image) {
         return Builder(
           builder: (BuildContext context) {
             return Container(
-                width: MediaQuery.of(context).size.width,
+                width: 40.0.h,
                 margin: EdgeInsets.symmetric(horizontal: 5.0),
                 child: Image.asset(image));
           },
@@ -76,26 +85,27 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SizedBox buildProductsGrid(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: Container(
-        child: GridView.count(
-            crossAxisCount: 2,
-            children: List.generate(4, (index) {
-              return Container(
-                  child: InkWell(
-                onTap: () => Navigator.pushNamed(context, route_product_list,
-                    //imdex+1 is product category id number
-                    arguments: ScreenParameters(
-                        parameter1: index + 1, parameter2: widget.accessToken)),
-                child: Card(
-                  child: Container(child: Image.asset(productImages[index])
-                      // child: Image(image: AssetImage('assets/chair_icon.imageset/chair_icon.png'),)
-                      ),
-                ),
-              ));
-            })),
+  Widget buildProductsGrid(BuildContext context) {
+    return Padding(
+      padding:  EdgeInsets.symmetric(horizontal: 1.0.h),
+      child: SizedBox(
+        height: 60.0.h,
+        child: Container(
+          child: GridView.count(
+              crossAxisCount: 2,
+              children: List.generate(4, (index) {
+                return Container(
+                    child: InkWell(
+                  onTap: () => Navigator.pushNamed(context, route_product_list,
+                      //imdex+1 is product category id number
+                      arguments: ScreenParameters(
+                          parameter1: index + 1, parameter2: widget.accessToken)),
+                  child: Card(
+                    child: Container(child: Image.asset(productImages[index])),
+                  ),
+                ));
+              })),
+        ),
       ),
     );
   }

@@ -23,7 +23,9 @@ class _MyOrdersState extends State<MyOrders> {
     return WillPopScope(
         onWillPop: _onBackPressed,
         child: Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+                title: Text('My Orders',
+                    style: TextStyle(fontWeight: FontWeight.bold))),
             drawer: Drawer(
                 child: MyDrawer(
               accessToken: widget.accessToken,
@@ -40,23 +42,21 @@ class _MyOrdersState extends State<MyOrders> {
 
   ListView buildOrderListScreen(OrderListSuccessful state) {
     return ListView.separated(
-                    separatorBuilder: (context, index) =>
-                        Divider(thickness: 4),
-                    itemCount: state.orderListModel.data.length,
-                    itemBuilder: (context, index) {
-                      var orderData = state.orderListModel.data[index];
-                      return ListTile(
-                        title: Text('Order ID : ${orderData.id.toString()}'),
-                        subtitle: Text('Ordered Date : ${orderData.created}'),
-                        trailing: Text('Rs. ${orderData.cost.toString()}'),
-                        onTap: () => Navigator.pushNamed(
-                            context, route_order_details,
-                            arguments: ScreenParameters(
-                                parameter1: orderData.id,
-                                parameter2: widget.accessToken)),
-                      );
-                    },
-                  );
+      separatorBuilder: (context, index) => Divider(thickness: 4),
+      itemCount: state.orderListModel.data.length,
+      itemBuilder: (context, index) {
+        var orderData = state.orderListModel.data[index];
+        
+        return ListTile(
+          title: Text('Order ID : ${orderData.id.toString()}'),
+          subtitle: Text('Ordered Date : ${orderData.created}'),
+          trailing: Text('Rs. ${orderData.cost.toString()}'),
+          onTap: () => Navigator.pushNamed(context, route_order_details,
+              arguments: ScreenParameters(
+                  parameter1: orderData.id, parameter2: widget.accessToken)),
+        );
+      },
+    );
   }
 
   Future<bool> _onBackPressed() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:try_neostore/constants/constants.dart';
+import 'package:sizer/sizer.dart';
 
 class MyButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -22,9 +22,9 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 33, vertical: 13),
+      padding:  EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 2.0.h),
       child: AspectRatio(
-        aspectRatio: (aspectX ?? 880) / (aspectY ?? 142),
+        aspectRatio: (aspectX ?? 880) / (aspectY ?? 155),
         child: FlatButton(
           onPressed: onPressed,
           color: color ?? Colors.white,

@@ -19,11 +19,10 @@ class _LoginScreenState extends State<LoginScreen> {
   String _email;
   String _password;
 
-
   @override
   Widget build(BuildContext context) {
-      bool keyboardIsClosed= MediaQuery.of(context).viewInsets.bottom==0;
-
+    bool keyboardIsClosed = MediaQuery.of(context).viewInsets.bottom == 0;
+    var height = MediaQuery.of(context).size.height;
     return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) async {
           if (state is LoginSuccessful) {
@@ -37,8 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Scaffold(
             key: _scaffoldKey,
             backgroundColor: primaryRed2,
-            floatingActionButton: Visibility(visible: keyboardIsClosed,
-                          child: FloatingActionButton(
+            floatingActionButton: Visibility(
+              visible: keyboardIsClosed,
+              child: FloatingActionButton(
                 onPressed: () => Navigator.pushNamed(context, route_register),
                 backgroundColor: primaryRed1,
                 shape: RoundedRectangleBorder(),
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: ListView(
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                    SizedBox(height: height * 0.2),
                     Center(
                       child: Text('NeoSTORE',
                           style: TextStyle(
@@ -72,7 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           text: TextSpan(
                               text: 'Forgot Password?',
                               style: TextStyle(
-                                  color: Colors.white, fontSize: 20.0,fontWeight: FontWeight.w500),
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w500),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   Navigator.pushNamed(
@@ -81,10 +83,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.20),
                     Padding(
-                      padding: const EdgeInsets.only(left:33.0),
+                      padding: const EdgeInsets.only(left: 33.0),
                       child: Text(
                         "Don't have an account? ",
-                        style: TextStyle(color: Colors.white, fontSize: 20.0,fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
                   ],
@@ -125,7 +130,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   passwordField() {
     return MyTextFormField(
-      myIcon: Icon(Icons.lock, color: Colors.white),obscureText: true,
+      myIcon: Icon(Icons.lock, color: Colors.white),
+      obscureText: true,
       myLabelText: 'Password',
       keyboardType: TextInputType.visiblePassword,
       validator: validatePassword,

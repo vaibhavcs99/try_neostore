@@ -19,10 +19,23 @@ class _OrderDetailsState extends State<OrderDetails> {
         accessToken: widget.accessToken, orderId: widget.orderId));
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+          title: Text('Order Details',
+              style: TextStyle(fontWeight: FontWeight.bold))),
       body: BlocBuilder<OrderDetailsBloc, OrderDetailsState>(
+        
+        buildWhen: (previous, current) {
+          
+          if (previous == current) {
+            print(previous);
+            print(current);
+            return false;
+          }
+          return true;
+        },
         builder: (context, state) {
           if (state is OrderDetailsSuccessful) {
+            print('From Screen : ${state.orderDetailsModel.data.id}');
             return ListView(
               children: [
                 buildListTile(context, state.orderDetailsModel),

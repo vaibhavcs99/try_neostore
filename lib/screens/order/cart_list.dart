@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/bloc/cart_list_bloc/cart_list_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
@@ -49,10 +50,12 @@ class _CartListState extends State<CartList> {
       return Center(child: Text('Cart is empty!'));
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(horizontal: 1.0.h),
       child: Column(
         children: [
+          SizedBox(height: 1.0.h),
           buildListTile(context, state),
+          SizedBox(height: 2.0.h),
           buildTotalPrice(state.cartListModel.total),
           buildOrderButton(context)
         ],
@@ -62,49 +65,56 @@ class _CartListState extends State<CartList> {
 
   SizedBox buildListTile(BuildContext context, state) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.65,
-      child: ListView.builder(
-          itemCount: state.cartListModel.count,
-          itemBuilder: (context, index) {
-            var productData = state.cartListModel.data[index];
+      height: MediaQuery.of(context).size.height * 0.59,
+      child: ListView(
+        children: [
+          SizedBox(
+            height: 60.0.h,
+            child: ListView.builder(
+                itemCount: state.cartListModel.count,
+                itemBuilder: (context, index) {
+                  var productData = state.cartListModel.data[index];
 
-            return Dismissible(
-              key: Key(productData.product.id.toString()),
-              background: slideLeftBackground(),
-              onDismissed: (direction) {
-                BlocProvider.of<CartListBloc>(context).add(OnDeleteSwiped(
-                    productId: productData.product.id,
-                    accessToken: widget.accessToken));
-              },
-              child: Card(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    buildProductImage(productData),
-                    SizedBox(
-                      width: 18,
-                    ),
-                    Expanded(
-                      flex: 8,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  return Dismissible(
+                    key: Key(productData.product.id.toString()),
+                    background: slideLeftBackground(),
+                    onDismissed: (direction) {
+                      BlocProvider.of<CartListBloc>(context).add(OnDeleteSwiped(
+                          productId: productData.product.id,
+                          accessToken: widget.accessToken));
+                    },
+                    child: Card(
+                        child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.0.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(height: 8),
-                          Text(productData.product.name,
-                              style: TextStyle(fontSize: 20)),
-                          SizedBox(height: 6),
-                          Text(productData.product.productCategory),
-                          buildDropdownButton(productData, context),
+                          buildProductImage(productData),
+                          SizedBox(
+                            width: 4.0.w,
+                          ),
+                          Expanded(
+                            flex: 8,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 2.0.h),
+                                Text(productData.product.name,
+                                    style: TextStyle(fontSize: 16.0.sp)),
+                                SizedBox(height: 2.0.h),
+                                Text(productData.product.productCategory),
+                                buildDropdownButton(productData, context),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              )),
-            );
-          }),
+                    )),
+                  );
+                }),
+          ),
+        ],
+      ),
     );
   }
 
@@ -114,7 +124,8 @@ class _CartListState extends State<CartList> {
       iconEnabledColor: Colors.black,
       value: productData.quantity,
       items: itemList
-          .map((e) => DropdownMenuItem<int>(value: e, child: Text('$e')))
+          .map((number) =>
+              DropdownMenuItem<int>(value: number, child: Text('$number')))
           .toList(),
       onChanged: (value) {
         BlocProvider.of<CartListBloc>(context).add(OnDropDownPressed(
@@ -139,21 +150,21 @@ class _CartListState extends State<CartList> {
   Card buildTotalPrice(int totalPrice) {
     return Card(
       child: SizedBox(
-        height: 66.0,
+        height: 9.0.h,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: EdgeInsets.symmetric(horizontal: 4.0.h),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('TOTAL',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
+                      fontSize: 12.0.sp,
                       letterSpacing: 1.2)),
               Text('Rs. $totalPrice',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
+                      fontSize: 12.0.sp,
                       letterSpacing: 1.2))
             ],
           ),

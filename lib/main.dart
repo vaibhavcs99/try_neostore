@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizer/sizer_util.dart';
 import 'package:try_neostore/bloc/forgot_password_bloc/forgot_password_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/Utils/router.dart';
@@ -15,6 +17,7 @@ import 'bloc/order_list_bloc/order_list_bloc.dart';
 import 'bloc/product_details_bloc/product_details_bloc.dart';
 import 'bloc/product_list_bloc/product_list_bloc.dart';
 import 'bloc/register_bloc/register_bloc.dart';
+import 'bloc/my_account_bloc/my_account_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +38,7 @@ void main() async {
       BlocProvider(create: (_) => AddressBloc()),
       BlocProvider(create: (_) => OrderListBloc()),
       BlocProvider(create: (_) => OrderDetailsBloc()),
+      BlocProvider(create: (_) => MyAccountBloc()),
       BlocProvider(
           create: (_) => DrawerBloc(
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(_)))
@@ -48,21 +52,34 @@ class NeoStore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: primaryRed2,
-        scaffoldBackgroundColor: colorGreyBackground,
-        fontFamily: 'Gotham',
-        hintColor: Colors.white,
-        buttonTheme: ButtonThemeData(
-          buttonColor: Colors.white,
-        ),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return OrientationBuilder(
+          builder: (context, orientation) {
+            SizerUtil().init(constraints, orientation);
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: buildThemeData(),
+              initialRoute: route_splash_screen,
+              onGenerateRoute: _appRouter.onGenerateRoute,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  ThemeData buildThemeData() {
+    return ThemeData(
+      primaryColor: primaryRed2,
+      scaffoldBackgroundColor: colorGreyBackground,
+      fontFamily: 'Gotham',
+      hintColor: Colors.white,
+      buttonTheme: ButtonThemeData(
+        buttonColor: Colors.white,
       ),
-      initialRoute: route_splash_screen,
-      onGenerateRoute: _appRouter.onGenerateRoute,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
     );
   }
 }

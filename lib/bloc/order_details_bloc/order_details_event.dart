@@ -11,7 +11,10 @@ class OnShowOrderDetails extends OrderDetailsEvent {
   final String accessToken;
   final int orderId;
   OnShowOrderDetails({
-   @required this.accessToken,
-   @required this.orderId,
-  });
+    @required this.accessToken,
+    @required this.orderId,
+  }) : super();
+
+  @override
+  List<Object> get props => [this.orderId];
 }

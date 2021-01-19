@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rendering.dart';
 import 'package:try_neostore/model/order_details_model.dart';
 import 'package:try_neostore/repository/api_services.dart';
 
@@ -22,6 +23,8 @@ class OrderDetailsBloc extends Bloc<OrderDetailsEvent, OrderDetailsState> {
       if (response.statusCode == 200) {
         OrderDetailsModel orderDetailsModel =
             orderDetailsModelFromJson(response.data);
+        print('From Bloc : ${orderDetailsModel.data.id}');
+
         yield OrderDetailsSuccessful(orderDetailsModel: orderDetailsModel);
       } else {
         yield OrderDetailsUnsuccessful();

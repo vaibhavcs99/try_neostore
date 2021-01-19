@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class MyTextFormField extends StatelessWidget {
   final TextInputType keyboardType;
@@ -15,11 +16,11 @@ class MyTextFormField extends StatelessWidget {
       @required this.myIcon,
       this.obscureText,
       this.keyboardType});
-
+// const EdgeInsets.only(left: 33,right: 33, bottom: 13),
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 33,right: 33, bottom: 13),
+      padding:  EdgeInsets.only(left: 9.0.w, right: 9.0.w, bottom: 2.0.h),
       child: TextFormField(
         obscureText: obscureText ?? false,
         decoration: InputDecoration(
@@ -36,10 +37,10 @@ class MyTextFormField extends StatelessWidget {
             labelText: myLabelText,
             labelStyle:
                 TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-              
         validator: validator,
         onSaved: onSaved,
-        keyboardType: keyboardType,style: TextStyle(color: Colors.white),
+        keyboardType: keyboardType,
+        style: TextStyle(color: Colors.white),
       ),
     );
   }

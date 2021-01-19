@@ -7,6 +7,7 @@ import 'package:try_neostore/bloc/product_details_bloc/product_details_bloc.dart
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/model/product_details.model.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
+import 'package:sizer/sizer.dart';
 import 'package:try_neostore/utils/utils.dart' as utils;
 
 class ProductDetails extends StatefulWidget {
@@ -93,7 +94,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           Expanded(
             child: MyButton(
                 aspectX: 227,
-                aspectY: (screenWidth / 4).round(),
+                aspectY: (screenWidth / 3).round(),
                 textColor: Colors.white,
                 color: Colors.red,
                 onPressed: () {
@@ -104,13 +105,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                           productDetails.productImages.first.image);
                 },
                 myText: 'Buy Now',
-                fontSize: 20.0),
+                fontSize: 16.0.sp),
           ),
-          SizedBox(width: 8),
+
           Expanded(
             child: MyButton(
               aspectX: 227,
-              aspectY: (screenWidth / 4).round(),
+              aspectY: (screenWidth / 3).round(),
               textColor: Colors.grey,
               color: colorGreyBackground,
               onPressed: () => showRatingDialog(
@@ -195,7 +196,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           children: [
             Text(
               productDetails.name,
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 19.0.sp, fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 4),
             Text(getProductCategoryName(productDetails.productCategoryId),
@@ -204,15 +205,15 @@ class _ProductDetailsState extends State<ProductDetails> {
             Row(
               children: [
                 Expanded(
-                  flex: 75,
+                  flex: 55,
                   child: Text(productDetails.producer,
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w100)),
+                          TextStyle(fontSize: 16.0, fontWeight: FontWeight.w100)),
                 ),
                 Expanded(
-                    flex: 25,
+                    flex: 45,
                     child: SizedBox(
-                        height: 18, child: getRatingBar(productDetails.rating)))
+                        height: 4.0.h, child: getRatingBar(productDetails.rating)))
               ],
             ),
           ],
