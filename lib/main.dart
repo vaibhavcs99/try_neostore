@@ -18,6 +18,7 @@ import 'bloc/product_details_bloc/product_details_bloc.dart';
 import 'bloc/product_list_bloc/product_list_bloc.dart';
 import 'bloc/register_bloc/register_bloc.dart';
 import 'bloc/my_account_bloc/my_account_bloc.dart';
+import 'bloc/change_password/change_password_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,7 @@ void main() async {
       BlocProvider(create: (_) => OrderListBloc()),
       BlocProvider(create: (_) => OrderDetailsBloc()),
       BlocProvider(create: (_) => MyAccountBloc()),
+      BlocProvider(create: (_) => ChangePasswordBloc()),
       BlocProvider(
           create: (_) => DrawerBloc(
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(_)))

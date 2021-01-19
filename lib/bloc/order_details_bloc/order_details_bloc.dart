@@ -23,7 +23,6 @@ class OrderDetailsBloc extends Bloc<OrderDetailsEvent, OrderDetailsState> {
       if (response.statusCode == 200) {
         OrderDetailsModel orderDetailsModel =
             orderDetailsModelFromJson(response.data);
-        print('From Bloc : ${orderDetailsModel.data.id}');
 
         yield OrderDetailsSuccessful(orderDetailsModel: orderDetailsModel);
       } else {

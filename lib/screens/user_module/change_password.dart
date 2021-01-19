@@ -1,17 +1,17 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/bloc/change_password/change_password_bloc.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
 import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
 
 class ChangePassword extends StatefulWidget {
   final String accessToken;
 
-  const ChangePassword(
- {
-    Key key, this.accessToken,
+  const ChangePassword({
+    Key key,
+    this.accessToken,
   }) : super(key: key);
   @override
   _ChangePasswordState createState() => _ChangePasswordState();
@@ -27,33 +27,41 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: primaryRed2,
-        appBar: AppBar(
-          title: Text('Change Password'),
-          
-        ),
-        body: Center(
-          child: Form(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: ListView(children: [
-                SizedBox(height: 16),
-                currentPasswordField(),
-                SizedBox(height: 8),
-                newPasswordField(),
-                SizedBox(height: 8),
-                confirmNewPasswordField(),
-                SizedBox(height: 8),
-                MyButton(
-                    onPressed: _validateInputs, myText: 'Change Password')
-              ])),
-        ));
+    return BlocListener<ChangePasswordBloc, ChangePasswordState>(
+      listener: (context, state) {
+        if (state is ChangePasswordSuccessful) {
+          showSnackBar('Password changed successfully.');
+        }
+      },
+      child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: primaryRed2,
+          appBar: AppBar(
+            title: Text('Change Password'),
+          ),
+          body: Center(
+            child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: ListView(children: [
+                  SizedBox(height: 24),
+                  currentPasswordField(),
+                  SizedBox(height: 8),
+                  newPasswordField(),
+                  SizedBox(height: 8),
+                  confirmNewPasswordField(),
+                  SizedBox(height: 8),
+                  MyButton(
+                      onPressed: _validateInputs, myText: 'Change Password')
+                ])),
+          )),
+    );
   }
 
   currentPasswordField() {
-    return MyTextFormField(myIcon: Icon(Icons.lock),
+    return MyTextFormField(
+      myIcon: Icon(Icons.lock, color: Colors.white),
+      obscureText: true,
       myLabelText: 'Current Password',
       validator: validatePassword,
       onSaved: (newValue) {
@@ -63,7 +71,9 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   newPasswordField() {
-    return MyTextFormField(myIcon: Icon(Icons.lock),
+    return MyTextFormField(
+      myIcon: Icon(Icons.lock, color: Colors.white),
+      obscureText: true,
       myLabelText: 'Password',
       validator: validatePassword,
       onSaved: (newValue) {
@@ -73,8 +83,10 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   confirmNewPasswordField() {
-    return MyTextFormField(myIcon: Icon(Icons.lock),obscureText: true,
-      myLabelText:  'Confirm New Password',
+    return MyTextFormField(
+      myIcon: Icon(Icons.lock, color: Colors.white),
+      obscureText: true,
+      myLabelText: 'Confirm New Password',
       validator: validatePassword,
       onSaved: (newValue) {
         _confirmNewPassword = newValue.trim();
@@ -85,25 +97,15 @@ class _ChangePasswordState extends State<ChangePassword> {
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      changePassword(); //same method as authenticate user.
+      BlocProvider.of<ChangePasswordBloc>(context).add(OnChangePasswordPressed(
+        accessToken: widget.accessToken,
+        confirmNewPassword: _confirmNewPassword,
+        currentPassword: _currentPassword,
+        newPassword: _newPassword,
+      ));
     } else {
       _scaffoldKey.currentState
           .showSnackBar(SnackBar(content: Text('Please Enter all Fields')));
-    }
-  }
-
-  void changePassword() async {
-    Map<String, dynamic> _passwordDetails = {
-      'old_password': '$_currentPassword',
-      'password': '$_newPassword',
-      'confirm_password': '$_confirmNewPassword',
-    };
-
-    var response = await changePasswordService(
-        widget.accessToken, _passwordDetails);
-
-     if (response.statusCode == 200) {
-      showSnackBar('Password Changed successfully');
     }
   }
 

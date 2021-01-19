@@ -13,9 +13,14 @@ class OrderDetailsLoading extends OrderDetailsState {}
 
 class OrderDetailsSuccessful extends OrderDetailsState {
   final OrderDetailsModel orderDetailsModel;
+
   OrderDetailsSuccessful({
-   @required this.orderDetailsModel,
+    this.orderDetailsModel,
+
   });
+
+    @override
+  List<Object> get props => [orderDetailsModel];
 }
 
 class OrderDetailsUnsuccessful extends OrderDetailsState {}

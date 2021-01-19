@@ -50,8 +50,17 @@ Future<Response> sendPasswordResetMailService(
   }
 }
 
-Future<Response> changePasswordService(
-    String accessToken, Map<String, dynamic> passwordDetails) async {
+Future<Response> changePasswordService({
+  String accessToken,
+  @required String currentPassword,
+  @required String newPassword,
+  @required String confirmNewPassword,
+}) async {
+  Map<String, dynamic> passwordDetails = {
+    'old_password': currentPassword,
+    'password': newPassword,
+    'confirm_password': confirmNewPassword,
+  };
   var dio = Dio();
 
   dio.options.headers['access_token'] = accessToken;

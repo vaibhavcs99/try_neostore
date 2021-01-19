@@ -37,7 +37,6 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
             builder: (context, state) {
               if (state is MyAccountSuccessful) {
                 var userData = state.fetchDataResponse.data.userData;
-                print(userData.firstName);
                 return buildAccountScreen(userData, context);
               }
               return CircularProgressIndicator();
