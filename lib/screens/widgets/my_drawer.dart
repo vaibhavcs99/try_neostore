@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/data_class.dart';
+import 'package:try_neostore/bloc/drawer_bloc/drawer_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/model/fetchDataResponse.dart';
-import 'package:try_neostore/repository/api_services.dart';
 
 class MyDrawer extends StatefulWidget {
   final String accessToken;
@@ -17,92 +16,90 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
-    //***************************** */
-    // myAccountDetailsService(widget.accessToken);
-    //***************************** */
+    BlocProvider.of<DrawerBloc>(context)
+        .add(OnShowDrawerHeader(accessToken: widget.accessToken));
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          buildUserAccountHeader(),
-          ListTile(
-              title: Text('Home'),
-              leading: Icon(Icons.home),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, route_home_screen,
-                    arguments: widget.accessToken);
-              }),
-          ListTile(
-              title: Text('My Cart'),
-              leading: Icon(Icons.shopping_cart),
-              onTap: () {}),
-          ListTile(
-              title: Text('Tables'),
-              leading: Icon(Icons.shopping_cart),
-              onTap: () => Navigator.pushNamed(context, route_product_list,
-                  //imdex+1 is product category id number
-                  arguments: ScreenParameters(
-                      parameter1: 1, parameter2: widget.accessToken))),
-          ListTile(
-              title: Text('Chair'),
-              leading: Icon(Icons.shopping_cart),
-              onTap: () => Navigator.pushNamed(context, route_product_list,
-                  //imdex+1 is product category id number
-                  arguments: ScreenParameters(
-                      parameter1: 2, parameter2: widget.accessToken))),
-          ListTile(
-              title: Text('Sofas'),
-              leading: Icon(Icons.shopping_cart),
-              onTap: () => Navigator.pushNamed(context, route_product_list,
-                  //imdex+1 is product category id number
-                  arguments: ScreenParameters(
-                      parameter1: 3, parameter2: widget.accessToken))),
-          ListTile(
-              title: Text('Bed'),
-              leading: Icon(Icons.shopping_cart),
-              onTap: () => Navigator.pushNamed(context, route_product_list,
-                  //imdex+1 is product category id number
-                  arguments: ScreenParameters(
-                      parameter1: 4, parameter2: widget.accessToken))),
-          ListTile(
-            title: Text('My Account'),
-            leading: Icon(Icons.person),
-            onTap: () => Navigator.pushReplacementNamed(
-                context, route_my_account_details,
-                arguments: widget.accessToken),
+    return BlocListener<DrawerBloc, DrawerState>(
+        listener: (context, state) {
+          if (state is LogOutSuccessful) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                route_login, (Route<dynamic> route) => false);
+          }
+        },
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              buildUserAccountHeader(),
+              ListTile(
+                  title: Text('Home'),
+                  leading: Icon(Icons.home),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, route_home_screen,
+                        arguments: widget.accessToken);
+                  }),
+              ListTile(
+                  title: Text('My Cart'),
+                  leading: Icon(Icons.shopping_cart),
+                  onTap: () {}),
+              ListTile(
+                  title: Text('Tables'),
+                  leading: Icon(Icons.shopping_cart),
+                  onTap: () => Navigator.pushNamed(context, route_product_list,
+                      //imdex+1 is product category id number
+                      arguments: ScreenParameters(
+                          parameter1: 1, parameter2: widget.accessToken))),
+              ListTile(
+                  title: Text('Chair'),
+                  leading: Icon(Icons.shopping_cart),
+                  onTap: () => Navigator.pushNamed(context, route_product_list,
+                      //imdex+1 is product category id number
+                      arguments: ScreenParameters(
+                          parameter1: 2, parameter2: widget.accessToken))),
+              ListTile(
+                  title: Text('Sofas'),
+                  leading: Icon(Icons.shopping_cart),
+                  onTap: () => Navigator.pushNamed(context, route_product_list,
+                      //imdex+1 is product category id number
+                      arguments: ScreenParameters(
+                          parameter1: 3, parameter2: widget.accessToken))),
+              ListTile(
+                  title: Text('Bed'),
+                  leading: Icon(Icons.shopping_cart),
+                  onTap: () => Navigator.pushNamed(context, route_product_list,
+                      //imdex+1 is product category id number
+                      arguments: ScreenParameters(
+                          parameter1: 4, parameter2: widget.accessToken))),
+              ListTile(
+                title: Text('My Account'),
+                leading: Icon(Icons.person),
+                onTap: () => Navigator.pushReplacementNamed(
+                    context, route_my_account_details,
+                    arguments: widget.accessToken),
+              ),
+              ListTile(title: Text('Store Locator'), leading: Icon(Icons.map)),
+              ListTile(
+                  title: Text('My Orders'),
+                  leading: Icon(Icons.view_list),
+                  onTap: () => Navigator.pushReplacementNamed(
+                      context, route_order_list,
+                      arguments: widget.accessToken)),
+              ListTile(
+                title: Text('LogOut'),
+                leading: Icon(Icons.exit_to_app),
+                onTap: _onLogOut,
+              )
+            ],
           ),
-          ListTile(title: Text('Store Locator'), leading: Icon(Icons.map)),
-          ListTile(
-              title: Text('My Orders'),
-              leading: Icon(Icons.view_list),
-              onTap: () => Navigator.pushReplacementNamed(
-                  context, route_order_list,
-                  arguments: widget.accessToken)),
-          ListTile(
-            title: Text('LogOut'),
-            leading: Icon(Icons.exit_to_app),
-            onTap: _onLogOut,
-          )
-        ],
-      ),
-    );
+        ));
   }
 
-  FutureBuilder<FetchDataResponse> buildUserAccountHeader() {
-    return FutureBuilder<FetchDataResponse>(
-        future: getMyData(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return UserAccountsDrawerHeader(
-              accountName: Text(
-                '',
-                style: TextStyle(fontSize: 23),
-              ),
-              accountEmail: Text(''),
-            );
-          var user = snapshot.data.data.userData;
+  buildUserAccountHeader() {
+    return BlocBuilder<DrawerBloc, DrawerState>(
+      builder: (context, state) {
+        if (state is DrawerSuccessful) {
+          var user = state.fetchDataResponse.data.userData;
 
           return UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
@@ -113,9 +110,18 @@ class _MyDrawerState extends State<MyDrawer> {
               style: TextStyle(fontSize: 23),
             ),
             accountEmail: Text('${user.email}'),
-            // currentAccountPicture: CircleAvatar(backgroundImage: NetworkImage(user.profilePic)),
           );
-        });
+        }
+
+        return UserAccountsDrawerHeader(
+          accountName: Text(
+            '',
+            style: TextStyle(fontSize: 23),
+          ),
+          accountEmail: Text(''),
+        );
+      },
+    );
   }
 
   _onLogOut() {
@@ -128,12 +134,7 @@ class _MyDrawerState extends State<MyDrawer> {
           actions: [
             TextButton(
                 onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.remove('token');
-
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      route_login, (Route<dynamic> route) => false);
+                  BlocProvider.of<DrawerBloc>(context).add(OnLogOutPressed());
                 },
                 child: Text('Yes')),
             TextButton(
@@ -143,10 +144,5 @@ class _MyDrawerState extends State<MyDrawer> {
         );
       },
     );
-  }
-
-  Future<FetchDataResponse> getMyData() async {
-    var myJson = await myAccountDetailsService(widget.accessToken);
-    return fetchDataResponseFromJson(myJson.data);
   }
 }

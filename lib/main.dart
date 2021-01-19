@@ -8,6 +8,7 @@ import 'package:try_neostore/repository/user_session.dart';
 import 'bloc/address_bloc/address_bloc.dart';
 import 'bloc/auth_bloc/authentication_bloc.dart';
 import 'bloc/cart_list_bloc/cart_list_bloc.dart';
+import 'bloc/drawer_bloc/drawer_bloc.dart';
 import 'bloc/login_bloc/login_bloc.dart';
 import 'bloc/order_details_bloc/order_details_bloc.dart';
 import 'bloc/order_list_bloc/order_list_bloc.dart';
@@ -34,6 +35,9 @@ void main() async {
       BlocProvider(create: (_) => AddressBloc()),
       BlocProvider(create: (_) => OrderListBloc()),
       BlocProvider(create: (_) => OrderDetailsBloc()),
+      BlocProvider(
+          create: (_) => DrawerBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(_)))
     ],
     child: NeoStore(),
   ));

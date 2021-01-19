@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/screens/widgets/my_button.dart';
 import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -45,8 +46,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                 SizedBox(height: 8),
                 confirmNewPasswordField(),
                 SizedBox(height: 8),
-                FlatButton(
-                    onPressed: _validateInputs, child: Text('Change Password'))
+                MyButton(
+                    onPressed: _validateInputs, myText: 'Change Password')
               ])),
         ));
   }

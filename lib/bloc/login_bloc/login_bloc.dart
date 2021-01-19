@@ -29,7 +29,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         String accessToken =
             apiResponseFromJson(response.data).data.accessToken;
             
-        print('Login bloc successful!');
         authenticationBloc.add(LoggedIn(accessToken: accessToken));
         yield LoginSuccessful(accessToken: accessToken);
       } else {
