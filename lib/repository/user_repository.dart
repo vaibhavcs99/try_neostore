@@ -3,12 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:try_neostore/constants/urls.dart';
 
 class UserRepository {
-  static final UserRepository _userRepostiory = UserRepository._internal();
+  static final UserRepository _userRepostiory = UserRepository._private();
 
   factory UserRepository() {
     return _userRepostiory;
   }
-  UserRepository._internal(){
+  UserRepository._private(){
     print('User repository constructer generated');
   }
 

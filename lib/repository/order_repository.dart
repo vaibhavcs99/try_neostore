@@ -4,12 +4,12 @@ import 'package:try_neostore/constants/urls.dart';
 
 class OrderRepository {
   static final OrderRepository _orderRepostiory =
-      OrderRepository._internal();
+      OrderRepository._private();
 
   factory OrderRepository() {
     return _orderRepostiory;
   }
-  OrderRepository._internal() {
+  OrderRepository._private() {
     print('Order repository constructer generated');
   }
 

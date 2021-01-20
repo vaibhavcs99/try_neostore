@@ -29,6 +29,7 @@ dependencies:
   equatable: ^1.2.5
   flutter_bloc: ^6.1.1
   flutter_rating_bar: ^3.2.0+1
+  image_picker: ^0.6.7+21
   shared_preferences: ^0.5.12+4
   sizer: ^1.1.8
 

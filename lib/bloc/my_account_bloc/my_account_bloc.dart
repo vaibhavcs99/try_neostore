@@ -10,7 +10,6 @@ part 'my_account_event.dart';
 part 'my_account_state.dart';
 
 class MyAccountBloc extends Bloc<MyAccountEvent, MyAccountState> {
-  
   final UserRepository userRepository = UserRepository();
 
   MyAccountBloc() : super(MyAccountInitial());
@@ -20,9 +19,11 @@ class MyAccountBloc extends Bloc<MyAccountEvent, MyAccountState> {
     MyAccountEvent event,
   ) async* {
     if (event is OnShowAccountDetails) {
-      var response = await userRepository.myAccountDetailsService(event.accessToken);
+      var response =
+          await userRepository.myAccountDetailsService(event.accessToken);
       if (response.statusCode == 200) {
         var fetchDataResponse = fetchDataResponseFromJson(response.data);
+
         yield MyAccountSuccessful(fetchDataResponse: fetchDataResponse);
       }
       if (response.statusCode == 500) {

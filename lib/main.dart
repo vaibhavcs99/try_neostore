@@ -67,9 +67,7 @@ class NeoStore extends StatelessWidget {
 MultiBlocProvider providers(UserSession userSession) {
   return MultiBlocProvider(
     providers: [
-      BlocProvider(
-          create: (_) => AuthenticationBloc(userSession: userSession)),
-          
+      BlocProvider(create: (_) => AuthenticationBloc(userSession: userSession)),
       BlocProvider(
           create: (context) => LoginBloc(
               // userRepository: context.read<UserRepository>(),
@@ -85,13 +83,13 @@ MultiBlocProvider providers(UserSession userSession) {
       BlocProvider(create: (_) => OrderListBloc()),
       BlocProvider(create: (_) => OrderDetailsBloc()),
       BlocProvider(create: (_) => MyAccountBloc()),
+      BlocProvider(create: (_) => ChangePasswordBloc()),
       BlocProvider(
-          create: (context) => ChangePasswordBloc(
-              myAccountBloc: context.read<MyAccountBloc>())),
-      BlocProvider(create: (_) => EditAccountBloc()),
+          create: (context) =>
+              EditAccountBloc(myAccountBloc: context.read<MyAccountBloc>())),
       BlocProvider(
-          create: (_) => DrawerBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(_)))
+          create: (context) => DrawerBloc(
+              authenticationBloc: context.read<AuthenticationBloc>()))
     ],
     child: NeoStore(),
   );

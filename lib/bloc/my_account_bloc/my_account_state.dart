@@ -16,6 +16,8 @@ class MyAccountSuccessful extends MyAccountState {
   MyAccountSuccessful({
    @required this.fetchDataResponse,
   });
+    @override
+  List<Object> get props => [fetchDataResponse];
 }
 
 class MyAccountUnsuccessful extends MyAccountState {}

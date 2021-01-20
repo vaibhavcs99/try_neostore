@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:sizer/sizer.dart';
+import 'package:try_neostore/Utils/data_class.dart';
+
 import 'package:try_neostore/model/fetchDataResponse.dart';
 import 'package:try_neostore/screens/widgets/container_white_border.dart';
 import 'package:try_neostore/screens/widgets/my_drawer.dart';
@@ -21,7 +23,8 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<MyAccountBloc>(context).add(OnShowAccountDetails(accessToken: widget.accessToken));
+    BlocProvider.of<MyAccountBloc>(context)
+        .add(OnShowAccountDetails(accessToken: widget.accessToken));
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -50,10 +53,18 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
   ListView buildAccountScreen(UserData userData, BuildContext context) {
     return ListView(
       children: [
-        CircleAvatar(
-          radius: 66,
-          backgroundImage:
-              NetworkImage('https://cdn.wallpapersafari.com/91/96/D8ZYbS.jpg'),
+
+        Container(
+          height: 20.0.h,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: NetworkImage(userData.profilePic.isEmpty
+                  ? 'https://picsum.photos/200/300'
+                  : userData.profilePic),
+              fit: BoxFit.fill,
+            ),
+          ),
         ),
         BorderContainer(
             myText: userData.firstName,
@@ -73,7 +84,9 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
         MyButton(
           onPressed: () => Navigator.pushNamed(
               context, route_edit_account_details,
-              arguments: widget.accessToken),
+              arguments: ScreenParameters(
+                  parameter1: widget.accessToken,
+                  parameter2: userData.profilePic)),
           myText: 'Edit Profile',
         ),
         FlatButton(

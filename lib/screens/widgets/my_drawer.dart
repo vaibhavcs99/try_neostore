@@ -100,11 +100,10 @@ class _MyDrawerState extends State<MyDrawer> {
       builder: (context, state) {
         if (state is DrawerSuccessful) {
           var user = state.fetchDataResponse.data.userData;
-
           return UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage(
-                    'https://www.govloop.com/wp-content/uploads/2016/02/panda-1024x576.jpg')),
+                    user.profilePic.isEmpty? 'https://picsum.photos/200/300':user.profilePic)),
             accountName: Text(
               '${user.firstName}' + ' ' + '${user.lastName}',
               style: TextStyle(fontSize: 23),

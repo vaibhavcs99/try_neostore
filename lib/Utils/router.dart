@@ -42,9 +42,12 @@ class AppRouter {
         );
         break;
       case route_edit_account_details:
-        var accessToken = settings.arguments as String;
+        ScreenParameters parameters = settings.arguments as ScreenParameters;
+        String accessToken = parameters.parameter1 as String;
+        String profilePic = parameters.parameter2 as String;
         return MaterialPageRoute(
-          builder: (_) => EditAccountDetails(accessToken: accessToken),
+          builder: (_) => EditAccountDetails(
+              accessToken: accessToken,profilePic: profilePic),
         );
         break;
       case route_change_password:

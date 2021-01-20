@@ -11,7 +11,7 @@ class BorderContainer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 33),
       child: AspectRatio(
-          aspectRatio: 22 / 3,
+          aspectRatio: 22.0.w.rou / 3,
           child: Container(
               alignment: Alignment.center,
               child: Row(

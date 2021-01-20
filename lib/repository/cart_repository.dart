@@ -3,12 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:try_neostore/constants/urls.dart';
 
 class CartRepository {
-  static final CartRepository _cartRepostiory = CartRepository._internal();
+  static final CartRepository _cartRepostiory = CartRepository._private();
 
   factory CartRepository() {
     return _cartRepostiory;
   }
-  CartRepository._internal() {
+  CartRepository._private() {
     print('Cart repository constructer generated');
   }
 

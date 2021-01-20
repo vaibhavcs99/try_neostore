@@ -13,8 +13,7 @@ class ChangePasswordBloc
     extends Bloc<ChangePasswordEvent, ChangePasswordState> {
   final UserRepository userRepository = UserRepository();
 
-  final MyAccountBloc myAccountBloc;
-  ChangePasswordBloc({this.myAccountBloc}) : super(ChangePasswordInitial());
+  ChangePasswordBloc() : super(ChangePasswordInitial());
 
   @override
   Stream<ChangePasswordState> mapEventToState(
