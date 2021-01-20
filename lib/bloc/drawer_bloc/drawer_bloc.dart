@@ -5,13 +5,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:try_neostore/bloc/auth_bloc/authentication_bloc.dart';
 import 'package:try_neostore/model/fetchDataResponse.dart';
-import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/repository/user_repository.dart';
 
 part 'drawer_event.dart';
 part 'drawer_state.dart';
 
 class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
   final AuthenticationBloc authenticationBloc;
+  final UserRepository userRepository = UserRepository();
 
   DrawerBloc({@required this.authenticationBloc}) : super(DrawerInitial());
 
@@ -20,7 +21,8 @@ class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
     DrawerEvent event,
   ) async* {
     if (event is OnShowDrawerHeader) {
-      var response = await myAccountDetailsService(event.accessToken);
+      var response =
+          await userRepository.myAccountDetailsService(event.accessToken);
 
       if (response.statusCode == 200) {
         FetchDataResponse fetchDataResponse =

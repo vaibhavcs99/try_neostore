@@ -4,12 +4,15 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:try_neostore/model/order_details_model.dart';
-import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/repository/order_repository.dart';
 
 part 'address_event.dart';
 part 'address_state.dart';
 
 class AddressBloc extends Bloc<AddressEvent, AddressState> {
+
+    final OrderRepository orderRepository = OrderRepository();
+
   AddressBloc() : super(AddressInitial());
 
   @override
@@ -19,7 +22,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
     if (event is OnOrderNowPressed) {
       yield OrderLoading();
 
-      var response = await orderItemsService(
+      var response = await orderRepository. orderItemsService(
           address: event.address, accessToken: event.accessToken);
 
       if (response.statusCode == 200) {

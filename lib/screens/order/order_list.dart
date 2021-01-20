@@ -4,8 +4,6 @@ import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/bloc/order_list_bloc/order_list_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/screens/widgets/my_drawer.dart';
-import 'package:try_neostore/model/order_list_model.dart';
-import 'package:try_neostore/repository/api_services.dart';
 
 class MyOrders extends StatefulWidget {
   final String accessToken;

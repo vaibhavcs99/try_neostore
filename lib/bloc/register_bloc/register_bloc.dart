@@ -6,13 +6,13 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:try_neostore/bloc/auth_bloc/authentication_bloc.dart';
 import 'package:try_neostore/model/api_response.dart';
-import 'package:try_neostore/repository/api_services.dart';
-
+import 'package:try_neostore/repository/user_repository.dart';
 part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final AuthenticationBloc authenticationBloc;
+  final UserRepository userRepository = UserRepository();
 
   RegisterBloc({@required this.authenticationBloc}) : super(RegisterInitial());
 
@@ -33,7 +33,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         'phone_no': event.phoneNumber,
       };
 
-      Response response = await registerUserService(userDetails: userDetails);
+      Response response =
+          await userRepository.registerUserService(userDetails: userDetails);
 
       if (response.statusCode == 200) {
         String accessToken =

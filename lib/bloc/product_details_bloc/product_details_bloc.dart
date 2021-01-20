@@ -5,13 +5,18 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:try_neostore/model/error.dart';
 import 'package:try_neostore/model/product_details.model.dart';
-import 'package:try_neostore/repository/api_services.dart';
+import 'package:try_neostore/repository/cart_repository.dart';
+import 'package:try_neostore/repository/product_repository.dart';
 
 part 'product_details_event.dart';
 part 'product_details_state.dart';
 
 class ProductDetailsBloc
     extends Bloc<ProductDetailsEvent, ProductDetailsState> {
+      
+  final ProductRepository productRepository = ProductRepository();
+  final CartRepository cartRepository = CartRepository();
+
   ProductDetailsBloc() : super(ProductDetailsInitial());
 
   @override
@@ -21,8 +26,8 @@ class ProductDetailsBloc
     if (event is OnShowProductDetails) {
       yield ProductDetailsLoading();
 
-      var response =
-          await productDetailsService(productId: event.productId.toString());
+      var response = await productRepository.productDetailsService(
+          productId: event.productId.toString());
 
       if (response.statusCode == 200) {
         var productDetailsModel = productDetailsModelFromJson(response.data);
@@ -37,21 +42,21 @@ class ProductDetailsBloc
     if (event is OnBuyNowClicked) {
       yield ProductBuyNowLoading();
 
-      var response = await addItemCartService(
+      var response = await cartRepository.addItemCartService(
           productId: event.productId,
           quantity: event.quantity,
           accessToken: event.accessToken);
 
       if (response.statusCode == 200) {
-        var response =
-            await productDetailsService(productId: event.productId.toString());
+        var response = await productRepository.productDetailsService(
+            productId: event.productId.toString());
 
         if (response.statusCode == 200) {
           var productDetailsModel = productDetailsModelFromJson(response.data);
 
-          yield ProductBuyNowSuccessful(productDetailsModel:productDetailsModel);
+          yield ProductBuyNowSuccessful(
+              productDetailsModel: productDetailsModel);
         }
-        
       } else {
         yield ProductBuyNowUnsuccessful();
       }
@@ -60,12 +65,12 @@ class ProductDetailsBloc
     if (event is OnRateButtonClicked) {
       yield ProductRatingLoading();
 
-      var response = await setProductRatingService(
+      var response = await productRepository.setProductRatingService(
           productId: event.productId.toString(), rating: event.feedbackRating);
 
       if (response.statusCode == 200) {
         var response =
-            await productDetailsService(productId: event.productId.toString());
+            await productRepository. productDetailsService(productId: event.productId.toString());
 
         if (response.statusCode == 200) {
           var productDetailsModel = productDetailsModelFromJson(response.data);

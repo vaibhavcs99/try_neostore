@@ -5,7 +5,6 @@ import 'package:try_neostore/bloc/cart_list_bloc/cart_list_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 
 import 'package:try_neostore/model/cart_list_model.dart';
-import 'package:try_neostore/repository/api_services.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
 
 class CartList extends StatefulWidget {
@@ -185,12 +184,6 @@ class _CartListState extends State<CartList> {
         )),
       ),
     );
-  }
-
-  Future<CartListModel> getMyModel() async {
-    var myJson = await cartListService(accessToken: widget.accessToken);
-    var myModel = cartListModelFromJson(myJson.data);
-    return myModel;
   }
 
   slideLeftBackground() {
