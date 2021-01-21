@@ -9,6 +9,7 @@ import 'package:sizer/sizer.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/bloc/edit_account_bloc/edit_account_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
+import 'package:try_neostore/screens/widgets/container_white_border.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
 import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
 import 'package:try_neostore/utils/validators.dart' as validators;
@@ -34,7 +35,8 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   String _lastName;
   String _email;
   int _phoneNumber;
-  String _dob;
+
+  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +64,9 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
                 SizedBox(height: 4.0.h),
                 firstNameField(),
                 lastNameField(),
-                dateOfBirth(),
                 emailField(),
                 phoneNumberField(),
+                dateOfBirth(),
                 MyButton(
                     myText: 'Update Details',
                     onPressed: () => _validateInputs())
@@ -168,22 +170,23 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   void registerUser() async {
     String finalImage;
     String initialPart = 'data:image/jpg;base64,';
-
-      final imageBytes =  _image.readAsBytesSync();
+    if (_image != null) {
+      final imageBytes = _image.readAsBytesSync();
       finalImage = base64Encode(imageBytes);
-      print(initialPart+finalImage.substring(0, 100));
+      print(initialPart + finalImage.substring(0, 100));
+    }
 
-      Map<String, dynamic> _userDetails = {
-        'first_name': _firstName,
-        'last_name': _lastName,
-        'email': _email,
-        'dob': _dob,
-        'profile_pic':  _image== null ? widget.profilePic : initialPart+ finalImage ,
-        'phone_no': _phoneNumber,
-      };
-      BlocProvider.of<EditAccountBloc>(context).add(OnUpdateDetailsPressed(
-          accessToken: widget.accessToken, userDetails: _userDetails));
- 
+    Map<String, dynamic> _userDetails = {
+      'first_name': _firstName,
+      'last_name': _lastName,
+      'email': _email,
+      'dob': selectedDate,
+      'profile_pic':
+          _image == null ? widget.profilePic : initialPart + finalImage,
+      'phone_no': _phoneNumber,
+    };
+    BlocProvider.of<EditAccountBloc>(context).add(OnUpdateDetailsPressed(
+        accessToken: widget.accessToken, userDetails: _userDetails));
   }
 
   firstNameField() {
@@ -233,14 +236,39 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   }
 
   dateOfBirth() {
-    return MyTextFormField(
-      myIcon: Icon(Icons.cake, color: Colors.white),
-      myLabelText: 'Date of Birth, DD/MM/YYYY',
-      validator: validateDob,
-      keyboardType: TextInputType.datetime,
-      onSaved: (newValue) {
-        _dob = newValue.trim();
-      },
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        // Expanded(
+        //   flex: 80,
+        //   child: MyTextFormField(
+        //     myIcon: Icon(Icons.cake, color: Colors.white),
+        //     myLabelText: 'Date of Birth',
+        //     validator: validateDob,
+        //     keyboardType: TextInputType.datetime,
+        //     rightPadding: 0,
+        //     onSaved: (newValue) {
+        //       _dob = newValue.trim();
+        //     },
+        //   ),
+        // ),
+        Expanded(
+            flex: 70,
+            child: BorderContainer(
+                myText: selectedDate.day.toString() +
+                    ' / ' +
+                    selectedDate.month.toString() +
+                    ' / ' +
+                    selectedDate.year.toString(),
+                myIcon: Icon(Icons.cake, color: Colors.white))),
+        Expanded(
+            flex: 30,
+            child: InkWell(
+                onTap: () => _selectDate(context),
+                child: Icon(Icons.calendar_today,
+                    color: Colors.white, size: 26.0.sp)))
+      ],
     );
   }
 
@@ -280,5 +308,19 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
         );
       },
     );
+  }
+
+  _selectDate(BuildContext buildContext) async {
+    final DateTime receivedTime = await showDatePicker(
+        context: buildContext,
+        initialDate: selectedDate,
+        firstDate: DateTime(1970, 1),
+        lastDate: selectedDate);
+
+    if (receivedTime != null) {
+      setState(() {
+        selectedDate = receivedTime;
+      });
+    }
   }
 }

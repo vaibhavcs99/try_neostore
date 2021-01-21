@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class BorderContainer extends StatelessWidget {
   final String myText;
@@ -9,25 +10,25 @@ class BorderContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 33),
-      child: AspectRatio(
-          aspectRatio: 22.0.w.rou / 3,
-          child: Container(
-              alignment: Alignment.center,
-              child: Row(
-                children: [
-                  SizedBox(width: 8),
-                  myIcon,
-                  SizedBox(width: 12),
-                  Text(myText ?? 'No data',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600)),
-                ],
+      padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 8.0.w),
+      child: Container(
+          width: 10.0.w,
+          height: 8.0.h,
+          alignment: Alignment.center,
+          child: Row(
+            children: [
+              Expanded(flex: 1, child: myIcon),SizedBox(width: 4.0.w),
+              Expanded(
+                flex: 6,
+                child: Text(myText ?? 'No data',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600)),
               ),
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.white)))),
+            ],
+          ),
+          decoration: BoxDecoration(border: Border.all(color: Colors.white))),
     );
   }
 }

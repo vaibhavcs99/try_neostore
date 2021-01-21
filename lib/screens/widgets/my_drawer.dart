@@ -1,13 +1,15 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/data_class.dart';
+import 'package:try_neostore/bloc/cart_list_bloc/cart_list_bloc.dart';
 import 'package:try_neostore/bloc/drawer_bloc/drawer_bloc.dart';
 import 'package:try_neostore/constants/constants.dart';
 
 class MyDrawer extends StatefulWidget {
   final String accessToken;
 
-  const MyDrawer({Key key, this.accessToken}) : super(key: key);
+  const MyDrawer({Key key, @required this.accessToken}) : super(key: key);
 
   @override
   _MyDrawerState createState() => _MyDrawerState();
@@ -18,6 +20,8 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     BlocProvider.of<DrawerBloc>(context)
         .add(OnShowDrawerHeader(accessToken: widget.accessToken));
+    BlocProvider.of<CartListBloc>(context)
+        .add(OnShowCartList(accessToken: widget.accessToken));
 
     return BlocListener<DrawerBloc, DrawerState>(
         listener: (context, state) {
@@ -28,71 +32,134 @@ class _MyDrawerState extends State<MyDrawer> {
         },
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              buildUserAccountHeader(),
-              ListTile(
-                  title: Text('Home'),
-                  leading: Icon(Icons.home),
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, route_home_screen,
-                        arguments: widget.accessToken);
-                  }),
-              ListTile(
-                  title: Text('My Cart'),
-                  leading: Icon(Icons.shopping_cart),
-                  onTap: () {}),
-              ListTile(
-                  title: Text('Tables'),
-                  leading: Icon(Icons.shopping_cart),
-                  onTap: () => Navigator.pushNamed(context, route_product_list,
-                      //imdex+1 is product category id number
-                      arguments: ScreenParameters(
-                          parameter1: 1, parameter2: widget.accessToken))),
-              ListTile(
-                  title: Text('Chair'),
-                  leading: Icon(Icons.shopping_cart),
-                  onTap: () => Navigator.pushNamed(context, route_product_list,
-                      //imdex+1 is product category id number
-                      arguments: ScreenParameters(
-                          parameter1: 2, parameter2: widget.accessToken))),
-              ListTile(
-                  title: Text('Sofas'),
-                  leading: Icon(Icons.shopping_cart),
-                  onTap: () => Navigator.pushNamed(context, route_product_list,
-                      //imdex+1 is product category id number
-                      arguments: ScreenParameters(
-                          parameter1: 3, parameter2: widget.accessToken))),
-              ListTile(
-                  title: Text('Bed'),
-                  leading: Icon(Icons.shopping_cart),
-                  onTap: () => Navigator.pushNamed(context, route_product_list,
-                      //imdex+1 is product category id number
-                      arguments: ScreenParameters(
-                          parameter1: 4, parameter2: widget.accessToken))),
-              ListTile(
-                title: Text('My Account'),
-                leading: Icon(Icons.person),
-                onTap: () => Navigator.pushReplacementNamed(
-                    context, route_my_account_details,
-                    arguments: widget.accessToken),
-              ),
-              ListTile(title: Text('Store Locator'), leading: Icon(Icons.map)),
-              ListTile(
-                  title: Text('My Orders'),
-                  leading: Icon(Icons.view_list),
+          child: Container(
+            color: colorBlackBackground,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                buildUserAccountHeader(),
+                Divider(color: Colors.black, thickness: 2),
+                ListTile(
+                    title: Text('Home', style: TextStyle(color: Colors.white)),
+                    leading: Icon(Icons.home, color: Colors.white),
+                    onTap: () {
+                      Navigator.pushReplacementNamed(context, route_home_screen,
+                          arguments: widget.accessToken);
+                    }),
+                Divider(color: Colors.black, thickness: 2),
+                BlocBuilder<CartListBloc, CartListState>(
+                  builder: (context, state) {
+                    if (state is CartListSuccessful) {
+                      int count = state.cartListModel.count;
+                      return ListTile(
+                          title: Text('My Cart',
+                              style: TextStyle(color: Colors.white)),
+                          leading:
+                              Icon(Icons.shopping_cart, color: Colors.white),
+                          trailing: Badge(padding: EdgeInsets.all(12),
+                            badgeContent:
+                                Text(count==null?'0':count.toString()),
+                            child: Icon(Icons.settings),
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, route_cart_list,
+                                arguments: widget.accessToken);
+                          });
+                    }
+                    return buildCartListTileGeneral(context);
+                  },
+                ),
+                Divider(color: Colors.black, thickness: 2),
+                ListTile(
+                    title:
+                        Text('Tables', style: TextStyle(color: Colors.white)),
+                    leading:
+                        Image.asset('assets/icons/tables_icon.png', scale: 0.8),
+                    onTap: () => Navigator.pushNamed(
+                        context, route_product_list,
+                        //imdex+1 is product category id number
+                        arguments: ScreenParameters(
+                            parameter1: 1, parameter2: widget.accessToken))),
+                Divider(color: Colors.black, thickness: 2),
+                ListTile(
+                    title:
+                        Text('Chairs', style: TextStyle(color: Colors.white)),
+                    leading:
+                        Image.asset('assets/icons/chair_icon.png', scale: 0.8),
+                    onTap: () => Navigator.pushNamed(
+                        context, route_product_list,
+                        //imdex+1 is product category id number
+                        arguments: ScreenParameters(
+                            parameter1: 2, parameter2: widget.accessToken))),
+                Divider(color: Colors.black, thickness: 2),
+                ListTile(
+                    title: Text('Sofas', style: TextStyle(color: Colors.white)),
+                    leading:
+                        Image.asset('assets/icons/sofa_icon.png', scale: 0.8),
+                    onTap: () => Navigator.pushNamed(
+                        context, route_product_list,
+                        //imdex+1 is product category id number
+                        arguments: ScreenParameters(
+                            parameter1: 3, parameter2: widget.accessToken))),
+                Divider(color: Colors.black, thickness: 2),
+                ListTile(
+                    title: Text('Cupboards',
+                        style: TextStyle(color: Colors.white)),
+                    leading: Image.asset('assets/icons/cupboard_icon.png',
+                        scale: 0.8),
+                    onTap: () => Navigator.pushNamed(
+                        context, route_product_list,
+                        //imdex+1 is product category id number
+                        arguments: ScreenParameters(
+                            parameter1: 4, parameter2: widget.accessToken))),
+                Divider(color: Colors.black, thickness: 2),
+                ListTile(
+                  title:
+                      Text('My Account', style: TextStyle(color: Colors.white)),
+                  leading: Icon(Icons.person, color: Colors.white),
                   onTap: () => Navigator.pushReplacementNamed(
-                      context, route_order_list,
-                      arguments: widget.accessToken)),
-              ListTile(
-                title: Text('LogOut'),
-                leading: Icon(Icons.exit_to_app),
-                onTap: _onLogOut,
-              )
-            ],
+                      context, route_my_account_details,
+                      arguments: widget.accessToken),
+                ),
+                Divider(color: Colors.black, thickness: 2),
+                ListTile(
+                    title: Text('Store Locator',
+                        style: TextStyle(color: Colors.white)),
+                    leading: Icon(Icons.map, color: Colors.white)),
+                Divider(color: Colors.black, thickness: 2),
+                ListTile(
+                    title: Text('My Orders',
+                        style: TextStyle(color: Colors.white)),
+                    leading: Icon(Icons.view_list, color: Colors.white),
+                    onTap: () => Navigator.pushReplacementNamed(
+                        context, route_order_list,
+                        arguments: widget.accessToken)),
+                Divider(color: Colors.black, thickness: 2),
+                ListTile(
+                  title: Text('LogOut', style: TextStyle(color: Colors.white)),
+                  leading: Icon(Icons.exit_to_app, color: Colors.white),
+                  onTap: _onLogOut,
+                )
+              ],
+            ),
           ),
         ));
+  }
+
+  ListTile buildCartListTileGeneral(BuildContext context) {
+    return ListTile(
+                      title: Text('My Cart',
+                          style: TextStyle(color: Colors.white)),
+                      leading: Icon(Icons.shopping_cart, color: Colors.white),
+                      trailing: Badge(
+                        badgeContent:
+                            Text('0'),
+                        child: Icon(Icons.settings),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, route_cart_list,
+                            arguments: widget.accessToken);
+                      });
   }
 
   buildUserAccountHeader() {
@@ -100,24 +167,32 @@ class _MyDrawerState extends State<MyDrawer> {
       builder: (context, state) {
         if (state is DrawerSuccessful) {
           var user = state.fetchDataResponse.data.userData;
-          return UserAccountsDrawerHeader(
-            currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    user.profilePic.isEmpty? 'https://picsum.photos/200/300':user.profilePic)),
-            accountName: Text(
-              '${user.firstName}' + ' ' + '${user.lastName}',
-              style: TextStyle(fontSize: 23),
+          return Container(
+            color: colorBlackBackground,
+            child: UserAccountsDrawerHeader(
+              decoration: BoxDecoration(color: colorBlackBackground),
+              currentAccountPicture: CircleAvatar(
+                  backgroundImage: NetworkImage(user.profilePic.isEmpty
+                      ? 'https://picsum.photos/200/300'
+                      : user.profilePic)),
+              accountName: Text(
+                '${user.firstName}' + ' ' + '${user.lastName}',
+                style: TextStyle(fontSize: 23),
+              ),
+              accountEmail: Text('${user.email}'),
             ),
-            accountEmail: Text('${user.email}'),
           );
         }
 
-        return UserAccountsDrawerHeader(
-          accountName: Text(
-            '',
-            style: TextStyle(fontSize: 23),
+        return Container(
+          color: colorBlackBackground,
+          child: UserAccountsDrawerHeader(
+            accountName: Text(
+              '',
+              style: TextStyle(fontSize: 23),
+            ),
+            accountEmail: Text(''),
           ),
-          accountEmail: Text(''),
         );
       },
     );

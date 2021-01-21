@@ -8,19 +8,22 @@ class MyTextFormField extends StatelessWidget {
   final FormFieldValidator<String> validator;
   final FormFieldSetter<String> onSaved;
   final Widget myIcon;
+  final double rightPadding;
 
-  MyTextFormField(
-      {@required this.myLabelText,
-      @required this.validator,
-      @required this.onSaved,
-      @required this.myIcon,
-      this.obscureText,
-      this.keyboardType});
+  MyTextFormField({
+    @required this.myLabelText,
+    @required this.validator,
+    @required this.onSaved,
+    @required this.myIcon,
+    this.obscureText,
+    this.keyboardType,
+    this.rightPadding,
+  });
 // const EdgeInsets.only(left: 33,right: 33, bottom: 13),
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.only(left: 9.0.w, right: 9.0.w, bottom: 2.0.h),
+      padding: EdgeInsets.only(left: 9.0.w, right: rightPadding??9.0.w, bottom: 2.0.h),
       child: TextFormField(
         obscureText: obscureText ?? false,
         decoration: InputDecoration(

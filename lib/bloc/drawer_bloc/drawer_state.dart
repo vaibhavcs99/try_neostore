@@ -16,6 +16,9 @@ class DrawerSuccessful extends DrawerState {
   DrawerSuccessful({
    @required this.fetchDataResponse,
   });
+
+    @override
+  List<Object> get props => [fetchDataResponse];
 }
 
 class DrawerUnsuccessful extends DrawerState {}

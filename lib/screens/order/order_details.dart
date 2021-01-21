@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/bloc/order_details_bloc/order_details_bloc.dart';
 import 'package:try_neostore/model/order_details_model.dart';
+import 'package:sizer/sizer.dart';
 
 class OrderDetails extends StatefulWidget {
   final int orderId;
@@ -25,12 +26,15 @@ class _OrderDetailsState extends State<OrderDetails> {
       body: BlocBuilder<OrderDetailsBloc, OrderDetailsState>(
         builder: (context, state) {
           if (state is OrderDetailsSuccessful) {
-
-            return ListView(
-              children: [
-                buildListTile(context, state.orderDetailsModel),
-                buildTotalPrice(state.orderDetailsModel),
-              ],
+            return Padding(
+              padding:  EdgeInsets.symmetric(horizontal:2.0.w),
+              child: ListView(
+                children: [
+                  SizedBox(height: 2.0.h),
+                  buildListTile(context, state.orderDetailsModel),
+                  buildTotalPrice(state.orderDetailsModel),
+                ],
+              ),
             );
           }
           return Center(child: CircularProgressIndicator());
@@ -42,29 +46,27 @@ class _OrderDetailsState extends State<OrderDetails> {
   SizedBox buildListTile(
       BuildContext context, OrderDetailsModel orderDetailsModel) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.7,
+      height: 70.0.h,
       child: ListView.builder(
         itemCount: orderDetailsModel.data.orderDetails.length,
         itemBuilder: (context, index) {
           var orderData = orderDetailsModel.data.orderDetails[index];
           return Card(
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.18,
+              height: 18.0.h,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
                       flex: 1,
                       child: Container(
-                        width: 100,
                         child: Image.network(orderData.prodImage),
                       )),
                   Expanded(
                     flex: 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, top: 17.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      padding:  EdgeInsets.only(left: 6.0.w, top: 3.0.h),
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(orderData.prodName,
                               style: TextStyle(fontSize: 23)),

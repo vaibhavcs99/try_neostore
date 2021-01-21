@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  badges: ^1.1.6
   carousel_slider: ^2.3.1
   cupertino_icons: ^1.0.0
   dio: ^3.0.10
@@ -60,6 +61,10 @@ flutter:
     - assets/slider_img2.jpg
     - assets/slider_img3.jpg
     - assets/slider_img4.jpg
+    - assets/icons/sofa_icon.png
+    - assets/icons/tables_icon.png
+    - assets/icons/chair_icon.png
+    - assets/icons/cupboard_icon.png
     # - assets/chair.imageset/chair.png
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

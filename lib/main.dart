@@ -75,6 +75,9 @@ MultiBlocProvider providers(UserSession userSession) {
       BlocProvider(
           create: (context) => RegisterBloc(
               authenticationBloc: context.read<AuthenticationBloc>())),
+      BlocProvider(
+          create: (context) => DrawerBloc(
+              authenticationBloc: context.read<AuthenticationBloc>())),
       BlocProvider(create: (_) => ForgotPasswordBloc()),
       BlocProvider(create: (_) => ProductListBloc()),
       BlocProvider(create: (_) => ProductDetailsBloc()),
@@ -85,11 +88,9 @@ MultiBlocProvider providers(UserSession userSession) {
       BlocProvider(create: (_) => MyAccountBloc()),
       BlocProvider(create: (_) => ChangePasswordBloc()),
       BlocProvider(
-          create: (context) =>
-              EditAccountBloc(myAccountBloc: context.read<MyAccountBloc>())),
-      BlocProvider(
-          create: (context) => DrawerBloc(
-              authenticationBloc: context.read<AuthenticationBloc>()))
+          create: (context) => EditAccountBloc(
+              myAccountBloc: context.read<MyAccountBloc>(),
+              drawerBloc: context.read<DrawerBloc>())),
     ],
     child: NeoStore(),
   );

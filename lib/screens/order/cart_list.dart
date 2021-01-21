@@ -6,6 +6,7 @@ import 'package:try_neostore/constants/constants.dart';
 
 import 'package:try_neostore/model/cart_list_model.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
+import 'package:try_neostore/screens/widgets/my_drawer.dart';
 
 class CartList extends StatefulWidget {
   final String accessToken;
@@ -27,6 +28,7 @@ class _CartListState extends State<CartList> {
         appBar: AppBar(
             title:
                 Text('My Cart', style: TextStyle(fontWeight: FontWeight.bold))),
+                drawer: Drawer(child: MyDrawer(accessToken: widget.accessToken)),
         body:
             BlocBuilder<CartListBloc, CartListState>(builder: (context, state) {
           print(state.toString());
@@ -50,7 +52,7 @@ class _CartListState extends State<CartList> {
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 1.0.h),
-      child: Column(
+      child: ListView(
         children: [
           SizedBox(height: 1.0.h),
           buildListTile(context, state),
