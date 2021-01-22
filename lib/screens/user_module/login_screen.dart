@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/bloc/login_bloc/login_bloc.dart';
@@ -22,7 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     bool keyboardIsClosed = MediaQuery.of(context).viewInsets.bottom == 0;
-    var height = MediaQuery.of(context).size.height;
     return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) async {
           if (state is LoginSuccessful) {
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: ListView(
                   children: [
-                    SizedBox(height: height * 0.2),
+                    SizedBox(height: 13.0.h),
                     Center(
                       child: Text('NeoSTORE',
                           style: TextStyle(
@@ -59,13 +59,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.bold,
                               color: Colors.white)),
                     ),
-                    SizedBox(height: 49),
+                    SizedBox(height: 6.0.h),
                     emailField(),
                     passwordField(),
                     MyButton(
                         onPressed: () => _validateInputs(), myText: 'Login'),
                     SizedBox(
-                      height: 15,
+                      height: 4.0.h,
                     ),
                     Center(
                       child: RichText(
@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               text: 'Forgot Password?',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20.0,
+                                  fontSize: 17.0.sp,
                                   fontWeight: FontWeight.w500),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       context, route_forgot_password);
                                 })),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.20),
+                    SizedBox(height: 11.0.h),
                     Padding(
                       padding: const EdgeInsets.only(left: 33.0),
                       child: Text(

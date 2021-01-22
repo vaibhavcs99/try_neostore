@@ -51,17 +51,18 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
   }
 
   ListView buildAccountScreen(UserData userData, BuildContext context) {
+    print(userData.accessToken);
     return ListView(
       children: [
-
         Container(
           height: 20.0.h,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             image: DecorationImage(
-              image: NetworkImage(userData.profilePic.isEmpty
-                  ? 'https://picsum.photos/200/300'
-                  : userData.profilePic),
+              image: NetworkImage(
+                  userData.profilePic == null || userData.profilePic == ''
+                      ? 'https://picsum.photos/200/300'
+                      : userData.profilePic),
               fit: BoxFit.fill,
             ),
           ),

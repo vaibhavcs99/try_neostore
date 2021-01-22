@@ -9,21 +9,25 @@ class MyTextFormField extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
   final Widget myIcon;
   final double rightPadding;
+  final TextEditingController controller;
 
   MyTextFormField({
+    Key key,
     @required this.myLabelText,
     @required this.validator,
     @required this.onSaved,
     @required this.myIcon,
-    this.obscureText,
-    this.keyboardType,
     this.rightPadding,
-  });
+    this.controller,
+    this.keyboardType,
+    this.obscureText,
+  }) : super(key: key);
 // const EdgeInsets.only(left: 33,right: 33, bottom: 13),
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 9.0.w, right: rightPadding??9.0.w, bottom: 2.0.h),
+      padding: EdgeInsets.only(
+          left: 9.0.w, right: rightPadding ?? 9.0.w, bottom: 2.0.h),
       child: TextFormField(
         obscureText: obscureText ?? false,
         decoration: InputDecoration(
@@ -41,6 +45,7 @@ class MyTextFormField extends StatelessWidget {
             labelStyle:
                 TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         validator: validator,
+        controller: controller,
         onSaved: onSaved,
         keyboardType: keyboardType,
         style: TextStyle(color: Colors.white),

@@ -31,6 +31,9 @@ class _MyOrdersState extends State<MyOrders> {
             body: BlocBuilder<OrderListBloc, OrderListState>(
               builder: (context, state) {
                 if (state is OrderListSuccessful) {
+                  if (state.orderListModel.data.length == 0)
+                    return Center(child: Text('No orders placed.'));
+
                   return buildOrderListScreen(state);
                 }
                 return Center(child: CircularProgressIndicator());
@@ -44,7 +47,7 @@ class _MyOrdersState extends State<MyOrders> {
       itemCount: state.orderListModel.data.length,
       itemBuilder: (context, index) {
         var orderData = state.orderListModel.data[index];
-        
+
         return ListTile(
           title: Text('Order ID : ${orderData.id.toString()}'),
           subtitle: Text('Ordered Date : ${orderData.created}'),

@@ -172,7 +172,7 @@ class _MyDrawerState extends State<MyDrawer> {
             child: UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: colorBlackBackground),
               currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(user.profilePic.isEmpty
+                  backgroundImage: NetworkImage(user.profilePic==null || user.profilePic==''
                       ? 'https://picsum.photos/200/300'
                       : user.profilePic)),
               accountName: Text(

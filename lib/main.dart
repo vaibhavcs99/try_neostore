@@ -6,9 +6,6 @@ import 'package:try_neostore/bloc/forgot_password_bloc/forgot_password_bloc.dart
 import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/Utils/router.dart';
 import 'package:try_neostore/repository/user_session.dart';
-import 'package:try_neostore/repository/user_repository.dart';
-import 'package:try_neostore/screens/order/address_list.dart';
-
 import 'bloc/address_bloc/address_bloc.dart';
 import 'bloc/auth_bloc/authentication_bloc.dart';
 import 'bloc/cart_list_bloc/cart_list_bloc.dart';
@@ -84,10 +81,12 @@ MultiBlocProvider providers(UserSession userSession) {
       BlocProvider(create: (_) => ProductListBloc()),
       BlocProvider(create: (_) => ProductDetailsBloc()),
       BlocProvider(create: (_) => CartListBloc()),
-      BlocProvider(create: (_) => EnterAddressBloc()),
+      BlocProvider(create: (_) => AddressListBloc()),
+      BlocProvider(
+          create: (context) => EnterAddressBloc(
+              addressListBloc: context.read<AddressListBloc>())),
       BlocProvider(create: (_) => OrderListBloc()),
       BlocProvider(create: (_) => OrderDetailsBloc()),
-      BlocProvider(create: (_) => AddressListBloc()),
       BlocProvider(create: (_) => MyAccountBloc()),
       BlocProvider(create: (_) => ChangePasswordBloc()),
       BlocProvider(

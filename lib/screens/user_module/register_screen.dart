@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/bloc/register_bloc/register_bloc.dart';
@@ -51,11 +52,11 @@ class _RegisterState extends State<Register> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: ListView(
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                SizedBox(height: 3.0.h),
                 Center(
                   child: Text('NeoSTORE',
                       style: TextStyle(
-                          fontSize: 45,
+                          fontSize: 37.0.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
                 ),
@@ -180,14 +181,18 @@ class _RegisterState extends State<Register> {
   }
 
   Row buildGender() {
-    return Row(mainAxisAlignment: MainAxisAlignment.center,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Gender',
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 20.0,
-                fontWeight: FontWeight.w500)),SizedBox(width: 28.0),
-        Checkbox(checkColor: primaryRed2,activeColor: Colors.white,
+                fontWeight: FontWeight.w500)),
+        SizedBox(width: 28.0),
+        Checkbox(
+          checkColor: primaryRed2,
+          activeColor: Colors.white,
           value: _maleCheckBox,
           onChanged: (value) {
             _gender = 'M';
@@ -199,7 +204,9 @@ class _RegisterState extends State<Register> {
           },
         ),
         Text('Male'),
-        Checkbox(checkColor: primaryRed2,activeColor: Colors.white,
+        Checkbox(
+          checkColor: primaryRed2,
+          activeColor: Colors.white,
           value: _femaleCheckBox,
           onChanged: (value) {
             setState(() {
@@ -223,7 +230,9 @@ class _RegisterState extends State<Register> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Checkbox(checkColor: primaryRed2,activeColor: Colors.white,
+        Checkbox(
+            checkColor: primaryRed2,
+            activeColor: Colors.white,
             value: termsAndConditionValue ?? false,
             onChanged: (value) {
               setState(() {
