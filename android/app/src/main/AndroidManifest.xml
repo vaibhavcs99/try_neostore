@@ -9,8 +9,8 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="try_neostore"
-        android:icon="@mipmap/ic_launcher">
+            android:label="NeoSTORE"
+        android:icon="@mipmap/neo_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
