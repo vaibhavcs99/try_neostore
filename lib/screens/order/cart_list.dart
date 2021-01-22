@@ -141,7 +141,7 @@ class _CartListState extends State<CartList> {
   MyButton buildOrderButton(BuildContext context) {
     return MyButton(
       color: primaryRed2,
-      onPressed: () => Navigator.pushNamed(context, route_enter_address,
+      onPressed: () => Navigator.pushNamed(context, route_address_list,
           arguments: widget.accessToken),
       myText: 'Order Now',
       textColor: Colors.white,

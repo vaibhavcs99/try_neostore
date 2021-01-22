@@ -3,33 +3,32 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:try_neostore/model/order_details_model.dart';
+import 'package:try_neostore/repository/db_helper.dart';
 import 'package:try_neostore/repository/order_repository.dart';
 
 part 'address_event.dart';
 part 'address_state.dart';
 
-class AddressBloc extends Bloc<AddressEvent, AddressState> {
+class EnterAddressBloc extends Bloc<EnterAddressEvent, EnterAddressState> {
+  final dbHelper = DatabaseHelper.instance;
 
-    final OrderRepository orderRepository = OrderRepository();
-
-  AddressBloc() : super(AddressInitial());
+  EnterAddressBloc() : super(EnterAddressInitial());
 
   @override
-  Stream<AddressState> mapEventToState(
-    AddressEvent event,
+  Stream<EnterAddressState> mapEventToState(
+    EnterAddressEvent event,
   ) async* {
-    if (event is OnOrderNowPressed) {
-      yield OrderLoading();
+    if (event is OnSaveAddressPressed) {
+      yield SaveAddressLoading();
 
-      var response = await orderRepository. orderItemsService(
-          address: event.address, accessToken: event.accessToken);
-
-      if (response.statusCode == 200) {
-        yield OrderSuccessful(accessToken: event.accessToken);
-      } else {
-        yield OrderUnsuccessful();
-      }
+      Map<String, String> myAddress = {
+        DatabaseHelper.columnAddress: event.address
+      };
+      await dbHelper.insertAddress(myAddress);
+      
+      yield SaveAddressSuccessful(accessToken: event.accessToken);
     }
+
+
   }
 }

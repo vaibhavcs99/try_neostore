@@ -1,22 +1,22 @@
 part of 'address_bloc.dart';
 
-abstract class AddressState extends Equatable {
-  const AddressState();
+abstract class EnterAddressState extends Equatable {
+  const EnterAddressState();
 
   @override
   List<Object> get props => [];
 }
 
-class AddressInitial extends AddressState {}
+class EnterAddressInitial extends EnterAddressState {}
 
 //**************************************************** */
-class OrderLoading extends AddressState {}
+class SaveAddressLoading extends EnterAddressState {}
 
-class OrderSuccessful extends AddressState {
+class SaveAddressSuccessful extends EnterAddressState {
   final String accessToken;
-  OrderSuccessful({
+  SaveAddressSuccessful({
    @required this.accessToken,
   });
 }
 
-class OrderUnsuccessful extends AddressState {}
+class SaveAddressUnsuccessful extends EnterAddressState {}
