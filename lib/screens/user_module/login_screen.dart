@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       context, route_forgot_password);
                                 })),
                     ),
-                    SizedBox(height: 11.0.h),
+                    SizedBox(height: 15.0.h),
                     Padding(
                       padding: const EdgeInsets.only(left: 33.0),
                       child: Text(
