@@ -1,17 +1,25 @@
 part of 'address_bloc.dart';
 
-abstract class AddressEvent extends Equatable {
-  const AddressEvent();
+abstract class EnterAddressEvent extends Equatable {
+  const EnterAddressEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class OnOrderNowPressed extends AddressEvent {
+class OnSaveAddressPressed extends EnterAddressEvent {
   final String accessToken;
   final String address;
-  OnOrderNowPressed({
+  OnSaveAddressPressed({
     @required this.accessToken,
     @required this.address,
   });
 }
+// class OnOrderNowPressed extends AddressEvent {
+//   final String accessToken;
+//   final String address;
+//   OnOrderNowPressed({
+//     @required this.accessToken,
+//     @required this.address,
+//   });
+// }

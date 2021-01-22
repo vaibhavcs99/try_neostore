@@ -53,7 +53,7 @@ class _OrderDetailsState extends State<OrderDetails> {
           var orderData = orderDetailsModel.data.orderDetails[index];
           return Card(
             child: Container(
-              height: 18.0.h,
+              height: 25.0.h,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [

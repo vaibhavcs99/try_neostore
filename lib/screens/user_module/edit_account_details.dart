@@ -38,6 +38,19 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
 
   DateTime selectedDate = DateTime.now();
 
+  var firstNameController = TextEditingController();
+  var lastNameController = TextEditingController();
+  var emailController = TextEditingController();
+  var phoneNumberController = TextEditingController();
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    phoneNumberController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<EditAccountBloc, EditAccountState>(
@@ -127,7 +140,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: NetworkImage(widget.profilePic.isEmpty
+                      image: NetworkImage(widget.profilePic == null
                           ? 'https://picsum.photos/200/300'
                           : widget.profilePic),
                       fit: BoxFit.fill,
@@ -160,6 +173,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      clearAllTexts();
       registerUser(); //same method as authenticate user.
     } else {
       _scaffoldKey.currentState
@@ -181,18 +195,22 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       'last_name': _lastName,
       'email': _email,
       'dob': selectedDate,
-      'profile_pic':
-          _image == null ? widget.profilePic : initialPart + finalImage,
+      'profile_pic': _image == null
+          ? (widget.profilePic == null ? 'null' : widget.profilePic)
+          : initialPart + finalImage,
       'phone_no': _phoneNumber,
     };
     BlocProvider.of<EditAccountBloc>(context).add(OnUpdateDetailsPressed(
         accessToken: widget.accessToken, userDetails: _userDetails));
+    await Future.delayed(Duration(seconds: 3));
+    Navigator.pop(context);
   }
 
   firstNameField() {
     return MyTextFormField(
       myIcon: Icon(Icons.person, color: Colors.white),
       myLabelText: 'First Name',
+      controller: firstNameController,
       validator: validateName,
       onSaved: (newValue) {
         _firstName = newValue.trim();
@@ -205,6 +223,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       myIcon: Icon(Icons.person, color: Colors.white),
       myLabelText: 'Last Name',
       validator: validateName,
+      controller: lastNameController,
       onSaved: (newValue) {
         _lastName = newValue.trim();
       },
@@ -217,6 +236,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       myLabelText: 'Email',
       keyboardType: TextInputType.emailAddress,
       validator: validateEmail,
+      controller: emailController,
       onSaved: (newValue) {
         _email = newValue.trim();
       },
@@ -229,6 +249,7 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
       myLabelText: 'Phone Number',
       keyboardType: TextInputType.number,
       validator: validatePhoneNumber,
+      controller: phoneNumberController,
       onSaved: (newValue) {
         _phoneNumber = int.parse(newValue.trim());
       },
@@ -322,5 +343,12 @@ class _EditAccountDetailsState extends State<EditAccountDetails> {
         selectedDate = receivedTime;
       });
     }
+  }
+
+  void clearAllTexts() {
+    firstNameController.clear();
+    lastNameController.clear();
+    emailController.clear();
+    phoneNumberController.clear();
   }
 }

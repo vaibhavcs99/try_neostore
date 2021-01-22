@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/bloc/forgot_password_bloc/forgot_password_bloc.dart';
@@ -38,7 +39,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   buildEmailText(),
-                  SizedBox(height: 13),
+                  SizedBox(height: 3.0.h),
                   emailField(),
                   MyButton(onPressed: () => _validateInputs(), myText: 'Reset'),
                 ],
@@ -51,7 +52,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Text buildEmailText() {
     return Text('Enter your email address.',
         style: TextStyle(
-            color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w500));
+            color: Colors.white, fontSize: 17.0.sp, fontWeight: FontWeight.w500));
   }
 
   emailField() {

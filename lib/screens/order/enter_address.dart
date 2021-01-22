@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_neostore/Utils/validators.dart';
 import 'package:try_neostore/bloc/address_bloc/address_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
 import 'package:try_neostore/screens/widgets/my_button.dart';
 
 class EnterAddress extends StatefulWidget {
@@ -28,15 +27,13 @@ class _EnterAddressState extends State<EnterAddress> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddressBloc, AddressState>(
+    return BlocListener<EnterAddressBloc, EnterAddressState>(
       listener: (context, state) async {
-        if (state is OrderSuccessful) {
+        if (state is SaveAddressSuccessful) {
           _scaffoldKey.currentState.showSnackBar(
-              SnackBar(content: Text('Order Placed Successfully')));
+              SnackBar(content: Text('Address Saved Successfully')));
           await Future.delayed(Duration(seconds: 3));
-          Navigator.pushNamedAndRemoveUntil(
-              context, route_home_screen, (route) => false,
-              arguments: widget.accessToken);
+          Navigator.pop(context);
         }
       },
       child: Scaffold(
@@ -59,7 +56,7 @@ class _EnterAddressState extends State<EnterAddress> {
                 SizedBox(height: 27),
                 MyButton(
                     onPressed: () => validateInputs(),
-                    myText: 'Order Now',
+                    myText: 'Save Address',
                     color: Colors.red,
                     textColor: Colors.white)
               ],
@@ -247,18 +244,18 @@ class _EnterAddressState extends State<EnterAddress> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       _entireAddress = _streetAddress +
-          ' ' +
+          ', ' +
           _landmark +
-          ' ' +
+          ', ' +
           _city +
-          ' ' +
+          ', ' +
           _state +
-          ' ' +
+          ', ' +
           _zipCode +
-          ' ' +
+          ', ' +
           _country;
       //
-      BlocProvider.of<AddressBloc>(context).add(OnOrderNowPressed(
+      BlocProvider.of<EnterAddressBloc>(context).add(OnSaveAddressPressed(
           accessToken: widget.accessToken, address: _entireAddress));
     }
   }

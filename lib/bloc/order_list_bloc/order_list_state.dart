@@ -16,6 +16,8 @@ class OrderListSuccessful extends OrderListState {
   OrderListSuccessful({
     @required this.orderListModel,
   });
+    @override
+  List<Object> get props => [orderListModel];
 }
 
 class OrderListUnsuccessful extends OrderListState {}

@@ -27,6 +27,7 @@ class EditAccountBloc extends Bloc<EditAccountEvent, EditAccountState> {
   ) async* {
     if (event is OnUpdateDetailsPressed) {
       yield EditAccountLoading();
+      print(event.userDetails.toString());
       var response = await userRepository.editAccountDetailsService(
           accessToken: event.accessToken, userDetails: event.userDetails);
 
@@ -35,6 +36,7 @@ class EditAccountBloc extends Bloc<EditAccountEvent, EditAccountState> {
         drawerBloc.add(OnShowDrawerHeader(accessToken: event.accessToken));
         yield EditAccountSuccessful();
       } else {
+        print(response.data.toString());
         yield EditAccountUnsuccessful();
       }
     }

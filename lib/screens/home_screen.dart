@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   CarouselSlider buildCarouselSlider() {
     return CarouselSlider(
-      options: CarouselOptions(
+      options: CarouselOptions(autoPlayInterval: Duration(seconds: 3),
           aspectRatio: 16 / 9,
           autoPlay: true,
           enlargeCenterPage: true,

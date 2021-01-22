@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:try_neostore/Utils/data_class.dart';
 import 'package:try_neostore/constants/constants.dart';
+import 'package:try_neostore/screens/order/address_list.dart';
 import 'package:try_neostore/screens/widgets/splash_screen.dart';
 import 'package:try_neostore/screens/order/cart_list.dart';
 import 'package:try_neostore/screens/order/enter_address.dart';
@@ -107,6 +108,12 @@ class AppRouter {
         String accessToken = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => EnterAddress(accessToken: accessToken),
+        );
+        break;
+      case route_address_list:
+        String accessToken = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => AddressList(accessToken: accessToken),
         );
         break;
       case route_order_list:
