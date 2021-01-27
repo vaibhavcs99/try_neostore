@@ -1,10 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:try_neostore/Utils/data_class.dart';
-import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/screens/widgets/my_drawer.dart';
 import 'package:sizer/sizer.dart';
 
+import '../Utils/data_class.dart';
+import '../constants/constants.dart';
 import 'widgets/my_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,8 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(

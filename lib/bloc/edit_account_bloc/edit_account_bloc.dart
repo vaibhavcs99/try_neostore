@@ -4,9 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:try_neostore/bloc/drawer_bloc/drawer_bloc.dart';
-import 'package:try_neostore/bloc/my_account_bloc/my_account_bloc.dart';
-import 'package:try_neostore/repository/user_repository.dart';
+import '../../repository/user_repository.dart';
+import '../drawer_bloc/drawer_bloc.dart';
+import '../my_account_bloc/my_account_bloc.dart';
 
 part 'edit_account_event.dart';
 part 'edit_account_state.dart';

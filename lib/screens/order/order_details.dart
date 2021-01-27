@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:try_neostore/bloc/order_details_bloc/order_details_bloc.dart';
-import 'package:try_neostore/model/order_details_model.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../bloc/order_details_bloc/order_details_bloc.dart';
+import '../../model/order_details_model.dart';
 
 class OrderDetails extends StatefulWidget {
   final int orderId;

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:try_neostore/repository/user_repository.dart';
-import 'package:try_neostore/bloc/my_account_bloc/my_account_bloc.dart';
+
+import '../../repository/user_repository.dart';
 
 part 'change_password_event.dart';
 part 'change_password_state.dart';

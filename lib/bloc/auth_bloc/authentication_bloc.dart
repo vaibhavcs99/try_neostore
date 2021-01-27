@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:try_neostore/repository/user_session.dart';
+import '../../repository/user_session.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';

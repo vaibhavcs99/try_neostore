@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:try_neostore/model/cart_list_model.dart';
-import 'package:try_neostore/model/error.dart';
-import 'package:try_neostore/repository/cart_repository.dart';
+
+import '../../model/cart_list_model.dart';
+import '../../model/error.dart';
+import '../../repository/cart_repository.dart';
 
 part 'cart_list_event.dart';
 part 'cart_list_state.dart';

@@ -5,9 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:try_neostore/bloc/auth_bloc/authentication_bloc.dart';
-import 'package:try_neostore/model/api_response.dart';
-import 'package:try_neostore/repository/user_repository.dart';
+
+import '../../model/api_response.dart';
+import '../../repository/user_repository.dart';
+import '../auth_bloc/authentication_bloc.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

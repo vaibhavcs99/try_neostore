@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:try_neostore/repository/db_helper.dart';
-import 'package:try_neostore/repository/order_repository.dart';
+
+import '../../repository/db_helper.dart';
+import '../../repository/order_repository.dart';
 
 part 'address_list_event.dart';
 part 'address_list_state.dart';

@@ -1,24 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:try_neostore/Utils/data_class.dart';
-import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/screens/order/address_list.dart';
-import 'package:try_neostore/screens/widgets/splash_screen.dart';
-import 'package:try_neostore/screens/order/cart_list.dart';
-import 'package:try_neostore/screens/order/enter_address.dart';
-import 'package:try_neostore/screens/order/order_details.dart';
-import 'package:try_neostore/screens/order/order_list.dart';
-import 'package:try_neostore/screens/product/product_details.dart';
-import 'package:try_neostore/screens/product/products_list.dart';
-import 'package:try_neostore/screens/user_module/forgot_password.dart';
-import 'package:try_neostore/screens/home_screen.dart';
-import 'package:try_neostore/screens/user_module/login_screen.dart';
-import 'package:try_neostore/screens/user_module/register_screen.dart';
+
+import '../Utils/data_class.dart';
+import '../constants/constants.dart';
+import '../screens/home_screen.dart';
+import '../screens/order/address_list.dart';
+import '../screens/order/cart_list.dart';
+import '../screens/order/enter_address.dart';
+import '../screens/order/order_details.dart';
+import '../screens/order/order_list.dart';
+import '../screens/product/product_details.dart';
+import '../screens/product/products_list.dart';
 import '../screens/user_module/change_password.dart';
 import '../screens/user_module/edit_account_details.dart';
+import '../screens/user_module/forgot_password.dart';
+import '../screens/user_module/login_screen.dart';
 import '../screens/user_module/my_account.dart';
+import '../screens/user_module/register_screen.dart';
+import '../screens/widgets/splash_screen.dart';
 
 class AppRouter {
+  // ignore: missing_return
   Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case route_login:
@@ -136,6 +138,7 @@ class AppRouter {
         break;
 
       default:
+      //TODO: IMPLEMENT ERROR PAGE...
     }
   }
 }

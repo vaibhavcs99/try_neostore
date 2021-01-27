@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:try_neostore/Utils/validators.dart';
-import 'package:try_neostore/bloc/address_bloc/address_bloc.dart';
-import 'package:try_neostore/screens/widgets/my_button.dart';
+
+import '../../Utils/validators.dart';
+import '../../bloc/address_bloc/address_bloc.dart';
+import '../widgets/my_button.dart';
 
 class EnterAddress extends StatefulWidget {
   final String accessToken;

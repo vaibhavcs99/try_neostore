@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:try_neostore/Utils/data_class.dart';
-import 'package:try_neostore/bloc/order_list_bloc/order_list_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/screens/widgets/my_drawer.dart';
+
+import '../../Utils/data_class.dart';
+import '../../bloc/order_list_bloc/order_list_bloc.dart';
+import '../../constants/constants.dart';
+import '../widgets/my_drawer.dart';
 
 class MyOrders extends StatefulWidget {
   final String accessToken;

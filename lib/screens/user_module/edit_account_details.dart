@@ -6,13 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 
-import 'package:try_neostore/Utils/validators.dart';
-import 'package:try_neostore/bloc/edit_account_bloc/edit_account_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/screens/widgets/container_white_border.dart';
-import 'package:try_neostore/screens/widgets/my_button.dart';
-import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
-import 'package:try_neostore/utils/validators.dart' as validators;
+import '../../Utils/validators.dart';
+import '../../bloc/edit_account_bloc/edit_account_bloc.dart';
+import '../../constants/constants.dart';
+import '../widgets/container_white_border.dart';
+import '../widgets/my_button.dart';
+import '../widgets/my_text_form_field.dart';
 
 class EditAccountDetails extends StatefulWidget {
   final String accessToken;

@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:try_neostore/model/fetchDataResponse.dart';
-import 'package:try_neostore/repository/user_repository.dart';
+
+import '../../model/fetchDataResponse.dart';
+import '../../repository/user_repository.dart';
 
 part 'my_account_event.dart';
 part 'my_account_state.dart';

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:try_neostore/bloc/cart_list_bloc/cart_list_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
+import 'package:sizer/sizer.dart';
 
-import 'package:try_neostore/model/cart_list_model.dart';
-import 'package:try_neostore/screens/widgets/my_button.dart';
-import 'package:try_neostore/screens/widgets/my_drawer.dart';
+import '../../bloc/cart_list_bloc/cart_list_bloc.dart';
+import '../../constants/constants.dart';
+import '../../model/cart_list_model.dart';
+import '../widgets/my_button.dart';
+import '../widgets/my_drawer.dart';
 
 class CartList extends StatefulWidget {
   final String accessToken;

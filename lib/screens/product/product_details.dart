@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:try_neostore/Utils/utils.dart';
-import 'package:try_neostore/Utils/validators.dart';
-import 'package:try_neostore/bloc/product_details_bloc/product_details_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/model/product_details.model.dart';
 import 'package:sizer/sizer.dart';
-import 'package:try_neostore/utils/utils.dart' as utils;
+
+import '../../Utils/utils.dart';
+import '../../Utils/validators.dart';
+import '../../bloc/product_details_bloc/product_details_bloc.dart';
+import '../../constants/constants.dart';
+import '../../model/product_details.model.dart';
 
 class ProductDetails extends StatefulWidget {
   final int productId;

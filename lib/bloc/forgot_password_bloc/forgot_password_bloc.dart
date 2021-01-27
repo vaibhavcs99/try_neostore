@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:try_neostore/bloc/login_bloc/login_bloc.dart';
-import 'package:try_neostore/model/error.dart';
-import 'package:try_neostore/repository/user_repository.dart';
+
+import '../../model/error.dart';
+import '../../repository/user_repository.dart';
 
 part 'forgot_password_event.dart';
 part 'forgot_password_state.dart';

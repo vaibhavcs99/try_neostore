@@ -1,10 +1,11 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:try_neostore/Utils/data_class.dart';
-import 'package:try_neostore/bloc/cart_list_bloc/cart_list_bloc.dart';
-import 'package:try_neostore/bloc/drawer_bloc/drawer_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
+
+import '../../Utils/data_class.dart';
+import '../../bloc/cart_list_bloc/cart_list_bloc.dart';
+import '../../bloc/drawer_bloc/drawer_bloc.dart';
+import '../../constants/constants.dart';
 
 class MyDrawer extends StatefulWidget {
   final String accessToken;

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:try_neostore/Utils/data_class.dart';
-import 'package:try_neostore/bloc/product_list_bloc/product_list_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/model/product_list_model.dart';
-import 'package:try_neostore/utils/utils.dart';
+
+import '../../Utils/data_class.dart';
+import '../../bloc/product_list_bloc/product_list_bloc.dart';
+import '../../constants/constants.dart';
+import '../../model/product_list_model.dart';
+import '../../utils/utils.dart';
 
 class ProductList extends StatefulWidget {
   final int index;

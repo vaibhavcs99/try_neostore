@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer_util.dart';
-import 'package:try_neostore/bloc/address_list_bloc/address_list_bloc.dart';
-import 'package:try_neostore/bloc/forgot_password_bloc/forgot_password_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/Utils/router.dart';
-import 'package:try_neostore/repository/user_session.dart';
+
+import 'Utils/router.dart';
 import 'bloc/address_bloc/address_bloc.dart';
+import 'bloc/address_list_bloc/address_list_bloc.dart';
 import 'bloc/auth_bloc/authentication_bloc.dart';
 import 'bloc/cart_list_bloc/cart_list_bloc.dart';
+import 'bloc/change_password/change_password_bloc.dart';
 import 'bloc/drawer_bloc/drawer_bloc.dart';
+import 'bloc/edit_account_bloc/edit_account_bloc.dart';
+import 'bloc/forgot_password_bloc/forgot_password_bloc.dart';
 import 'bloc/login_bloc/login_bloc.dart';
+import 'bloc/my_account_bloc/my_account_bloc.dart';
 import 'bloc/order_details_bloc/order_details_bloc.dart';
 import 'bloc/order_list_bloc/order_list_bloc.dart';
 import 'bloc/product_details_bloc/product_details_bloc.dart';
 import 'bloc/product_list_bloc/product_list_bloc.dart';
 import 'bloc/register_bloc/register_bloc.dart';
-import 'bloc/my_account_bloc/my_account_bloc.dart';
-import 'bloc/change_password/change_password_bloc.dart';
-import 'bloc/edit_account_bloc/edit_account_bloc.dart';
+import 'constants/constants.dart';
+import 'repository/user_session.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

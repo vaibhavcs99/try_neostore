@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:try_neostore/bloc/address_list_bloc/address_list_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/repository/db_helper.dart';
-import 'package:try_neostore/screens/widgets/my_button.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../bloc/address_list_bloc/address_list_bloc.dart';
+import '../../constants/constants.dart';
+import '../../repository/db_helper.dart';
+import '../widgets/my_button.dart';
 
 class AddressList extends StatefulWidget {
   final String accessToken;

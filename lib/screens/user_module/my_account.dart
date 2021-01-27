@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
 import 'package:sizer/sizer.dart';
-import 'package:try_neostore/Utils/data_class.dart';
 
-import 'package:try_neostore/model/fetchDataResponse.dart';
-import 'package:try_neostore/screens/widgets/container_white_border.dart';
-import 'package:try_neostore/screens/widgets/my_drawer.dart';
-import 'package:try_neostore/screens/widgets/my_button.dart';
-import 'package:try_neostore/bloc/my_account_bloc/my_account_bloc.dart';
+import '../../Utils/data_class.dart';
+import '../../bloc/my_account_bloc/my_account_bloc.dart';
+import '../../constants/constants.dart';
+import '../../model/fetchDataResponse.dart';
+import '../widgets/container_white_border.dart';
+import '../widgets/my_button.dart';
+import '../widgets/my_drawer.dart';
 
 class MyAccountDetails extends StatefulWidget {
   final String accessToken;
@@ -19,7 +19,6 @@ class MyAccountDetails extends StatefulWidget {
 }
 
 class _MyAccountDetailsState extends State<MyAccountDetails> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {

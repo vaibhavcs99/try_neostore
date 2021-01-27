@@ -1,12 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:try_neostore/Utils/validators.dart';
-import 'package:try_neostore/bloc/login_bloc/login_bloc.dart';
-import 'package:try_neostore/constants/constants.dart';
-import 'package:try_neostore/screens/widgets/my_button.dart';
-import 'package:try_neostore/screens/widgets/my_text_form_field.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../Utils/validators.dart';
+import '../../bloc/login_bloc/login_bloc.dart';
+import '../../constants/constants.dart';
+import '../widgets/my_button.dart';
+import '../widgets/my_text_form_field.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

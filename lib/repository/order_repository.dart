@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:try_neostore/constants/urls.dart';
+
+import '../constants/urls.dart';
 
 class OrderRepository {
   static final OrderRepository _orderRepostiory =

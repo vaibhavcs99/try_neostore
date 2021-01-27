@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:try_neostore/model/error.dart';
-import 'package:try_neostore/model/product_details.model.dart';
-import 'package:try_neostore/repository/cart_repository.dart';
-import 'package:try_neostore/repository/product_repository.dart';
+
+import '../../model/error.dart';
+import '../../model/product_details.model.dart';
+import '../../repository/cart_repository.dart';
+import '../../repository/product_repository.dart';
 
 part 'product_details_event.dart';
 part 'product_details_state.dart';
