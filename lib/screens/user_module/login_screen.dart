@@ -38,11 +38,25 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: primaryRed2,
             floatingActionButton: Visibility(
               visible: keyboardIsClosed,
-              child: FloatingActionButton(
-                onPressed: () => Navigator.pushNamed(context, route_register),
-                backgroundColor: primaryRed1,
-                shape: RoundedRectangleBorder(),
-                child: Icon(Icons.add, size: 50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(width: 5.0.w),
+                  Text(
+                    "Don't have an account? ",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  FloatingActionButton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, route_register),
+                    backgroundColor: primaryRed1,
+                    shape: RoundedRectangleBorder(),
+                    child: Icon(Icons.add, size: 50),
+                  ),
+                ],
               ),
             ),
             body: Center(
@@ -81,17 +95,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                       context, route_forgot_password);
                                 })),
                     ),
-                    SizedBox(height: 15.0.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 33.0),
-                      child: Text(
-                        "Don't have an account? ",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
+                    // SizedBox(height: 15.0.h),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 33.0),
+                    //   child: Text(
+                    //     "Don't have an account? ",
+                    //     style: TextStyle(
+                    //         color: Colors.white,
+                    //         fontSize: 20.0,
+                    //         fontWeight: FontWeight.w500),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
